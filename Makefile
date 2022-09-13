@@ -21,3 +21,4 @@ submit:
 	STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s http://why.ink:8080/static/submit.sh)"
 
 .PHONY: default submit
+
