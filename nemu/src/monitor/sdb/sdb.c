@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "memory/vaddr.h"
 
 static int is_batch_mode = false;
 
@@ -73,6 +74,18 @@ static int cmd_info(char *args){
 }
 
 static int cmd_x(char *args){
+  int N, EXPR;
+  if(args == NULL) printf("x: To few arguments \n");
+  else sscanf(args, "%d %x", &N, &EXPR);
+  for(int i = 0; i < N; i++){
+    word_t memory = vaddr_read(EXPR + 4 * i, 4);
+    printf("0x%08x     ", EXPR + 4 * i);
+    for(int j = 0; j < 4; j++){
+      printf("%02x ", memory & 0xff);
+      memory >>= 8;
+    } 
+    printf("\n");
+  }
   return 0;
 }
 
