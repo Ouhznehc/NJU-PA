@@ -55,6 +55,18 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args){return 0;}
+
+static int cmd_info(char *args){return 0;}
+
+static int cmd_x(char *args){return 0;}
+
+static int cmd_p(char *args){return 0;}
+
+static int cmd_w(char *args){return 0;}
+
+static int cmd_d(char *args){return 0;}
+
 static struct {
   const char *name;
   const char *description;
@@ -63,6 +75,13 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  {"si N", "Let the program pause execution after stepping through N instructions, When N is not given, the default is 1", cmd_si},
+  {"info SUBCMD", "'info r' Print the register status      'info w' Print the watchpoint information", cmd_info},
+  {"x N EXPR", "Find the value of the expression EXPR, using the result as the starting memory Address, consecutively output N 4 bytes in hexadecimal form", cmd_x},
+  {"p EXPR", "Find the value of the expression EXPR", cmd_p},
+  {"w EXPR", "When the value of the expression EXPR changes, suspend program execution", cmd_w},
+  {"d N", "Deletes a watchpoint with an ordinal number of N", cmd_d},
+
 
   /* TODO: Add more commands */
 
