@@ -28,6 +28,7 @@ void isa_reg_display() {
   for(int i = 0; i < 32; i++){
     printf("%s is 0x%08x\n", regs[i], cpu.gpr[i]);
   }
+  printf("0x%08x\n",cpu.pc);
   // riscv32_CPU_state x = cpu;
   // for(int i = 0; i < 32; i++){
   //   printf("%08x\n",x.gpr[i]);
