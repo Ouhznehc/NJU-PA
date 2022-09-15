@@ -67,8 +67,8 @@ static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
   Log("%s", arg);
   if(arg == NULL) printf("info: Too few arguments \n");
-  else if(strcmp(arg, "r")); //! TODO
-  else if(strcmp(arg, "w")); //! TODO
+  else if(strcmp(arg, "r")) printf("check r!\n"); //! TODO
+  else if(strcmp(arg, "w")) printf("check w!\n"); //! TODO
   else printf("info %s: Unknow command \n", arg);
   return 0;
 }
