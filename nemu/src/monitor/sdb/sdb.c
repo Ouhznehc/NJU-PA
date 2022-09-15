@@ -66,7 +66,6 @@ static int cmd_si(char *args){
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
   Log("%s", arg);
-  printf("%s\n", arg);
   if(arg == NULL) printf("info: Too few arguments \n");
   else if(strcmp(arg, "r")); //! TODO
   else if(strcmp(arg, "w")); //! TODO
