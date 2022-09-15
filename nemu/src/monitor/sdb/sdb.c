@@ -57,10 +57,7 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args){
   int N = 1;
-  if(args != NULL){
-    
-    sscanf(args, "%d", &N);
-  } 
+  if(args != NULL) sscanf(args, "%d", &N);
   printf("%d\n",N);
   cpu_exec(N);
   return 0;
