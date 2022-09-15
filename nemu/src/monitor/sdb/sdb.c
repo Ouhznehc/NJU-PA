@@ -72,8 +72,8 @@ static struct {
   const char *description;
   int (*handler) (char *);
 } cmd_table [] = {
-  { "help", "Display information about all supported commands", cmd_help },
-  { "c", "Continue the execution of the program", cmd_c },
+  { "help", "Display information about all supported commands\n", cmd_help },
+  { "c", "Continue the execution of the program\n", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   {"si N", "Let the program pause execution after stepping through N instructions, When N is not given, the default is 1", cmd_si},
   {"info SUBCMD", "'info r' Print the register status      'info w' Print the watchpoint information", cmd_info},
