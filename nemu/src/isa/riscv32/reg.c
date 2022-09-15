@@ -25,14 +25,11 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  for(int i = 0; i < 32; i++){
-    printf("%s is 0x%08x\n", regs[i], cpu.gpr[i]);
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 4; j++)
+    printf("%s is 0x%08x    ", regs[4 * i + j], cpu.gpr[4 * i + j]);
+    printf("\n");
   }
-  printf("0x%08x\n",cpu.pc);
-  // riscv32_CPU_state x = cpu;
-  // for(int i = 0; i < 32; i++){
-  //   printf("%08x\n",x.gpr[i]);
-  // }
   return;
 }
 
