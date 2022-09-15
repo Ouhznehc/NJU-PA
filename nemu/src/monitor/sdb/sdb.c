@@ -89,7 +89,7 @@ static struct {
   { "c", "Continue the execution of the program\n", cmd_c },
   { "q", "Exit NEMU\n", cmd_q },
   {"si", "Let the program pause execution after stepping through N instructions, When N is not given, the default is 1\n", cmd_si},
-  {"info", "'info r' Print the register status      'info w' Print the watchpoint information\n", cmd_info},
+  {"info", "'info r': Print the register status      'info w': Print the watchpoint information\n", cmd_info},
   {"x", "Find the value of the expression EXPR, using the result as the starting memory Address, consecutively output N 4 bytes in hexadecimal form\n", cmd_x},
   {"p", "Find the value of the expression EXPR\n", cmd_p},
   {"w", "When the value of the expression EXPR changes, suspend program execution\n", cmd_w},
