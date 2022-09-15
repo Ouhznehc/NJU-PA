@@ -65,11 +65,10 @@ static int cmd_si(char *args){
 
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
-  Log("%s", arg);
   if(arg == NULL) printf("info: Too few arguments \n");
-  else if(strcmp(arg, "r") == 0) printf("check r!\n"); //! TODO
-  else if(strcmp(arg, "w") == 0) printf("check w!\n"); //! TODO
-  else printf("info %s: Unknow command \n", arg);
+  else if(strcmp(arg, "r") == 0); //! TODO
+  else if(strcmp(arg, "w") == 0); //! TODO
+  else printf("info %s: Unknown command \n", arg);
   return 0;
 }
 
