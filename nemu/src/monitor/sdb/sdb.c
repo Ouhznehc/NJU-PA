@@ -58,6 +58,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args){
   int N = 1;
   if(args != NULL) sscanf(args, "%d", &N);
+  printf("%d\n",N);
   cpu_exec(N);
   return 0;
 
@@ -66,7 +67,7 @@ static int cmd_si(char *args){
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
   if(arg == NULL) printf("info: Too few arguments \n");
-  else if(strcmp(arg, "r") == 0) isa_reg_display(); //! TODO
+  else if(strcmp(arg, "r") == 0) isa_reg_display();
   else if(strcmp(arg, "w") == 0); //! TODO
   else printf("info %s: Unknown command \n", arg);
   return 0;
