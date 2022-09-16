@@ -21,7 +21,8 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_MINUS, TK_TIMES, TK_DIVIDE, TK_NUM,
+  TK_LBRACKET, TK_RBRACKET
 
   /* TODO: Add more token types */
 
@@ -36,9 +37,15 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+  {" +", TK_NOTYPE},        // spaces
+  {"\\+", TK_PLUS},         // plus
+  {"==", TK_EQ},            // equal
+  {"-", TK_MINUS},          // minus
+  {"\\*", TK_TIMES},        // times
+  {"/", TK_DIVIDE},         // divide
+  {"\\b[0-9]+\\b", TK_NUM}, // numbers
+  {"\\(", TK_LBRACKET},      // left bracket
+  {"\\)", TK_RBRACKET},      // right bracket
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -88,13 +95,31 @@ static bool make_token(char *e) {
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
-
+        
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
 
         switch (rules[i].token_type) {
+          case TK_DIVIDE:
+          case TK_EQ:
+          case TK_LBRACKET:
+          case TK_MINUS:
+          case TK_PLUS:
+          case TK_RBRACKET:
+          case TK_TIMES:
+            tokens[nr_token].type = rules[i].token_type;
+            nr_token++;
+            break;
+          case TK_NOTYPE:
+            break;
+          case TK_NUM:
+            tokens[nr_token].type = rules[i].token_type;
+            if(substr_len < 32) strncpy(tokens[nr_token].str, substr_start, substr_len);
+            else panic("buffer overflow!");
+            nr_token++;
+            break;
           default: TODO();
         }
 
