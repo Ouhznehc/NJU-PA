@@ -44,7 +44,7 @@ static struct rule {
   {"\\*", TK_TIMES},        // times
   {"/", TK_DIVIDE},         // divide
   {"\\b[0-9]+\\b", TK_NUM}, // numbers
-  {"\\(", TK_LBRACKET},      // left bracket
+  {"\(", TK_LBRACKET},      // left bracket
   {"\\)", TK_RBRACKET},      // right bracket
 };
 
