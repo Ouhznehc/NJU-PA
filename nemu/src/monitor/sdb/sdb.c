@@ -100,7 +100,7 @@ static int cmd_p(char *args){
     printf("Invalid expression \n");
     return 0;
   }
-  printf("%s = 0x%08x  \n", args, ans);
+  printf("0x%08x  \n", ans);
   return 0;
 }
 
