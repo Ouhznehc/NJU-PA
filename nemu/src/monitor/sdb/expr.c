@@ -184,7 +184,12 @@ int eval(int p, int q, bool *success) {
       case TK_PLUS:   return val1 + val2;
       case TK_MINUS:  return val1 - val2;
       case TK_TIMES:  return val1 * val2;
-      case TK_DIVIDE: return val1 / val2;
+      case TK_DIVIDE: 
+        if(val2 == 0){
+          *success = false;
+          return 0;
+        }
+        return val1 / val2;
       default: assert(0);
     }
   }
