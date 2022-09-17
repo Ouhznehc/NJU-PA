@@ -129,14 +129,50 @@ static bool make_token(char *e) {
 }
 
 
+int check_parentheses(int p, int q){
+  int is_BNF_valid = 1;
+  if(tokens[p].type != TK_LBRACKET || tokens[q].type != TK_RBRACKET) is_BNF_valid = 0;
+  int counter = 0;
+  for(int i = p; i <= q; i++){
+    if(tokens[i].type == TK_LBRACKET) counter++;
+    if(tokens[i].type == TK_RBRACKET) counter--;
+    if(counter <= 0 && i < q) is_BNF_valid = 0;
+  }
+  if(counter != 0) return -1;
+  return is_BNF_valid;
+}
+
+int main_opt_pos(int p, int q){
+  return 0;
+}
+
+int eval(int p, int q){
+    if(p == q) return atoi(tokens[p].str);
+    if(check_parentheses(p, q)) return eval(p + 1, q - 1);
+    else{
+        int main_pos = main_opt_pos(p, q);
+        int val1 = eval(p, main_pos - 1);
+        int val2 = eval(main_pos + 1, q);
+        switch (tokens[main_pos].type){
+          case TK_PLUS:   return val1 + val2;
+          case TK_MINUS:  return val1 - val2;
+          case TK_TIMES:  return val1 * val2;
+          case TK_DIVIDE: return val1 / val2;
+          default: assert(0);
+        }
+    }
+}
+
 word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
+  if (!make_token(e)){
     *success = false;
     return 0;
   }
-
+  if(check_parentheses(0, nr_token - 1) == -1){
+    *success = false;
+    return 0;
+  }
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+  *success = true;
+  return eval(0, nr_token - 1);
 }
