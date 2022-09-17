@@ -75,7 +75,7 @@ static int cmd_info(char *args){
 
 static int cmd_x(char *args){
   int N, EXPR;
-  if(args == NULL) printf("x: To few arguments \n");
+  if(args == NULL) printf("x: Too few arguments \n");
   else sscanf(args, "%d %x", &N, &EXPR);
   for(int i = 0; i < N; i++){
     word_t memory = vaddr_read(EXPR + 4 * i, 4);
@@ -89,7 +89,21 @@ static int cmd_x(char *args){
   return 0;
 }
 
-static int cmd_p(char *args){return 0;}
+static int cmd_p(char *args){
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    printf("q: Too few arguments \n");
+    return 0;
+  }
+  bool success = true;
+  int ans = expr(arg, &success);
+  if(success == false){
+    printf("Invalid expression \n");
+    return 0;
+  }
+  printf("%s = 0x%08x  \n", arg, ans);
+  return 0;
+}
 
 static int cmd_w(char *args){return 0;}
 
