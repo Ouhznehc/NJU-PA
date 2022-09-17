@@ -90,18 +90,17 @@ static int cmd_x(char *args){
 }
 
 static int cmd_p(char *args){
-  char *arg = strtok(NULL, " ");
-  if(arg == NULL){
+  if(args == NULL){
     printf("q: Too few arguments \n");
     return 0;
   }
   bool success = true;
-  int ans = expr(arg, &success);
+  int ans = expr(args, &success);
   if(success == false){
     printf("Invalid expression \n");
     return 0;
   }
-  printf("%s = 0x%08x  \n", arg, ans);
+  printf("%s = 0x%08x  \n", args, ans);
   return 0;
 }
 
