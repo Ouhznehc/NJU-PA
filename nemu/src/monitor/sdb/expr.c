@@ -129,11 +129,11 @@ static bool make_token(char *e) {
 }
 
 
-int check_parentheses(int p, int q){
+int check_parentheses(int p, int q) {
   int is_BNF_valid = 1;
   if(tokens[p].type != TK_LBRACKET || tokens[q].type != TK_RBRACKET) is_BNF_valid = 0;
   int counter = 0;
-  for(int i = p; i <= q; i++){
+  for(int i = p; i <= q; i++) {
     if(tokens[i].type == TK_LBRACKET) counter++;
     if(tokens[i].type == TK_RBRACKET) counter--;
     if(counter <= 0 && i < q) is_BNF_valid = 0;
@@ -142,18 +142,18 @@ int check_parentheses(int p, int q){
   return is_BNF_valid;
 }
 
-int main_opt_pos(int p, int q){
+int main_opt_pos(int p, int q) {
   return 0;
 }
 
-int eval(int p, int q){
+int eval(int p, int q) {
     if(p == q) return atoi(tokens[p].str);
     if(check_parentheses(p, q)) return eval(p + 1, q - 1);
     else{
         int main_pos = main_opt_pos(p, q);
         int val1 = eval(p, main_pos - 1);
         int val2 = eval(main_pos + 1, q);
-        switch (tokens[main_pos].type){
+        switch (tokens[main_pos].type) {
           case TK_PLUS:   return val1 + val2;
           case TK_MINUS:  return val1 - val2;
           case TK_TIMES:  return val1 * val2;
