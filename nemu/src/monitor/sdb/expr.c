@@ -143,24 +143,29 @@ int check_parentheses(int p, int q) {
 }
 
 int main_opt_pos(int p, int q) {
+
   return 0;
 }
 
-int eval(int p, int q) {
-    if(p == q) return atoi(tokens[p].str);
-    if(check_parentheses(p, q)) return eval(p + 1, q - 1);
-    else{
-        int main_pos = main_opt_pos(p, q);
-        int val1 = eval(p, main_pos - 1);
-        int val2 = eval(main_pos + 1, q);
-        switch (tokens[main_pos].type) {
-          case TK_PLUS:   return val1 + val2;
-          case TK_MINUS:  return val1 - val2;
-          case TK_TIMES:  return val1 * val2;
-          case TK_DIVIDE: return val1 / val2;
-          default: assert(0);
-        }
+int eval(int p, int q, bool *success) {
+  if(p > q){
+    *success = false;
+    return 0;
+  }
+  if(p == q) return atoi(tokens[p].str);
+  if(check_parentheses(p, q)) return eval(p + 1, q - 1, success);
+  else{
+    int main_pos = main_opt_pos(p, q);
+    int val1 = eval(p, main_pos - 1, success);
+    int val2 = eval(main_pos + 1, q, success);
+    switch (tokens[main_pos].type) {
+      case TK_PLUS:   return val1 + val2;
+      case TK_MINUS:  return val1 - val2;
+      case TK_TIMES:  return val1 * val2;
+      case TK_DIVIDE: return val1 / val2;
+      default: assert(0);
     }
+  }
 }
 
 word_t expr(char *e, bool *success) {
@@ -173,6 +178,5 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   /* TODO: Insert codes to evaluate the expression. */
-  *success = true;
-  return eval(0, nr_token - 1);
+  return eval(0, nr_token - 1, success);
 }
