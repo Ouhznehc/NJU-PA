@@ -94,10 +94,14 @@ static int cmd_p(char *args){
     printf("q: Too few arguments \n");
     return 0;
   }
-  bool success = true;
+  int success = 1;
   int ans = expr(args, &success);
-  if(success == false){
+  if(success == 0){
     printf("Invalid expression \n");
+    return 0;
+  }
+  if(success == -1){
+    printf("Runtime error \n");
     return 0;
   }
   printf("0x%08x  \n", ans);

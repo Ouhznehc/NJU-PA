@@ -169,9 +169,9 @@ int main_opt_pos(int p, int q) {
   return pos;
 }
 
-int eval(int p, int q, bool *success) {
+int eval(int p, int q, int *success) {
   if(p > q){
-    *success = false;
+    *success = 0;
     return 0;
   }
   if(p == q) return atoi(tokens[p].str);
@@ -186,7 +186,7 @@ int eval(int p, int q, bool *success) {
       case TK_TIMES:  return val1 * val2;
       case TK_DIVIDE: 
         if(val2 == 0){
-          *success = false;
+          *success = -1;
           return 0;
         }
         return val1 / val2;
@@ -195,13 +195,13 @@ int eval(int p, int q, bool *success) {
   }
 }
 
-word_t expr(char *e, bool *success) {
+word_t expr(char *e, int *success) {
   if (!make_token(e)){
-    *success = false;
+    *success = 0;
     return 0;
   }
   if(check_parentheses(0, nr_token - 1) == -1){
-    *success = false;
+    *success = 0;
     return 0;
   }
   /* TODO: Insert codes to evaluate the expression. */
