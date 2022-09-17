@@ -142,9 +142,31 @@ int check_parentheses(int p, int q) {
   return is_BNF_valid;
 }
 
-int main_opt_pos(int p, int q) {
+int priority(int type){
+  if(type == TK_TIMES || TK_DIVIDE) return 1;
+  else if(type == TK_PLUS || TK_MINUS) return 2;
+}
 
-  return 0;
+int main_opt_pos(int p, int q) {
+  int pos = p, Priority = -1, counter = 0;
+  for(int i = p; i <= q; i++){
+    if(tokens[i].type == TK_LBRACKET){
+      counter++;
+      while(counter){
+        i++;
+        if(tokens[i].type == TK_LBRACKET) counter++;
+        if(tokens[i].type == TK_RBRACKET) counter--;
+      }
+    }
+    else if(tokens[i].type == TK_NUM) continue;
+    else{
+      if(priority(tokens[i].type) >= Priority){
+        Priority = priority(tokens[i].type);
+        pos = i;
+      }
+    }
+  }
+  return pos;
 }
 
 int eval(int p, int q, bool *success) {
