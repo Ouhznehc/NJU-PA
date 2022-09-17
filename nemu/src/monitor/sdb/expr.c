@@ -102,16 +102,6 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          case TK_DIVIDE:
-          case TK_EQ:
-          case TK_LBRACKET:
-          case TK_MINUS:
-          case TK_PLUS:
-          case TK_RBRACKET:
-          case TK_TIMES:
-            tokens[nr_token].type = rules[i].token_type;
-            nr_token++;
-            break;
           case TK_NOTYPE:
             break;
           case TK_NUM:
@@ -120,7 +110,9 @@ static bool make_token(char *e) {
             else panic("buffer overflow!");
             nr_token++;
             break;
-          default: TODO();
+          default: 
+            tokens[nr_token].type = rules[i].token_type;
+            nr_token++;
         }
 
         break;
