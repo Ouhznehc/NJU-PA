@@ -107,7 +107,7 @@ static int cmd_p(char *args){
   }
   int success = 1;
   word_t ans = expr(args, &success);
-  if(success) printf("ans = %u  \n", ans);
+  if(success == 1) printf("%u  \n", ans);
   else return 1;
   return 0;
 }
