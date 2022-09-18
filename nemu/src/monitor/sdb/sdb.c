@@ -77,10 +77,14 @@ static int cmd_p(char *args);
 
 static int cmd_x(char *args){
   int N;
-  char arg[50];
+  int argslen = strlen(args);
+  char *arg = (char*) malloc(sizeof(char) * argslen);
   if(args == NULL) printf("x: Too few arguments \n");
   else sscanf(args, "%d %[^\n]", &N, arg);
-  if(cmd_p(arg)) return 0;
+  if(cmd_p(arg)){
+    free(arg);
+    return 0;
+  } 
   int success = 1;
   word_t EXPR = expr(arg, &success);
   for(int i = 0; i < N; i++){
@@ -92,6 +96,7 @@ static int cmd_x(char *args){
     } 
     printf("\n");
   }
+  free(arg);
   return 0;
 }
 
