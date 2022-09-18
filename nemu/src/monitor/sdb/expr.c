@@ -149,9 +149,9 @@ int check_parentheses(int p, int q) {
 }
 
 int priority(int type){
-  if(type == TK_TIMES || type == TK_DIVIDE) return 1;
-  else if(type == TK_PLUS || type == TK_MINUS) return 2;
-  else if(type == TK_POINTER || type == TK_NEG) return 3;
+  if(type == TK_TIMES || type == TK_DIVIDE) return 2;
+  else if(type == TK_PLUS || type == TK_MINUS) return 3;
+  else if(type == TK_POINTER || type == TK_NEG) return 1;
   return 0;
 }
 
@@ -168,7 +168,7 @@ int main_opt_pos(int p, int q) {
     }
     else if(tokens[i].type == TK_NUM_10 || tokens[i].type == TK_NUM_16 || tokens[i].type == TK_REG) continue;
     else{
-      if(priority(tokens[i].type) == 3 && flag) single = i, flag = 0;
+      if(priority(tokens[i].type) == 1 && flag) single = i, flag = 0;
       if(priority(tokens[i].type) >= Priority){
         Priority = priority(tokens[i].type);
         pos = i;
@@ -176,7 +176,7 @@ int main_opt_pos(int p, int q) {
     }
   }
   if(Priority == -1) return -1;
-  if(Priority == 3) return single;
+  if(Priority == 1) return single;
   return pos;
 }
 
@@ -202,7 +202,7 @@ int eval(int p, int q, int *success) {
       return 0;
     }
     int val1, val2;
-    if(priority(tokens[main_pos].type) != 3){
+    if(priority(tokens[main_pos].type) != 1){
       val1 = eval(p, main_pos - 1, success);
       val2 = eval(main_pos + 1, q, success);
     }
