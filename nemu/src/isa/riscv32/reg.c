@@ -41,6 +41,5 @@ word_t isa_reg_str2val(const char *s, int *success) {
     if(strcmp(s, regs[i]) == 0)
       return cpu.gpr[i];
   *success = -2;
-  panic("sb");
   return 0;
 }
