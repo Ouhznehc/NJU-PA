@@ -210,8 +210,6 @@ int eval(int p, int q, int *success) {
       val1 = eval(main_pos + 1, q, success);
       val2 = 0;
     }
-    printf("type = %d\n", tokens[main_pos].type);
-    printf("val1 = %d val2 = %d \n", val1, val2);
     switch (tokens[main_pos].type) {
       case TK_PLUS:    return val1 + val2;
       case TK_MINUS:   return val1 - val2;
