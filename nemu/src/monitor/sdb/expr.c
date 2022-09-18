@@ -163,7 +163,7 @@ int main_opt_pos(int p, int q) {
         if(tokens[i].type == TK_RBRACKET) counter--;
       }
     }
-    else if(tokens[i].type == TK_NUM_10) continue;
+    else if(tokens[i].type == TK_NUM_10 || tokens[i].type == TK_NUM_16 || tokens[i].type == TK_REG) continue;
     else{
       if(priority(tokens[i].type) >= Priority){
         Priority = priority(tokens[i].type);
