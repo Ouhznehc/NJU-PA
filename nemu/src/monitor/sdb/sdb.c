@@ -73,10 +73,16 @@ static int cmd_info(char *args){
   return 0;
 }
 
+static int cmd_p(char *args);
+
 static int cmd_x(char *args){
-  int N, EXPR;
+  int N;
+  char *arg = strtok(NULL, " ");
   if(args == NULL) printf("x: Too few arguments \n");
-  else sscanf(args, "%d %x", &N, &EXPR);
+  else sscanf(args, "%d %[^\n]", &N, arg);
+  if(cmd_p(arg)) return 0;
+  int success = 1;
+  word_t EXPR = expr(arg, &success);
   for(int i = 0; i < N; i++){
     word_t memory = vaddr_read(EXPR + 4 * i, 4);
     printf("0x%08x     ", EXPR + 4 * i);
@@ -92,21 +98,21 @@ static int cmd_x(char *args){
 static int cmd_p(char *args){
   if(args == NULL){
     printf("q: Too few arguments \n");
-    return 0;
+    return 1;
   }
   int success = 1;
-  int ans = expr(args, &success);
+  word_t ans = expr(args, &success);
   if(success == 0){
     printf("Invalid expression \n");
-    return 0;
+    return 1;
   }
   if(success == -1){
     printf("Runtime error \n");
-    return 0;
+    return 1;
   }
   if(success == -2){
     printf("Invalid register name \n");
-    return 0;
+    return 1;
   }
   printf("EXPR = 0x%08x  \n", ans);
   return 0;
