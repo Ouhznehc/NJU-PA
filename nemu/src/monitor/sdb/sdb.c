@@ -76,12 +76,10 @@ static int cmd_info(char *args){
 static int cmd_p(char *args);
 
 static int cmd_x(char *args){
-    printf("%s\n", args);
   int N;
   char arg[50];
   if(args == NULL) printf("x: Too few arguments \n");
   else sscanf(args, "%d %[^\n]", &N, arg);
-  printf("%s\n", arg);
   if(cmd_p(arg)) return 0;
   int success = 1;
   word_t EXPR = expr(arg, &success);
