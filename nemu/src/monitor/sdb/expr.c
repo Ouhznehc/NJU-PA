@@ -168,6 +168,7 @@ word_t main_opt_pos(int p, int q) {
     }
     else if(tokens[i].type == TK_NUM_10 || tokens[i].type == TK_NUM_16 || tokens[i].type == TK_REG) continue;
     else{
+      if(priority(tokens[i].type) == 3) return i;
       if(priority(tokens[i].type) >= Priority){
         Priority = priority(tokens[i].type);
         pos = i;
