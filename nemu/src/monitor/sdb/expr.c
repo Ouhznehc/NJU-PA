@@ -172,6 +172,7 @@ word_t main_opt_pos(int p, int q) {
       }
     }
   }
+  if(Priority == -1) return -1;
   return pos;
 }
 
@@ -192,6 +193,10 @@ word_t eval(int p, int q, int *success) {
   if(check_parentheses(p, q)) return eval(p + 1, q - 1, success);
   else{
     int main_pos = main_opt_pos(p, q);
+    if(main_pos == -1){
+      *success = 0;
+      return 0;
+    }
     word_t val1 = eval(p, main_pos - 1, success);
     word_t val2 = eval(main_pos + 1, q, success);
     switch (tokens[main_pos].type) {
