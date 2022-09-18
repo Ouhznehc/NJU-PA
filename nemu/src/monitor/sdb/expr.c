@@ -238,7 +238,7 @@ word_t expr(char *e, int *success) {
     return 0;
   }
   for (int i = 0; i < nr_token; i ++)
-    if (i == 0 || (tokens[i - 1].type != TK_RBRACKET && tokens[i - 1].type != TK_NUM_10 && tokens[i - 1].type != TK_NUM_16 && tokens[i - 1].type != TK_REG) ){
+    if (i == 0 || tokens[i].type == TK_LBRACKET){
       if(tokens[i].type == TK_MINUS) tokens[i].type = TK_NEG;
       if(tokens[i].type == TK_TIMES) tokens[i].type = TK_POINTER;
     }
