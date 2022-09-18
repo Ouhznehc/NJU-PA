@@ -104,6 +104,10 @@ static int cmd_p(char *args){
     printf("Runtime error \n");
     return 0;
   }
+  if(success == -2){
+    printf("Invalid register name \n");
+    return 0;
+  }
   printf("0x%08x  \n", ans);
   return 0;
 }
