@@ -44,12 +44,12 @@ static struct rule {
   {"\\*", TK_TIMES},                // times
   {"/", TK_DIVIDE},                 // divide
   {"\\b[0-9]+\\b", TK_NUM_10},      // numbers_10
-  // {"\\(", TK_LBRACKET},             // left bracket
-  // {"\\)", TK_RBRACKET},             // right bracket
-  // {"0x[0-9a-f]+", TK_NUM_16},       // numbers_16
-  // {"&&", TK_AND},                   // and
-  // {"!=", TK_NEQ},                   // not_equal
-  // {"\\$0|\\$.{2}", TK_REG},         // register
+  {"\\(", TK_LBRACKET},             // left bracket
+  {"\\)", TK_RBRACKET},             // right bracket
+  {"0x[0-9a-f]+", TK_NUM_16},       // numbers_16
+  {"&&", TK_AND},                   // and
+  {"!=", TK_NEQ},                   // not_equal
+  {"\\$[0-9a-z]{1,2}", TK_REG},              // register
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -109,15 +109,14 @@ static bool make_token(char *e) {
           case TK_NOTYPE:
             break;
           case TK_NUM_10:
-          // case TK_NUM_16:
+          case TK_NUM_16:
             tokens[nr_token].type = rules[i].token_type;
             if(substr_len < 32) strncpy(tokens[nr_token].str, substr_start, substr_len);
             else panic("buffer overflow!");
             nr_token++;
             break;
-          // case TK_REG:
-          //   tokens[nr_token].type = rules[i].token_type;
-          //   TODO();
+          case TK_REG:
+            tokens[nr_token].type = rules[i].token_type;
           default: 
             tokens[nr_token].type = rules[i].token_type;
             nr_token++;
@@ -181,7 +180,12 @@ int eval(int p, int q, int *success) {
     *success = 0;
     return 0;
   }
-  if(p == q) return atoi(tokens[p].str);
+  if(p == q) {
+    int ans;
+    if(tokens[p].type == TK_NUM_10) ans = atoi(tokens[p].str);
+    else sscanf(tokens[p].str, "%x", &ans);
+    return ans;
+  }
   if(check_parentheses(p, q)) return eval(p + 1, q - 1, success);
   else{
     int main_pos = main_opt_pos(p, q);
