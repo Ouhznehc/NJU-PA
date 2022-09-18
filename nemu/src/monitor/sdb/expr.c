@@ -49,7 +49,7 @@ static struct rule {
   {"0x[0-9a-f]+", TK_NUM_16},       // numbers_16
   {"&&", TK_AND},                   // and
   {"!=", TK_NEQ},                   // not_equal
-  {"\\$.*?", TK_REG},               // register
+  {"\\$0 | \\$.{2}", TK_REG},               // register
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -109,11 +109,15 @@ static bool make_token(char *e) {
           case TK_NOTYPE:
             break;
           case TK_NUM_10:
+          case TK_NUM_16:
             tokens[nr_token].type = rules[i].token_type;
             if(substr_len < 32) strncpy(tokens[nr_token].str, substr_start, substr_len);
             else panic("buffer overflow!");
             nr_token++;
             break;
+          case TK_REG:
+            tokens[nr_token].type = rules[i].token_type;
+            TODO();
           default: 
             tokens[nr_token].type = rules[i].token_type;
             nr_token++;
