@@ -155,7 +155,7 @@ int priority(int type){
   return 0;
 }
 
-word_t main_opt_pos(int p, int q) {
+int main_opt_pos(int p, int q) {
   int pos = p, Priority = -1, counter = 0, single = -1, flag = 1;
   for(int i = p; i <= q; i++){
     if(tokens[i].type == TK_LBRACKET){
@@ -180,7 +180,7 @@ word_t main_opt_pos(int p, int q) {
   return pos;
 }
 
-word_t eval(int p, int q, int *success) {
+int eval(int p, int q, int *success) {
   if(p > q){
     *success = 0;
     return 0;
