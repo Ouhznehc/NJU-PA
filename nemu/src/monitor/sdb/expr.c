@@ -211,6 +211,9 @@ word_t eval(int p, int q, int *success) {
       val2 = 0;
     }
     switch (tokens[main_pos].type) {
+      case TK_AND:     return val1 && val2;
+      case TK_EQ:      return val1 == val2;
+      case TK_NEQ:     return val1 != val2;
       case TK_PLUS:    return val1 + val2;
       case TK_MINUS:   return val1 - val2;
       case TK_TIMES:   return val1 * val2;
