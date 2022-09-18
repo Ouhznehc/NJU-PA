@@ -184,7 +184,7 @@ int eval(int p, int q, int *success) {
     int ans;
     if(tokens[p].type == TK_NUM_10) ans = atoi(tokens[p].str);
     else if(tokens[p].type == TK_NUM_16) sscanf(tokens[p].str, "%x", &ans);
-    else ans = isa_reg_str2val(&tokens[p].str[1], success);
+    else ans = isa_reg_str2val(tokens[p].str + 1, success);
     if(*success) return ans;
     else return 0;
   }
