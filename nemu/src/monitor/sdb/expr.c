@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include <isa.h>
-
+#include "memory/vaddr.h"
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
@@ -22,7 +22,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_MINUS, TK_TIMES, TK_DIVIDE, TK_NUM_10,
-  TK_LBRACKET, TK_RBRACKET, TK_NUM_16, TK_NEQ, TK_REG, TK_AND, TK_POINTER 
+  TK_LBRACKET, TK_RBRACKET, TK_NUM_16, TK_NEQ, TK_REG, TK_AND, TK_POINTER, TK_NEG,
 
   /* TODO: Add more token types */
 
@@ -149,8 +149,10 @@ int check_parentheses(int p, int q) {
 }
 
 int priority(int type){
-  if(type == TK_TIMES || TK_DIVIDE) return 1;
-  else if(type == TK_PLUS || TK_MINUS) return 2;
+  if(type == TK_TIMES || type == TK_DIVIDE) return 1;
+  else if(type == TK_PLUS || type == TK_MINUS) return 2;
+  else if(type == TK_POINTER || type == TK_NEG) return 3;
+  return 0;
 }
 
 word_t main_opt_pos(int p, int q) {
@@ -197,12 +199,21 @@ word_t eval(int p, int q, int *success) {
       *success = 0;
       return 0;
     }
-    word_t val1 = eval(p, main_pos - 1, success);
-    word_t val2 = eval(main_pos + 1, q, success);
+    word_t val1, val2;
+    if(priority(tokens[main_pos].type) != 3){
+      val1 = eval(p, main_pos - 1, success);
+      val2 = eval(main_pos + 1, q, success);
+    }
+    else{
+      val1 = eval(main_pos + 1, q, success);
+      val2 = 0;
+    }
     switch (tokens[main_pos].type) {
       case TK_PLUS:   return val1 + val2;
       case TK_MINUS:  return val1 - val2;
       case TK_TIMES:  return val1 * val2;
+      case TK_NEG:    return -val1;
+      case TK_POINTER:return vaddr_read(val1, 4);
       case TK_DIVIDE: 
         if(val2 == 0){
           *success = -1;
@@ -223,6 +234,11 @@ word_t expr(char *e, int *success) {
     *success = 0;
     return 0;
   }
+  for (int i = 0; i < nr_token; i ++)
+    if (i == 0 || (tokens[i - 1].type != TK_RBRACKET && tokens[i - 1].type != TK_NUM_10 && tokens[i - 1].type != TK_NUM_16 && tokens[i - 1].type != TK_REG) ){
+      if(tokens[i].type == TK_MINUS) tokens[i].type = TK_NEG;
+      if(tokens[i].type == TK_TIMES) tokens[i].type = TK_POINTER;
+    }
   /* TODO: Insert codes to evaluate the expression. */
   return eval(0, nr_token - 1, success);
 }
