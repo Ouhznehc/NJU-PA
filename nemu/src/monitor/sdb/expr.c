@@ -213,11 +213,11 @@ int eval(int p, int q, int *success) {
     printf("type = %d\n", tokens[main_pos].type);
     printf("val1 = %d val2 = %d \n", val1, val2);
     switch (tokens[main_pos].type) {
-      case TK_PLUS:   return val1 + val2;
-      case TK_MINUS:  return val1 - val2;
-      case TK_TIMES:  return val1 * val2;
-      case TK_NEG:    return -val1;
-      case TK_POINTER:return vaddr_read(val1, 4);
+      case TK_PLUS:    return val1 + val2;
+      case TK_MINUS:   return val1 - val2;
+      case TK_TIMES:   return val1 * val2;
+      case TK_NEG:     return -val1;
+      case TK_POINTER: return vaddr_read(val1, 4);
       case TK_DIVIDE: 
         if(val2 == 0){
           *success = -1;
