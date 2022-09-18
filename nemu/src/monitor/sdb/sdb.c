@@ -119,7 +119,7 @@ static int cmd_p(char *args){
     printf("Invalid register name \n");
     return 1;
   }
-  printf("%u  \n", ans);
+  printf("%d  \n", ans);
   return 0;
 }
 
