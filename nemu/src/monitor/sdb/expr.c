@@ -141,7 +141,8 @@ int check_parentheses(int p, int q) {
   for(int i = p; i <= q; i++) {
     if(tokens[i].type == TK_LBRACKET) counter++;
     if(tokens[i].type == TK_RBRACKET) counter--;
-    if(counter <= 0 && i < q) is_BNF_valid = 0;
+    if(counter == 0 && i < q) is_BNF_valid = 0;
+    if(counter < 0) return -1;
   }
   if(counter != 0) return -1;
   return is_BNF_valid;
