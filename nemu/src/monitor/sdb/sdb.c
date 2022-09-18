@@ -80,6 +80,7 @@ static int cmd_x(char *args){
   char *arg = strtok(NULL, " ");
   if(args == NULL) printf("x: Too few arguments \n");
   else sscanf(args, "%d %[^\n]", &N, arg);
+  printf("%s\n", arg);
   if(cmd_p(arg)) return 0;
   int success = 1;
   word_t EXPR = expr(arg, &success);
