@@ -191,7 +191,6 @@ int eval(int p, int q, int *success) {
     if(tokens[p].type == TK_NUM_10) ans = atoi(tokens[p].str);
     else if(tokens[p].type == TK_NUM_16) sscanf(tokens[p].str, "%x", &ans);
     else ans = isa_reg_str2val(tokens[p].str + 1, success);
-    printf("%d\n", ans);
     if(*success) return ans;
     else return 0;
   }
@@ -211,6 +210,7 @@ int eval(int p, int q, int *success) {
       val1 = eval(main_pos + 1, q, success);
       val2 = 0;
     }
+    printf("val1 = %d val2 = %d \n", val1, val2);
     switch (tokens[main_pos].type) {
       case TK_PLUS:   return val1 + val2;
       case TK_MINUS:  return val1 - val2;
