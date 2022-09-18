@@ -152,7 +152,7 @@ int priority(int type){
   else if(type == TK_PLUS || TK_MINUS) return 2;
 }
 
-int main_opt_pos(int p, int q) {
+word_t main_opt_pos(int p, int q) {
   int pos = p, Priority = -1, counter = 0;
   for(int i = p; i <= q; i++){
     if(tokens[i].type == TK_LBRACKET){
@@ -174,13 +174,13 @@ int main_opt_pos(int p, int q) {
   return pos;
 }
 
-int eval(int p, int q, int *success) {
+word_t eval(int p, int q, int *success) {
   if(p > q){
     *success = 0;
     return 0;
   }
   if(p == q) {
-    int ans;
+    word_t ans;
   //  Log("%s", tokens[p].str);
     if(tokens[p].type == TK_NUM_10) ans = atoi(tokens[p].str);
     else if(tokens[p].type == TK_NUM_16) sscanf(tokens[p].str, "%x", &ans);
@@ -191,8 +191,8 @@ int eval(int p, int q, int *success) {
   if(check_parentheses(p, q)) return eval(p + 1, q - 1, success);
   else{
     int main_pos = main_opt_pos(p, q);
-    int val1 = eval(p, main_pos - 1, success);
-    int val2 = eval(main_pos + 1, q, success);
+    word_t val1 = eval(p, main_pos - 1, success);
+    word_t val2 = eval(main_pos + 1, q, success);
     switch (tokens[main_pos].type) {
       case TK_PLUS:   return val1 + val2;
       case TK_MINUS:  return val1 - val2;
