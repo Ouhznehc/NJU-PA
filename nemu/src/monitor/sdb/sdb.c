@@ -115,10 +115,10 @@ static int cmd_p(char *args){
     printf("Runtime error \n");
     return 1;
   }
-  // if(success == -2){
-  //   printf("Invalid register name \n");
-  //   return 1;
-  // }
+  if(success == -2){
+    printf("Invalid register name \n");
+    return 1;
+  }
   printf("%u  \n", ans);
   return 0;
 }
