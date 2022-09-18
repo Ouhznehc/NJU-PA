@@ -21,8 +21,8 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_MINUS, TK_TIMES, TK_DIVIDE, TK_NUM,
-  TK_LBRACKET, TK_RBRACKET
+  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_MINUS, TK_TIMES, TK_DIVIDE, TK_NUM_10,
+  TK_LBRACKET, TK_RBRACKET, TK_NUM_16, TK_NEQ, TK_REG, TK_AND, TK_POINTER 
 
   /* TODO: Add more token types */
 
@@ -37,15 +37,19 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},        // spaces
-  {"\\+", TK_PLUS},         // plus
-  {"==", TK_EQ},            // equal
-  {"-", TK_MINUS},          // minus
-  {"\\*", TK_TIMES},        // times
-  {"/", TK_DIVIDE},         // divide
-  {"\\b[0-9]+\\b", TK_NUM}, // numbers
-  {"\\(", TK_LBRACKET},      // left bracket
-  {"\\)", TK_RBRACKET},      // right bracket
+  {" +", TK_NOTYPE},                // spaces
+  {"\\+", TK_PLUS},                 // plus
+  {"==", TK_EQ},                    // equal
+  {"-", TK_MINUS},                  // minus
+  {"\\*", TK_TIMES},                // times
+  {"/", TK_DIVIDE},                 // divide
+  {"\\b[0-9]+\\b", TK_NUM_10},      // numbers_10
+  {"\\(", TK_LBRACKET},             // left bracket
+  {"\\)", TK_RBRACKET},             // right bracket
+  {"0x[0-9a-f]+", TK_NUM_16},       // numbers_16
+  {"&&", TK_AND},                   // and
+  {"!=", TK_NEQ},                   // not_equal
+  {"\\$.*?", TK_REG},               // register
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -104,7 +108,7 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case TK_NOTYPE:
             break;
-          case TK_NUM:
+          case TK_NUM_10:
             tokens[nr_token].type = rules[i].token_type;
             if(substr_len < 32) strncpy(tokens[nr_token].str, substr_start, substr_len);
             else panic("buffer overflow!");
@@ -114,7 +118,6 @@ static bool make_token(char *e) {
             tokens[nr_token].type = rules[i].token_type;
             nr_token++;
         }
-
         break;
       }
     }
@@ -158,7 +161,7 @@ int main_opt_pos(int p, int q) {
         if(tokens[i].type == TK_RBRACKET) counter--;
       }
     }
-    else if(tokens[i].type == TK_NUM) continue;
+    else if(tokens[i].type == TK_NUM_10) continue;
     else{
       if(priority(tokens[i].type) >= Priority){
         Priority = priority(tokens[i].type);
