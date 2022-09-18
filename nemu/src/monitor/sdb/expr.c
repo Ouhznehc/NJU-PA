@@ -199,7 +199,7 @@ word_t eval(int p, int q, int *success) {
       *success = 0;
       return 0;
     }
-    word_t val1, val2;
+    int val1, val2;
     if(priority(tokens[main_pos].type) != 3){
       val1 = eval(p, main_pos - 1, success);
       val2 = eval(main_pos + 1, q, success);
