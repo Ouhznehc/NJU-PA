@@ -180,7 +180,7 @@ int main_opt_pos(int p, int q) {
   return pos;
 }
 
-int eval(int p, int q, int *success) {
+word_t eval(int p, int q, int *success) {
   if(p > q){
     *success = 0;
     return 0;
@@ -201,7 +201,7 @@ int eval(int p, int q, int *success) {
       *success = 0;
       return 0;
     }
-    int val1, val2;
+    word_t val1, val2;
     if(priority(tokens[main_pos].type) != 1){
       val1 = eval(p, main_pos - 1, success);
       val2 = eval(main_pos + 1, q, success);
