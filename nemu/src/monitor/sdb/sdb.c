@@ -108,7 +108,7 @@ static int cmd_p(char *args){
     printf("Invalid register name \n");
     return 0;
   }
-  printf("0x%08x  \n", ans);
+  printf("EXPR = 0x%08x  \n", ans);
   return 0;
 }
 
