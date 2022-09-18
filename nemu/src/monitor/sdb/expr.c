@@ -249,5 +249,11 @@ word_t expr(char *e, int *success) {
       if(tokens[i].type == TK_TIMES) tokens[i].type = TK_POINTER;
     }
   /* TODO: Insert codes to evaluate the expression. */
+  switch(*success){
+    case 0 :    printf("Invalid expression \n"); break;
+    case -1:    printf("Runtime error \n"); break;
+    case -2:    printf("Invalid register name \n"); break;
+    default: break;
+  }
   return eval(0, nr_token - 1, success);
 }

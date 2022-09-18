@@ -107,19 +107,8 @@ static int cmd_p(char *args){
   }
   int success = 1;
   word_t ans = expr(args, &success);
-  if(success == 0){
-    printf("Invalid expression \n");
-    return 1;
-  }
-  if(success == -1){
-    printf("Runtime error \n");
-    return 1;
-  }
-  if(success == -2){
-    printf("Invalid register name \n");
-    return 1;
-  }
-  printf("%u  \n", ans);
+  if(success) printf("%u  \n", ans);
+  else return 1;
   return 0;
 }
 
