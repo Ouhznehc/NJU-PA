@@ -156,7 +156,7 @@ int priority(int type){
 }
 
 word_t main_opt_pos(int p, int q) {
-  int pos = p, Priority = -1, counter = 0;
+  int pos = p, Priority = -1, counter = 0, single = -1;
   for(int i = p; i <= q; i++){
     if(tokens[i].type == TK_LBRACKET){
       counter++;
@@ -168,7 +168,7 @@ word_t main_opt_pos(int p, int q) {
     }
     else if(tokens[i].type == TK_NUM_10 || tokens[i].type == TK_NUM_16 || tokens[i].type == TK_REG) continue;
     else{
-      if(priority(tokens[i].type) == 3) return i;
+      if(priority(tokens[i].type) == 3) single = i;
       if(priority(tokens[i].type) >= Priority){
         Priority = priority(tokens[i].type);
         pos = i;
@@ -176,6 +176,7 @@ word_t main_opt_pos(int p, int q) {
     }
   }
   if(Priority == -1) return -1;
+  if(Priority == 3) return single;
   return pos;
 }
 
