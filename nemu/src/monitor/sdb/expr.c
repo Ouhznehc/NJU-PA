@@ -49,7 +49,7 @@ static struct rule {
   {"0x[0-9a-f]+", TK_NUM_16},       // numbers_16
   {"&&", TK_AND},                   // and
   {"!=", TK_NEQ},                   // not_equal
-  {"\\$0 | \\$.{2}", TK_REG},               // register
+  {"(\\$0)|(\\$.{2})", TK_REG},               // register
 };
 
 #define NR_REGEX ARRLEN(rules)
