@@ -183,6 +183,7 @@ int main_opt_pos(int p, int q) {
 
 word_t eval(int p, int q, int *success) {
   if(p > q){*success = 0; return 0;}
+  printf("%d\n", check_parentheses(p, q));
   if(check_parentheses(p, q) == -1) {*success = 0; return 0;}
   if(p == q) {
     word_t ans;
