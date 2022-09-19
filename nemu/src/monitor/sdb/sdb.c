@@ -112,9 +112,31 @@ static int cmd_p(char *args){
   return 0;
 }
 
-static int cmd_w(char *args){return 0;}
+static int cmd_w(char *args){
+  int success = 1;
+  if(args == NULL){
+    printf("w: Too few arguments \n");
+    return 0;
+  }
+  WP* new_one = new_wp(args, &success);
+  if(success != 1) return 0;
+  printf("add watchpoint %d :  %s\n", new_one->NO, args);
+  return 0;
+}
 
-static int cmd_d(char *args){return 0;}
+static int cmd_d(char *args){
+  int N, success = 1;
+  if(args == NULL){
+    printf("d: Too few arguments \n");
+    return 0;
+  }
+  sscanf(args, "%d", &N);
+  WP *erase = free_wp(N, &success);
+  if(success != 1) return 0;
+  printf("alreay delete watchpoint %d : %s\n", N, erase->EXPR);
+  return 0;
+  
+}
 
 static struct {
   const char *name;
