@@ -25,7 +25,7 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
-    //memset(wp_pool[i].EXPR, 0, sizeof(wp_pool[i].EXPR));
+    memset(wp_pool[i].EXPR, 0, sizeof(wp_pool[i].EXPR));
     wp_pool[i].initial_ans = 0;
   }
   head = NULL;
@@ -59,7 +59,7 @@ WP *new_wp(char *e, int *success){
 }
 
 void clear_wp(WP* now){
-  //memset(now->EXPR, 0, sizeof(now->EXPR));
+  memset(now->EXPR, 0, sizeof(now->EXPR));
   now->initial_ans = 0;
 }
 

@@ -21,7 +21,7 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char *EXPR;
+  char EXPR[100];
   word_t initial_ans;
   /* TODO: Add more members if necessary */
 
