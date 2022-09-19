@@ -120,7 +120,7 @@ static int cmd_w(char *args){
   }
   WP* new_one = new_wp(args, &success);
   if(success != 1) return 0;
-  printf("add watchpoint %d:  %s\n", new_one->NO, args);
+  printf("add watchpoint %d:  %s    value = %u\n", new_one->NO, args, new_one->initial_ans);
   return 0;
 }
 
