@@ -76,13 +76,11 @@ WP* free_wp(int N, int *success){
       head = NULL;
       erase->next = free_->next;
       free_->next = erase;
-      free_ = free_->next;
       return erase;
     }
     head = erase->next;
     erase->next = free_->next;
     free_->next = erase;
-    free_ = free_->next;
     clear_wp(erase);
     return erase;
   }
@@ -92,7 +90,6 @@ WP* free_wp(int N, int *success){
       now->next = erase->next;
       erase->next = free_->next;
       free_->next = erase;
-      free_ = free_->next;
       clear_wp(erase);
       return erase;
     }
