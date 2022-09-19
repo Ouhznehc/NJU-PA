@@ -35,4 +35,6 @@ WP* new_wp(char *e, int *success);
 
 WP* free_wp(int N, int*success);
 
+void print_wp();
+
 #endif

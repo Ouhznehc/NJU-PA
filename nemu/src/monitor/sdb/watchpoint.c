@@ -98,6 +98,17 @@ WP* free_wp(int N, int *success){
   printf("No such watchpoint numbered %d\n", N);
   return NULL;
 }
+
+void print_wp(){
+  if(head == NULL){
+    printf("No watchpoint in the pool \n");
+    return;
+  }
+  WP* now = head;
+  while(now != free_)
+    printf("watchpoint %d:  %s    value = %u\n", now->NO, now->EXPR, now->initial_ans);
+  return;
+}
 /* TODO: Implement the functionality of watchpoint */
 
 
