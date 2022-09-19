@@ -93,6 +93,7 @@ WP* free_wp(int N, int *success){
       clear_wp(erase);
       return erase;
     }
+    now = now->next;
   }
   *success = 0;
   printf("No such watchpoint numbered %d\n", N);
