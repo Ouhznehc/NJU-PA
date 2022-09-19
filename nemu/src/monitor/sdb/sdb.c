@@ -90,7 +90,7 @@ static int cmd_x(char *args){
   word_t EXPR = expr(arg, &success);
   for(int i = 0; i < N; i++){
     word_t memory = vaddr_read(EXPR + 4 * i, 4);
-    printf("0x%08x     ", EXPR + 4 * i);
+    printf("0x%08x:     ", EXPR + 4 * i);
     for(int j = 0; j < 4; j++){
       mem[j] = memory & 0xff;
       memory >>= 8;
