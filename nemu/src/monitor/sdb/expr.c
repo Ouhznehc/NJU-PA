@@ -183,6 +183,8 @@ int main_opt_pos(int p, int q) {
 
 word_t eval(int p, int q, int *success) {
   if(p > q){*success = 0; return 0;}
+  printf("%d\n", check_parentheses(p, q));
+  if(check_parentheses(p, q) == -1) {*success = 0; return 0;}
   if(p == q) {
     word_t ans;
   //  Log("%s", tokens[p].str);
@@ -228,11 +230,9 @@ word_t eval(int p, int q, int *success) {
 word_t expr(char *e, int *success) {
   if (!make_token(e)){
     *success = 0;
-    goto output;
   }
   if(check_parentheses(0, nr_token - 1) == -1){
     *success = 0;
-    goto output;
   }
   for (int i = 0; i < nr_token; i ++)
     if (i == 0 || (tokens[i - 1].type != TK_RBRACKET && tokens[i - 1].type != TK_NUM_10 && tokens[i - 1].type != TK_NUM_16 && tokens[i - 1].type != TK_REG)){
@@ -240,7 +240,6 @@ word_t expr(char *e, int *success) {
       if(tokens[i].type == TK_TIMES) tokens[i].type = TK_POINTER;
     }
   /* TODO: Insert codes to evaluate the expression. */
-  output:
   word_t ans = eval(0, nr_token - 1, success);
   switch(*success){
     case 0 :    printf("Invalid expression \n"); break;
