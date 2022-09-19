@@ -43,7 +43,6 @@ WP *new_wp(char *e, int *success){
   WP* new_one = free_;
   if(*success != 1) return NULL;
   else if(head == NULL){
-    init_wp_pool();
     head = free_;
     free_ = free_->next;
     head->next = free_;
