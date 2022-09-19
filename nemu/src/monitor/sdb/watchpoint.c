@@ -105,8 +105,10 @@ void print_wp(){
     return;
   }
   WP* now = head;
-  while(now != free_)
+  while(now != free_){
     printf("watchpoint %d:  %s    value = %u\n", now->NO, now->EXPR, now->initial_ans);
+    now = now->next;
+  }
   return;
 }
 /* TODO: Implement the functionality of watchpoint */
