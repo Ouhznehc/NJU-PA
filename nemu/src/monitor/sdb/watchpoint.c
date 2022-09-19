@@ -120,6 +120,7 @@ void check_wp(){
     word_t val = expr(now->EXPR, &success);
     if(val != now->initial_ans){
       nemu_state.state = NEMU_STOP;
+      printf("watchpoint %d is changed:  %s    value_pre = %u, value_now = %u\n", now->NO, now->EXPR, now->initial_ans, val);
       return;
     }
     now = now->next;
