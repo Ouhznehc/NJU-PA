@@ -120,7 +120,7 @@ static int cmd_w(char *args){
   }
   WP* new_one = new_wp(args, &success);
   if(success != 1) return 0;
-  printf("add watchpoint %d :  %s\n", new_one->NO, args);
+  printf("add watchpoint %d:  %s\n", new_one->NO, args);
   return 0;
 }
 
@@ -133,7 +133,7 @@ static int cmd_d(char *args){
   sscanf(args, "%d", &N);
   WP *erase = free_wp(N, &success);
   if(success != 1) return 0;
-  printf("delete watchpoint %d : %s\n", N, erase->EXPR);
+  printf("delete watchpoint %d: %s\n", N, erase->EXPR);
   return 0;
   
 }
