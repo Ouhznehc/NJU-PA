@@ -230,11 +230,9 @@ word_t eval(int p, int q, int *success) {
 word_t expr(char *e, int *success) {
   if (!make_token(e)){
     *success = 0;
-    return 0;
   }
   if(check_parentheses(0, nr_token - 1) == -1){
     *success = 0;
-    return 0;
   }
   for (int i = 0; i < nr_token; i ++)
     if (i == 0 || (tokens[i - 1].type != TK_RBRACKET && tokens[i - 1].type != TK_NUM_10 && tokens[i - 1].type != TK_NUM_16 && tokens[i - 1].type != TK_REG)){
