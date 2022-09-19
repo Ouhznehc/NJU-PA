@@ -86,14 +86,17 @@ static int cmd_x(char *args){
     return 0;
   } 
   int success = 1;
+  word_t mem[4];
   word_t EXPR = expr(arg, &success);
   for(int i = 0; i < N; i++){
     word_t memory = vaddr_read(EXPR + 4 * i, 4);
     printf("0x%08x     ", EXPR + 4 * i);
     for(int j = 0; j < 4; j++){
-      printf("%02x ", memory & 0xff);
+      mem[j] = memory & 0xff;
       memory >>= 8;
     } 
+    for(int j = 3; j >= 0; j--)
+      printf("%02x ", mem[j]);
     printf("\n");
   }
   free(arg);
