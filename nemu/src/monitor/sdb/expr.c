@@ -198,6 +198,7 @@ word_t eval(int p, int q, int *success) {
     if(*success == 1) return ans;
     else return 0;
   }
+  if(check_parentheses(p, q) == -1) *success = 0;
   if(check_parentheses(p, q)) return eval(p + 1, q - 1, success);
   else{
     int main_pos = main_opt_pos(p, q);
