@@ -182,10 +182,8 @@ int main_opt_pos(int p, int q) {
 }
 
 word_t eval(int p, int q, int *success) {
-  if(p > q){
-    *success = 0;
-    return 0;
-  }
+  if(p > q){*success = 0; return 0;}
+  if(check_parentheses(p, q) == -1) {*success = 0; return 0;}
   if(p == q) {
     word_t ans;
   //  Log("%s", tokens[p].str);
@@ -198,8 +196,6 @@ word_t eval(int p, int q, int *success) {
     if(*success == 1) return ans;
     else return 0;
   }
-  printf("%d\n", check_parentheses(p, q));
-  if(check_parentheses(p, q) == -1) {*success = 0; return 0;}
   if(check_parentheses(p, q)) return eval(p + 1, q - 1, success);
   else{
     int main_pos = main_opt_pos(p, q);
