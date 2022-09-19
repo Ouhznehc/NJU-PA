@@ -80,14 +80,14 @@ static int cmd_x(char *args){
   int argslen = strlen(args);
   char *arg = (char*) malloc(sizeof(char) * argslen);
   if(args == NULL) printf("x: Too few arguments \n");
-  else sscanf(args, "%d %[^\n]", &N, arg);
-  if(cmd_p(arg)){
-    free(arg);
-    return 0;
-  } 
+  else sscanf(args, "%d %[^\n]", &N, arg); 
   int success = 1;
   word_t mem[4];
   word_t EXPR = expr(arg, &success);
+  if(success != 1){
+    free(arg);
+    return 0;
+  }
   for(int i = 0; i < N; i++){
     word_t memory = vaddr_read(EXPR + 4 * i, 4);
     printf("0x%08x:     ", EXPR + 4 * i);
