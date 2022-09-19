@@ -74,6 +74,8 @@ WP* free_wp(int N, int *success){
     erase = now;
     if(head->next == free_){
       head = NULL;
+      erase->next = free_->next;
+      free_->next = erase;
       return erase;
     }
     head = erase->next;
