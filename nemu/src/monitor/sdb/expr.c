@@ -198,14 +198,12 @@ word_t eval(int p, int q, int *success) {
     if(*success == 1) return ans;
     else return 0;
   }
-  if(check_parentheses(p, q) == -1) *success = 0;
+  printf("%d\n", check_parentheses(p, q));
+  if(check_parentheses(p, q) == -1) {*success = 0; return 0;}
   if(check_parentheses(p, q)) return eval(p + 1, q - 1, success);
   else{
     int main_pos = main_opt_pos(p, q);
-    if(main_pos == -1){
-      *success = 0;
-      return 0;
-    }
+    if(main_pos == -1){*success = 0; return 0;}
     word_t val1, val2;
     if(priority(tokens[main_pos].type) != 1){
       val1 = eval(p, main_pos - 1, success);
@@ -225,10 +223,7 @@ word_t eval(int p, int q, int *success) {
       case TK_NEG:     return -val1;
       case TK_POINTER: return vaddr_read(val1, 4);
       case TK_DIVIDE: 
-        if(val2 == 0){
-          *success = -1;
-          return 0;
-        }
+        if(val2 == 0){*success = -1; return 0;}
         return val1 / val2;
       default: assert(0);
     }
