@@ -188,10 +188,8 @@ word_t eval(int p, int q, int *success) {
   //  Log("%s", tokens[p].str);
     if(tokens[p].type == TK_NUM_10) ans = atoi(tokens[p].str);
     else if(tokens[p].type == TK_NUM_16) sscanf(tokens[p].str, "%x", &ans);
-    else{
-      ans = isa_reg_str2val(tokens[p].str + 1, success);
-    //  printf("%s\n",tokens[p].str);
-    }
+    else if(tokens[p].type == TK_REG) ans = isa_reg_str2val(tokens[p].str + 1, success);
+    else {*success = 0; return 0;}
     if(*success == 1) return ans;
     else return 0;
   }
