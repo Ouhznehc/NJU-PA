@@ -37,4 +37,6 @@ WP* free_wp(int N, int*success);
 
 void print_wp();
 
+void check_wp();
+
 #endif

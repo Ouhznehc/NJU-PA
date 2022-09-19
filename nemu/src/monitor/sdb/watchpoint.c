@@ -111,6 +111,21 @@ void print_wp(){
   }
   return;
 }
+
+void check_wp(){
+  if(head == NULL) return;
+  WP *now = head;
+  int success = 1;
+  while(now != free_){
+    word_t val = expr(now->EXPR, &success);
+    if(val != now->initial_ans){
+      nemu_state.state = NEMU_STOP;
+      return;
+    }
+    now = now->next;
+  }
+  return;
+}
 /* TODO: Implement the functionality of watchpoint */
 
 
