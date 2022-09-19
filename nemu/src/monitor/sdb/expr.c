@@ -222,7 +222,7 @@ word_t eval(int p, int q, int *success) {
       case TK_MINUS:   return val1 - val2;
       case TK_TIMES:   return val1 * val2;
       case TK_NEG:     return -val1;
-      case TK_POINTER: return vaddr_read(val1+0x80000000, 4);
+      case TK_POINTER: return vaddr_read(val1, 4);
       case TK_DIVIDE: 
         if(val2 == 0){
           *success = -1;
