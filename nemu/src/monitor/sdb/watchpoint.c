@@ -59,7 +59,7 @@ WP *new_wp(char *e, int *success){
 }
 
 void clear_wp(WP* now){
-  memset(now->EXPR, 0, sizeof(now->EXPR));
+  //memset(now->EXPR, 0, sizeof(now->EXPR));
   now->initial_ans = 0;
 }
 
