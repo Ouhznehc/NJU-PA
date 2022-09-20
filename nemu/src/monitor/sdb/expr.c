@@ -152,7 +152,8 @@ int priority(int type){
   if(type == TK_TIMES || type == TK_DIVIDE) return 2;
   else if(type == TK_PLUS || type == TK_MINUS) return 3;
   else if(type == TK_POINTER || type == TK_NEG) return 1;
-  else if(type == TK_AND || type == TK_EQ || type == TK_NEQ) return 4;
+  else if(type == TK_EQ || type == TK_NEQ) return 4;
+  else if(type == TK_AND) return 5;
   return 0;
 }
 
