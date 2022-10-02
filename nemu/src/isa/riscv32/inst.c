@@ -92,6 +92,6 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
   s->isa.inst.val = inst_fetch(&s->snpc, 4);
-  printf("%d/n%d/n", s->pc, s->snpc);
+  printf("%08x\n%08x\n", s->pc, s->snpc);
   return decode_exec(s);
 }
