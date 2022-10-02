@@ -65,6 +65,7 @@ static int decode_exec(Decode *s) {
   int dest = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
+  printf("%08x\n%08x\n", s->pc, s->snpc);
 
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
@@ -92,6 +93,5 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
   s->isa.inst.val = inst_fetch(&s->snpc, 4);
-  printf("%08x\n%08x\n", s->pc, s->snpc);
   return decode_exec(s);
 }
