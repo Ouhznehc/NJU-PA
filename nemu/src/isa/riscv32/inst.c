@@ -34,14 +34,14 @@ enum {
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 //! begin my code
 #define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1) << 20) |\
-                           ((BITS(i, 30, 21)) << 1) |\
-                           ((BITS(i, 20, 20)) << 11) |\
-                           ((BITS(i, 19, 12)) << 12) ; } while(0)
+                                    (BITS(i, 30, 21)) << 1  |\
+                                    (BITS(i, 20, 20)) << 11 |\
+                                    (BITS(i, 19, 12)) << 12 ; } while(0)
 
 #define immB() do { *imm = (SEXT(BITS(i, 31, 31), 1) << 12) |\
-                           ((BITS(i, 30, 25)) << 5)  |\
-                           ((BITS(i, 11, 8)) << 1)   |\
-                           ((BITS(i, 7, 7)) << 11)   ; } while(0)
+                                    (BITS(i, 30, 25)) << 5  |\
+                                    (BITS(i, 11, 8)) << 1   |\
+                                    (BITS(i, 7, 7)) << 11   ; } while(0)
 //! end my code
 
 static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) {
@@ -97,7 +97,7 @@ static int decode_exec(Decode *s) {
 
   // type_B
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(src1 == src2) s->dnpc = s->pc + imm);
-  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm; Log("%u", imm));
+  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm);
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", blt    , B, if((int)src1 < (int)src2) s->dnpc = s->pc + imm);
   INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge    , B, if((int)src1 >= (int)src2) s->dnpc = s->pc + imm);
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, if(src1 < src2) s->dnpc = s->pc + imm);
