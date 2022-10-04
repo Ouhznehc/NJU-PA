@@ -12,7 +12,6 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
-
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
