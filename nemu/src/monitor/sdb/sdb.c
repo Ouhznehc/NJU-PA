@@ -57,55 +57,55 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args){
-  int N = 1;
-  if(args != NULL) sscanf(args, "%d", &N);
-  cpu_exec(N);
+//   int N = 1;
+//   if(args != NULL) sscanf(args, "%d", &N);
+//   cpu_exec(N);
   return 0;
 
 }
 
 static int cmd_info(char *args){
-  char *arg = strtok(NULL, " ");
-  if(arg == NULL) printf("info: Too few arguments \n");
-  else if(strcmp(arg, "r") == 0) isa_reg_display();
-  else if(strcmp(arg, "w") == 0) print_wp();
-  else printf("info %s: Unknown command \n", arg);
+//   char *arg = strtok(NULL, " ");
+//   if(arg == NULL) printf("info: Too few arguments \n");
+//   else if(strcmp(arg, "r") == 0) isa_reg_display();
+//   else if(strcmp(arg, "w") == 0) print_wp();
+//   else printf("info %s: Unknown command \n", arg);
   return 0;
 }
 
 static int cmd_p(char *args);
 
 static int cmd_x(char *args){
-  int N;
-  int argslen = strlen(args);
-  char *arg = (char*) malloc(sizeof(char) * argslen);
-  if(args == NULL) printf("x: Too few arguments \n");
-  else sscanf(args, "%d %[^\n]", &N, arg); 
-  int success = 1;
-  word_t mem[4];
-  word_t EXPR = expr(arg, &success);
-  if(success != 1){
-    free(arg);
-    return 0;
-  }
-  for(int i = 0; i < N; i++){
-    word_t memory = vaddr_read(EXPR + 4 * i, 4);
-    printf("0x%08x:     ", EXPR + 4 * i);
-    for(int j = 0; j < 4; j++){
-      mem[j] = memory & 0xff;
-      memory >>= 8;
-    } 
-    for(int j = 3; j >= 0; j--)
-      printf("%02x ", mem[j]);
-    printf("\n");
-  }
-  free(arg);
+//   int N;
+//   int argslen = strlen(args);
+//   char *arg = (char*) malloc(sizeof(char) * argslen);
+//   if(args == NULL) printf("x: Too few arguments \n");
+//   else sscanf(args, "%d %[^\n]", &N, arg);
+//   int success = 1;
+//   word_t mem[4];
+//   word_t EXPR = expr(arg, &success);
+//   if(success != 1){
+//     free(arg);
+//     return 0;
+//   }
+//   for(int i = 0; i < N; i++){
+//     word_t memory = vaddr_read(EXPR + 4 * i, 4);
+//     printf("0x%08x:     ", EXPR + 4 * i);
+//     for(int j = 0; j < 4; j++){
+//       mem[j] = memory & 0xff;
+//       memory >>= 8;
+//     }
+//     for(int j = 3; j >= 0; j--)
+//       printf("%02x ", mem[j]);
+//     printf("\n");
+//   }
+//   free(arg);
   return 0;
 }
 
 static int cmd_p(char *args){
   if(args == NULL){
-    printf("q: Too few arguments \n");
+    printf("p: Too few arguments \n");
     return 1;
   }
   int success = 1;
