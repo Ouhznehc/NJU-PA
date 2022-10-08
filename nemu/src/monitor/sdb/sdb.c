@@ -134,7 +134,6 @@ static int cmd_d(char *args){
     return 0;
   }
   sscanf(args, "%d", &N);
-  printf("%d\n", N);
   WP *erase = free_wp(N, &success);
   if(success != 1) return 0;
   printf("delete watchpoint %d: %s\n", N, erase->EXPR);
