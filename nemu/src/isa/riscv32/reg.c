@@ -25,12 +25,12 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  //Log("register display is called");
-//   for(int i = 0; i < 8; i++){
-//     for(int j = 0; j < 4; j++)
-//     printf("%3s is 0x%08x    ", regs[4 * i + j], cpu.gpr[4 * i + j]);
-//     printf("\n");
-//   }
+  Log("register display is called");
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 4; j++)
+    printf("%3s is 0x%08x    ", regs[4 * i + j], cpu.gpr[4 * i + j]);
+    printf("\n");
+  }
   return;
 }
 
