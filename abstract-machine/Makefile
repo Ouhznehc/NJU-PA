@@ -2,7 +2,7 @@
 
 ### *Get a more readable version of this Makefile* by `make html` (requires python-markdown)
 
-
+CONFIG_TARGET_AM = y
 
 html:
 	cat Makefile | sed 's/^\([^#]\)/    \1/g' | markdown_py > Makefile.html
