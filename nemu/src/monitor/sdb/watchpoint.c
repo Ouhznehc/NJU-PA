@@ -29,7 +29,7 @@ void init_wp_pool() {
     wp_pool[i].initial_ans = 0;
   }
   head = NULL;
-  free_ = wp_pool;
+  free_ = &wp_pool[1];
 }
 /*   complete a linked list which starts at "head", ends at "free_"    */
 
