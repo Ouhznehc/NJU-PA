@@ -36,7 +36,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 
 char *strcat(char *dst, const char *src) {
   if(dst == NULL || src == NULL) return NULL;
-  char *start = dst + strlen(dst) + 1;
+  char *start = dst + strlen(dst);
   while((*start++ = *src++) != '\0');
   return dst;
 }
