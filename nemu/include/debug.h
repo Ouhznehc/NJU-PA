@@ -48,4 +48,8 @@
     _Log(ANSI_FMT(" " format, ANSI_FG_RED) "\n", \
         ## __VA_ARGS__)
 
+#define color_green(format, ...) \
+    _Log(ANSI_FMT(" " format, ANSI_FG_GREEN) "\n", \
+        ## __VA_ARGS__)
+
 #endif
