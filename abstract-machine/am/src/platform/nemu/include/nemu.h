@@ -21,7 +21,7 @@
 #else
 # define DEVICE_BASE 0xa0000000
 #endif
-
+#define CONFIG_TARGET_AM 1
 #define MMIO_BASE 0xa0000000
 
 #define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
