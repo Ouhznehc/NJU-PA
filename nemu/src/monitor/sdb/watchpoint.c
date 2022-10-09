@@ -121,12 +121,12 @@ void check_wp(){
     if(val != now->initial_ans){
       nemu_state.state = NEMU_STOP;
       printf("watchpoint %d is changed:  %s    value_pre = %u, value_now = %u\n", now->NO, now->EXPR, now->initial_ans, val);
-      return;
+      now->initial_ans = val;    
     }
     now = now->next;
   }
   return;
 }
 /* TODO: Implement the functionality of watchpoint */
-
+ 
 
