@@ -40,4 +40,8 @@
 
 #define TODO() panic("please implement me")
 
+#define Highlight(format, ...) \
+    _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_YELLOW) "\n", \
+        ## __VA_ARGS__)
+
 #endif
