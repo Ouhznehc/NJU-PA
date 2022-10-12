@@ -37,6 +37,7 @@ void isa_reg_display() {
 word_t isa_reg_str2val(const char *s, int *success) {
   //Log("%s", s);
   if(strcmp(s, "0") == 0) return cpu.gpr[0];
+  if(strcmp(s, "pc") == 0) return cpu.pc;
   for(int i = 0; i < 32; i++)
     if(strcmp(s, regs[i]) == 0)
       return cpu.gpr[i];
