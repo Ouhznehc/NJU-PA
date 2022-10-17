@@ -11,7 +11,7 @@ int printf(const char *fmt, ...) {
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str;
-  panic("Not implemented");
+  //panic("Not implemented");
   for(str = out; *fmt; fmt++){
     if(*fmt != '%'){
       *str++ = *fmt;
@@ -39,6 +39,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 }
 
 int sprintf(char *out, const char *fmt, ...) {
+  panic("lalal");
   va_list args;
   int val;
   va_start(args, fmt);
