@@ -5,7 +5,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void int_to_string(int num, char *ans){
+char *int_to_string(int num, char *ans){
   int sign = (num >= 0);
   if(!sign) num = -num;
   char reverse[1024];
@@ -18,7 +18,7 @@ void int_to_string(int num, char *ans){
   size_t len = strlen(reverse);
   if(!sign) *ans++ = '-';
   for(size_t i = 0; i < len; i++) *ans++ = *(--s);
-  return;
+  return ans;
 }
 
 int printf(const char *fmt, ...) {
@@ -36,7 +36,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     switch(*fmt){
       case 'd':
         int num = va_arg(ap, int);
-        int_to_string(num, str);
+        str = int_to_string(num, str);
+        
         continue;
       case 's':
         char *s = va_arg(ap, char*);
