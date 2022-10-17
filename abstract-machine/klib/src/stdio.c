@@ -8,15 +8,16 @@
 void int_to_string(int num, char *ans){
   int sign = (num >= 0);
   if(!sign) num = -num;
-  char *reverse = '\0';
+  char reverse[1024];
+  char *s = reverse;
   while(num){
-    *reverse++ = num % 10 + '0';
+    *s++ = num % 10 + '0';
     num /= 10;
   }
-  *reverse = '\0';
-  size_t len = strlen(reverse);
+  *s = '\0';
+  size_t len = strlen(s);
   if(!sign) *ans++ = '-';
-  for(size_t i = 0; i < len; i++) *ans++ = *(--reverse);
+  for(size_t i = 0; i < len; i++) *ans++ = *(--s);
   return;
 }
 
