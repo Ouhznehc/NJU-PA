@@ -11,6 +11,7 @@ int printf(const char *fmt, ...) {
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str;
+  panic("Not implemented");
   for(str = out; *fmt; fmt++){
     if(*fmt != '%'){
       *str++ = *fmt;
@@ -24,12 +25,12 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           *str++ = (char)(num % 10 + '0');
           num /= 10;
         }
-        break;
+        continue;
       case 's':
         char *s = va_arg(ap, char*);
         size_t len = strlen(s);
         for(size_t i = 0; i < len; i++) *str++ = *s++;
-        break; 
+        continue; 
       default: panic("Not implemented");
     }
   }
