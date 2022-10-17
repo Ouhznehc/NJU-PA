@@ -21,7 +21,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       case 'd':
         int num = va_arg(ap, int);
         while(num){
-          *str++ = num % 10 + '0';
+          *str++ = (char)(num % 10 + '0');
           num /= 10;
         }
         continue;
