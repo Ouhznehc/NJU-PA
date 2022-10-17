@@ -39,7 +39,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       case 'd':
         num = va_arg(ap, int);
         str = int_to_string(num, str);
-        
         continue;
       case 's':
         s = va_arg(ap, char*);
