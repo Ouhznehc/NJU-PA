@@ -5,6 +5,21 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+void int_to_string(int num, char *ans){
+  int sign = (num >= 0);
+  if(!sign) num = -num;
+  char *reverse = '\0';
+  while(num){
+    *reverse++ = num % 10 + '0';
+    num /= 10;
+  }
+  *reverse = '\0';
+  size_t len = strlen(reverse);
+  if(!sign) *ans++ = '-';
+  for(size_t i = 0; i < len; i++) *ans++ = *(--reverse);
+  return;
+}
+
 int printf(const char *fmt, ...) {
   panic("Not implemented");
 }
@@ -20,10 +35,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     switch(*fmt){
       case 'd':
         int num = va_arg(ap, int);
-        while(num){
-          *str++ = (char)(num % 10 + '0');
-          num /= 10;
-        }
+        int_to_string(num, str);
         continue;
       case 's':
         char *s = va_arg(ap, char*);
