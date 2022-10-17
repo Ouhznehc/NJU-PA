@@ -28,7 +28,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       case 's':
         char *s = va_arg(ap, char*);
         size_t len = strlen(s);
-        for(size_t i = 0; i < len; i++) *str++ = *s++;
+        //for(size_t i = 0; i < len; i++) *str++ = *s++;
+        strncpy(str, s, len);
+        str += len;
         continue; 
       default: panic("Not implemented");
     }
