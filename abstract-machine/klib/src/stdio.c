@@ -15,7 +15,7 @@ void int_to_string(int num, char *ans){
     num /= 10;
   }
   *s = '\0';
-  size_t len = strlen(s);
+  size_t len = strlen(reverse);
   if(!sign) *ans++ = '-';
   for(size_t i = 0; i < len; i++) *ans++ = *(--s);
   return;
