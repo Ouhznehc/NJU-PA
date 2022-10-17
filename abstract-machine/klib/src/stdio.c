@@ -21,9 +21,6 @@ char *int_to_string(int num, char *ans){
   return ans;
 }
 
-int printf(const char *fmt, ...) {
-  panic("Not implemented");
-}
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str;
@@ -69,4 +66,14 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
 
+int printf(const char *fmt, ...) {
+  char out[1024];
+  int val;
+  va_list args;
+  va_start(args, fmt);
+  val = vsprintf(out, fmt, args);
+  va_end(args);
+  putstr(out);
+  return val;
+}
 #endif
