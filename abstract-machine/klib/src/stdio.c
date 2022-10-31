@@ -10,7 +10,8 @@ char *int_to_string(int num, char *ans){
   if(!sign) num = -num;
   char reverse[1024];
   char *s = reverse;
-  while(num){
+  if(num == 0) *s++ = '0';
+  else while(num){
     *s++ = num % 10 + '0';
     num /= 10;
   }
