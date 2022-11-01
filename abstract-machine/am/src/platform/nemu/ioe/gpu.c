@@ -29,7 +29,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int x = ctl->x, y = ctl->y, w = ctl->w, h = ctl->h;
   uint32_t *pixels = ctl->pixels;
-  uint32_t width = 400, height = 300;
+  uint32_t width = screen_width(), height = screen_height();
   for(int i = 0; i < w; i++)
     for(int j = 0; j < h; j++)
       if(x + i < width && y + j < height)
