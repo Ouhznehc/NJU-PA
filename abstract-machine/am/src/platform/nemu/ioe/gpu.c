@@ -3,15 +3,15 @@
 
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
-static uint32_t screen_width() {
+uint32_t screen_width() {
   return (uint32_t)inw(VGACTL_ADDR + 2);
 }
 
-static uint32_t screen_height() {
+uint32_t screen_height() {
   return (uint32_t)inw(VGACTL_ADDR);
 }
 
-static uint32_t screen_size() {
+uint32_t screen_size() {
   return screen_width() * screen_height() * sizeof(uint32_t);
 }
 
