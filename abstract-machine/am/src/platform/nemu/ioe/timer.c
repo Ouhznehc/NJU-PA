@@ -1,6 +1,5 @@
 #include <am.h>
 #include <nemu.h>
-#include <stdio.h>
 static uint64_t bool_time = 0;
 
 static uint64_t __am_timer_get_time(){
