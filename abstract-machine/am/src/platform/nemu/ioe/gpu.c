@@ -22,7 +22,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = (int)screen_width(), .height = (int)screen_height(),
-    .vmemsz = (int)screen_size()
+    .vmemsz = 0
   };
 }
 
@@ -30,10 +30,10 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int x = ctl->x, y = ctl->y, w = ctl->w, h = ctl->h;
   uint32_t *pixels = ctl->pixels;
   uint32_t width = screen_width(), height = screen_height();
-  for(int i = 0; i < w; i ++)
-    for(int j = 0; j < h; j ++)
+  for(int i = 0; i < w; i++)
+    for(int j = 0; j < h; j++)
       if(x + i < width && y + j < height)
-        outl(FB_ADDR + (width * (y + j) + x + i) * 4, pixels[w * j + i]);
+        outl(FB_ADDR + (width * (y + j) + x + i) * 4, pixels[i + w * j]);
   if(ctl->sync) outl(SYNC_ADDR, 1);
 }
 
