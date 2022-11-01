@@ -60,7 +60,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       case '%':
         *str++ = '%';
         continue;
-      default: panic("Not implemented");
+      //default://panic("Not implemented");
     }
   }
   *str = '\0';
