@@ -22,14 +22,14 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = (int)screen_width(), .height = (int)screen_height(),
-    .vmemsz = 0
+    .vmemsz = (int)screen_size()
   };
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int x = ctl->x, y = ctl->y, w = ctl->w, h = ctl->h;
   uint32_t *pixels = ctl->pixels;
-  uint32_t width = screen_width(), height = screen_height();
+  uint32_t width = 400, height = 300;
   for(int i = 0; i < w; i++)
     for(int j = 0; j < h; j++)
       if(x + i < width && y + j < height)
