@@ -57,10 +57,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         for(size_t i = 0; i < len; i++) *str++ = *s++;
         continue; 
-      case '%':
-        *str++ = '%';
-        continue;
-      default: panic("Not implemented");
+      default: break;
     }
   }
   *str = '\0';
