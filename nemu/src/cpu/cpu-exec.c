@@ -104,8 +104,8 @@ static void iringbuf_display(){
   color_green("IRINGBUF DISPLAY");
   printf("====================================\n");
   for(int i = 0; i < MAX_INST_TO_PRINT; i++){
-    if(i == iringbuf_pointer) printf("-->");
-    else printf("   ");
+    if(i == iringbuf_pointer) printf("--> ");
+    else printf("    ");
     printf("%s\n", iringbuf[i]);
   }
   printf("====================================\n");
