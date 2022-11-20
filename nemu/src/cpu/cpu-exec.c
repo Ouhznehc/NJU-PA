@@ -30,8 +30,8 @@ CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
-static char iringbuf[MAX_INST_TO_PRINT][128];
-static int  iringbuf_pointer = 0;
+IFDEF(CONFIG_IRINGBUF, static char iringbuf[MAX_INST_TO_PRINT][128]);
+IFDEF(CONFIG_IRINGBUF, static int  iringbuf_pointer = 0);
 
 void device_update();
 
@@ -99,6 +99,7 @@ static void statistic() {
 }
 
 static void iringbuf_display(){
+  #ifdef CONFIG_IRINGBUF
   printf("\n");
   color_green("IRINGBUF DISPLAY");
   printf("====================================\n");
@@ -108,11 +109,12 @@ static void iringbuf_display(){
     printf("%s\n", iringbuf[i]);
   }
   printf("====================================\n");
+  #endif
   return;
 }
 
 void assert_fail_msg() {
-  IFDEF(CONFIG_IRINGBUF, iringbuf_display());
+  iringbuf_display();
   isa_reg_display();
   statistic();
 }
