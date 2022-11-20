@@ -37,8 +37,8 @@ void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_IRINGBUF
-  strcpy(iringbuf[iringbuf_pointer], _this->logbuf);
   iringbuf_pointer = (iringbuf_pointer + 1) % MAX_INST_TO_PRINT;
+  strcpy(iringbuf[iringbuf_pointer], _this->logbuf);
 #endif
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
