@@ -116,6 +116,7 @@ void assert_fail_msg() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
+  TODO();
   g_print_step = (n < MAX_INST_TO_PRINT);
   // Log("nemu_state = %d", nemu_state.state);
   switch (nemu_state.state) {
