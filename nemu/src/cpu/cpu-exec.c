@@ -99,6 +99,8 @@ static void statistic() {
 }
 
 static void iringbuf_display(){
+  printf("\n");
+  color_green("IRINGBUF DISPLAY\n");
   printf("====================================\n");
   for(int i = 0; i < MAX_INST_TO_PRINT; i++){
     if(i == iringbuf_pointer) printf("-->");
