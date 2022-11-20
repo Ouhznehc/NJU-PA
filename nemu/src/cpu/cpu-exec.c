@@ -30,10 +30,16 @@ CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
+static char iringbuf[MAX_INST_TO_PRINT][128];
+static int  iringbuf_pointer = 0;
 
 void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
+#ifdef CONFIG_IRINGBUF
+  iringbuf_pointer = (iringbuf_pointer + 1) % MAX_INST_TO_PRINT;
+  strcpy(iringbuf[iringbuf_pointer], _this->logbuf);
+#endif
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
@@ -91,7 +97,19 @@ static void statistic() {
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
 
+static void iringbuf_display(){
+  printf("====================================\n");
+  for(int i = 0; i < MAX_INST_TO_PRINT; i++){
+    if(i == iringbuf_pointer) printf("-->");
+    else printf("   ");
+    printf("%s\n", iringbuf[i]);
+  }
+  printf("====================================\n");
+  return;
+}
+
 void assert_fail_msg() {
+  IFDEF(CONFIG_IRINGBUF, iringbuf_display());
   isa_reg_display();
   statistic();
 }
