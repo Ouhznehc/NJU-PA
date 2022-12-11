@@ -67,93 +67,45 @@ int strncmp(const char *s1, const char *s2, size_t n) {
   return 0; 
 }
 
-// void *memset(void *s, int c, size_t n) {
-//   if (s == NULL) return NULL;
-//   unsigned char *str = (unsigned char*) s;
-//   while (n--) *str++ = c;
-//   return s;
-// }
-
-// void *memmove(void *dst, const void *src, size_t n) {
-//   return memcpy(dst, src, n);
-// }
-
-// void *memcpy(void *out, const void *in, size_t n) {
-//   if (out == NULL || in == NULL) return NULL;
-//   unsigned char *dst = (unsigned char*) out;
-//   unsigned char *src = (unsigned char*) in;
-//   if (dst >= src && dst <= src + n - 1) {
-//         dst = dst + n - 1;
-//         src = src + n - 1;
-//         while (n--)
-//             *dst-- = *src--;
-//     }
-//     else {
-//         while (n--)
-//             *dst++ = *src++;
-//     }
-//     return out;
-// }
-
-// int memcmp(const void *s1, const void *s2, size_t n) {
-//   assert(s1 != NULL && s2 != NULL); 
-//   unsigned char *str1 = (unsigned char*) s1;
-//   unsigned char *str2 = (unsigned char*) s2;      
-//   while (n--) { 
-//     if (*str1 == *str2) { 
-//       str1++;                     
-//       str2++; 
-//     } 
-//     else return *str1 < *str2 ? -1 : 1;
-//   }       
-//   return 0; 
-// }
 void *memset(void *s, int c, size_t n) {
-  char *tmp = s;
-  while(n--){
-    *tmp++ = c;
-  }
+  if (s == NULL) return NULL;
+  unsigned char *str = (unsigned char*) s;
+  while (n--) *str++ = c;
   return s;
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  char *tmp1 = dst;
-  const char *tmp2 = src;
-  if(tmp2 < tmp1 && tmp1 < tmp2 + n){
-    tmp1 += n;
-    tmp2 += n;
-    while(n--){
-      tmp1 --;
-      tmp2 --;
-      *tmp1 = *tmp2;
-    }
-  }
-  else 
-    while(n--){
-      *tmp1++ = *tmp2++;
-    }
-  return dst;
+  return memcpy(dst, src, n);
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
-  char *tmp1 = out;
-  const char *tmp2 = in;
-  while(n--){
-    *tmp1++ = *tmp2++;
-  }
-  return out;
+  if (out == NULL || in == NULL) return NULL;
+  unsigned char *dst = (unsigned char*) out;
+  unsigned char *src = (unsigned char*) in;
+  if (dst >= src && dst <= src + n - 1) {
+        dst = dst + n - 1;
+        src = src + n - 1;
+        while (n--)
+            *dst-- = *src--;
+    }
+    else {
+        while (n--)
+            *dst++ = *src++;
+    }
+    return out;
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  const char *tmp1 = s1;
-  const char *tmp2 = s2;
-  while(n--){
-    if(*tmp1 != *tmp2)
-      return ((*tmp1 < *tmp2) ? -1 : 1);
-    tmp1 ++;
-    tmp2 ++;
-  }
-  return 0;
+  assert(s1 != NULL && s2 != NULL); 
+  unsigned char *str1 = (unsigned char*) s1;
+  unsigned char *str2 = (unsigned char*) s2;      
+  while (n--) { 
+    if (*str1 == *str2) { 
+      str1++;                     
+      str2++; 
+    } 
+    else return *str1 < *str2 ? -1 : 1;
+  }       
+  return 0; 
 }
-
 #endif
