@@ -15,7 +15,8 @@ char *int_to_string(int num, char *ans, int zeroflag, int field_width, int base)
   char *s = reverse;
   if(num == 0) {*s++ = '0'; counter++;}
   else while(num){
-    *s++ = num % base + '0';
+    if(num % base > 9) *s++ = num % base - 10 + 'a';
+    else *s++ = num % base + '0';
     counter++;
     num /= base;
   }
