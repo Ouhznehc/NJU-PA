@@ -5,6 +5,8 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+static char out[1024];
+
 char *int_to_string(int num, char *ans, int zeroflag, int field_width){
   int sign = (num >= 0);
   int counter = 0;
@@ -82,7 +84,6 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 }
 
 int printf(const char *fmt, ...) {
-  char out[1024];
   int val;
   va_list args;
   va_start(args, fmt);
