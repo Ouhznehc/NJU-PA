@@ -7,7 +7,7 @@
 
 static char out[1024];
 
-char *int_to_string(int num, char *ans, int zeroflag, int field_width, int base){
+char *int_to_string(int num, char *ans, int zeroflag, int field_width){
   int sign = (num >= 0);
   int counter = 0;
   if(!sign) num = -num;
@@ -15,15 +15,13 @@ char *int_to_string(int num, char *ans, int zeroflag, int field_width, int base)
   char *s = reverse;
   if(num == 0) {*s++ = '0'; counter++;}
   else while(num){
-    if(num % base > 9) *s++ = num % base - 10 + 'a';
-    else *s++ = num % base + '0';
+    *s++ = num % 10 + '0';
     counter++;
-    num /= base;
+    num /= 10;
   }
   *s = '\0';
   size_t len = strlen(reverse);
   if(!sign) *ans++ = '-';
-  if(base == 16) {*ans++ = '0'; *ans++ = 'x';}
   if(field_width != -1){
     for(size_t i = 0; i < field_width - counter; i++)
       *ans++ = zeroflag? '0' : ' ';
@@ -32,19 +30,20 @@ char *int_to_string(int num, char *ans, int zeroflag, int field_width, int base)
   return ans;
 }
 
-char *uint_to_string(uint32_t num, char *ans, int zeroflag, int field_width, int base){
+char *uint_to_string(uint32_t num, char *ans, int zeroflag, int field_width){
   int counter = 0;
   char reverse[1024];
   char *s = reverse;
   if(num == 0) {*s++ = '0'; counter++;}
   else while(num){
-    *s++ = num % base + '0';
+    if(num % 16 > 9) *s++ = num % 16 - 10 + 'a';
+    else *s++ = num % 16 + '0';
     counter++;
-    num /= base;
+    num /= 16;
   }
   *s = '\0';
   size_t len = strlen(reverse);
-  if(base == 16) {*ans++ = '0'; *ans++ = 'x';}
+  *ans++ = '0'; *ans++ = 'x';
   if(field_width != -1){
     for(size_t i = 0; i < field_width - counter; i++)
       *ans++ = zeroflag? '0' : ' ';
@@ -69,11 +68,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     switch(*fmt){
       case 'd':
         num = va_arg(ap, int);
-        str = int_to_string(num, str, zeroflag, field_width, 10);
+        str = int_to_string(num, str, zeroflag, field_width);
         continue;
       case 'p':
         num = va_arg(ap, uint32_t);
-        str = uint_to_string(num, str, zeroflag, field_width, 16);
+        str = uint_to_string(num, str, zeroflag, field_width);
         continue;
       case 's':
       case 'c':
