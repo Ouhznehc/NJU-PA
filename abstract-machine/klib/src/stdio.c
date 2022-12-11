@@ -73,6 +73,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       case 'p':
         num = va_arg(ap, uint32_t);
         str = uint_to_string(num, str, zeroflag, field_width, 16);
+        continue;
       case 's':
       case 'c':
         s = va_arg(ap, char*);
