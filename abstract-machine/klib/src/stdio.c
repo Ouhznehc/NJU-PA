@@ -31,6 +31,26 @@ char *int_to_string(int num, char *ans, int zeroflag, int field_width, int base)
   return ans;
 }
 
+char *uint_to_string(uint32_t num, char *ans, int zeroflag, int field_width, int base){
+  int counter = 0;
+  char reverse[1024];
+  char *s = reverse;
+  if(num == 0) {*s++ = '0'; counter++;}
+  else while(num){
+    *s++ = num % base + '0';
+    counter++;
+    num /= base;
+  }
+  *s = '\0';
+  size_t len = strlen(reverse);
+  if(base == 16) {*ans++ = '0'; *ans++ = 'x';}
+  if(field_width != -1){
+    for(size_t i = 0; i < field_width - counter; i++)
+      *ans++ = zeroflag? '0' : ' ';
+  }
+  for(size_t i = 0; i < len; i++) *ans++ = *(--s);
+  return ans;
+}
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str;
@@ -52,7 +72,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         continue;
       case 'p':
         num = va_arg(ap, uint32_t);
-        str = int_to_string(num, str, zeroflag, field_width, 16);
+        str = uint_to_string(num, str, zeroflag, field_width, 16);
       case 's':
       case 'c':
         s = va_arg(ap, char*);
