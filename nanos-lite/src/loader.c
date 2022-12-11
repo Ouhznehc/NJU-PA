@@ -11,7 +11,7 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
-  ramdisk_read((void *)0x8300019d9, 0x0, 0x4db8);
+  ramdisk_read((void *)0x830003fc, 0x0, 0x4db8);
   //memset()
   return 0x830003fc;
 }
