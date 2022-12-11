@@ -42,33 +42,30 @@ enum {
     MEPC    = 0x341,
     MCAUSE  = 0x342
   };
-
-enum {
-    READ, WRITE
-  };
 //==============================================================
 
 
 
 
 
-static word_t csr(word_t csr, word_t value, word_t write_en){
-  if(write_en)
-    switch (csr) {
-      case MSTATUS: cpu.mstatus = value; break;
-      case MTVEC:   cpu.mtvec = value;   break;
-      case MEPC:    cpu.mepc = value;    break;
-      case MCAUSE:  cpu.mcause = value;  break;
-    } 
-  else{
-    switch (csr) {
+static word_t csr_read(word_t csr){
+  word_t value = 0;
+  switch (csr) {
       case MSTATUS: value = cpu.mstatus;  break;
       case MTVEC:   value = cpu.mtvec;    break;
       case MEPC:    value = cpu.mepc;     break;
       case MCAUSE:  value = cpu.mcause;   break;
     } 
-  }
   return value;
+}
+
+static void csr_write(word_t csr, word_t value){
+      switch (csr) {
+      case MSTATUS: cpu.mstatus = value; break;
+      case MTVEC:   cpu.mtvec = value;   break;
+      case MEPC:    cpu.mepc = value;    break;
+      case MCAUSE:  cpu.mcause = value;  break;
+    } 
 }
 
 #define src1R() do { *src1 = R(rs1); } while (0)
@@ -142,7 +139,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu   , R, R(dest) = src1 / src2);
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu   , R, R(dest) = src1 % src2);
   INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu  , R, R(dest) = ((uint64_t)src1 * (uint64_t)src2) >> 32);
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , R, s->dnpc = csr(MEPC, 0, 0));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , R, s->dnpc = csr_read(MEPC));
 
 
 
@@ -184,8 +181,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori    , I, R(dest) = src1 | imm);
   INSTPAT("??????? ????? ????? 010 ????? 00100 11", slti   , I, R(dest) = ((int)src1 < (int)imm));
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, s->dnpc = isa_raise_intr(EVENT_YIELD, s->pc));
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(dest) = csr(imm, 0, READ); csr(imm, csr(imm, 0, READ) | src1, WRITE););
-  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(dest) = csr(imm, 0, READ); csr(imm, src1, WRITE););
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(dest) = csr_read(imm); csr_write(imm, csr_read(imm) | src1););
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(dest) = csr_read(imm); csr_write(imm, src1););
 
 
 
