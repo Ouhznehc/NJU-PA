@@ -54,7 +54,7 @@ void init_map() {
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
   #ifdef CONFIG_DTRACE
-    color_yellow("INFO: read  map at addr = 0x%08x, len = %02d, name = %s", addr, len, map->name);
+    color_yellow("INFO: read  map at addr = 0x%08x, len = %02d, name = %s\n", addr, len, map->name);
   #endif
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
@@ -66,7 +66,7 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
 
 void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   #ifdef CONFIG_DTRACE
-    color_green("INFO: write map at addr = 0x%08x, len = %02d, name = %s", addr, len, map->name);
+    color_green("INFO: write map at addr = 0x%08x, len = %02d, name = %s\n", addr, len, map->name);
   #endif
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
