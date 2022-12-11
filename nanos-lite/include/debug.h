@@ -14,6 +14,12 @@
     halt(1); \
   } while (0)
 
+#define color_red(format, ...) \
+  do { \
+    printf("\33[1;31m: \n" format, ## __VA_ARGS__); \
+  } while (0)
+
+
 #ifdef assert
 # undef assert
 #endif
