@@ -16,7 +16,7 @@
 
 #define color_red(format, ...) \
   do { \
-    printf("\33[1;31m: \n" format, ## __VA_ARGS__); \
+    printf("\33[1;31m" format, ## __VA_ARGS__); \
   } while (0)
 
 
