@@ -1,6 +1,5 @@
 #include <fs.h>
-size_t ramdisk_read(void *buf, size_t offset, size_t len);
-size_t ramdisk_write(const void *buf, size_t offset, size_t len);
+
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
 
@@ -30,6 +29,7 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
   [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
   [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
+  [FD_FB]     = {"/dev/fb", 0, 0, invalid_read, fb_write},
 #include "files.h"
 };
 
@@ -50,7 +50,7 @@ int fs_open(const char *pathname, int flags, int mode){
 
 size_t fs_read(int fd, void *buf, size_t len){
   Finfo *file = &file_table[fd];
-  if(file->read) file->read(buf, file->disk_offset + file->open_offset, len);
+  if(file->read) file->read(buf, file->open_offset, len);
   else ramdisk_read(buf, file->disk_offset + file->open_offset, len);
   file->open_offset += len;
   return len;
@@ -58,7 +58,7 @@ size_t fs_read(int fd, void *buf, size_t len){
 
 size_t fs_write(int fd, const void *buf, size_t len){
   Finfo *file = &file_table[fd];
-  if(file->write) file->write(buf, file->disk_offset + file->open_offset, len);
+  if(file->write) file->write(buf, file->open_offset, len);
   else ramdisk_write(buf, file->disk_offset + file->open_offset, len);
   file->open_offset += len;
   return len;
