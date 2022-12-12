@@ -12,16 +12,13 @@ void sys_yield(Context *c){
   c->GPRx = 0;
 }
 
-void sys_exit(Context *c){
-  halt(0);
-}
+void sys_exit(Context *c){ halt(c->GPRx); }
 
 void sys_write(Context *c){ c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4); }
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
-
 
   switch (a[0]) {
     case SYS_yield: sys_yield(c); break;
