@@ -25,8 +25,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     fs_read(elf_id, &phdr, sizeof(phdr));
     if(phdr.p_type == PT_LOAD){
       fs_lseek(elf_id, phdr.p_offset, SEEK_SET);
-      fs_read(elf_id, (void *)phdr.p_vaddr, phdr.p_filesz);
-      memset((void *)phdr.p_vaddr + phdr.p_filesz, 0, phdr.p_memsz - phdr.p_filesz);
+      fs_read(elf_id, (void*)phdr.p_vaddr, phdr.p_filesz);
+      memset((void*)phdr.p_vaddr + phdr.p_filesz, 0, phdr.p_memsz - phdr.p_filesz);
     }
   }
   return ehdr.e_entry;
