@@ -10,6 +10,8 @@ void sys_write(Context *c) { c->GPRx = fs_write(c->GPR2, (void*)c->GPR3, c->GPR4
 
 void sys_read (Context *c) { c->GPRx = fs_read(c->GPR2, (void*)c->GPR3, c->GPR4); }
 
+
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
