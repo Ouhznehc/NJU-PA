@@ -13,23 +13,23 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
-  Elf_Ehdr elf_header;
-  Elf_Phdr program_header;
+  Elf_Ehdr ehdr;
+  Elf_Phdr phdr;
   int elf_id = fs_open(filename, 0, 0);
-  fs_read(elf_id, &elf_header, sizeof(elf_header));
+  fs_read(elf_id, &ehdr, sizeof(ehdr));
 
-  assert(*(uint32_t *)elf_header.e_ident == 0x464C457F);// magic number must be elf
+  assert(*(uint32_t *)ehdr.e_ident == 0x464C457F);// magic number must be elf
 
-  for(int i =  0; i < elf_header.e_phnum; i++){
-    fs_lseek(elf_id, elf_header.e_phoff + i * elf_header.e_phentsize, SEEK_SET);
-    fs_read(elf_id, &program_header, sizeof(program_header));
-    if(program_header.p_type == PT_LOAD){
-      fs_lseek(elf_id, program_header.p_offset, SEEK_SET);
-      fs_read(elf_id, (void *)program_header.p_vaddr, program_header.p_filesz);
-      memset((void *)program_header.p_vaddr + program_header.p_filesz, 0, program_header.p_memsz - program_header.p_filesz);
+  for(int i =  0; i < ehdr.e_phnum; i++){
+    fs_lseek(elf_id, ehdr.e_phoff + i * ehdr.e_phentsize, SEEK_SET);
+    fs_read(elf_id, &phdr, sizeof(phdr));
+    if(phdr.p_type == PT_LOAD){
+      fs_lseek(elf_id, phdr.p_offset, SEEK_SET);
+      fs_read(elf_id, (void *)phdr.p_vaddr, phdr.p_filesz);
+      memset((void *)phdr.p_vaddr + phdr.p_filesz, 0, phdr.p_memsz - phdr.p_filesz);
     }
   }
-  return elf_header.e_entry;
+  return ehdr.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
