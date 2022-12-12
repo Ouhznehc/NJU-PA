@@ -6,7 +6,7 @@ static Context* do_event(Event e, Context* c) {
     case 1:
       printf("Yield has been triggered\n");
       break;
-    case 2:
+    case EVENT_SYSCALL:
       //printf("Ask for syscall......\n");
       do_syscall(c);
       break;
