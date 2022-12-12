@@ -4,7 +4,7 @@
 
 void sys_yield(Context *c) { yield(); c->GPRx = 0; }
 
-void sys_exit (Context *c) { halt(c->GPRx); }
+void sys_exit (Context *c) { halt(0); }
 
 void sys_write(Context *c) { c->GPRx = fs_write(c->GPR2, (void*)c->GPR3, c->GPR4); }
 
