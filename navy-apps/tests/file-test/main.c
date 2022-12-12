@@ -2,7 +2,6 @@
 #include <assert.h>
 
 int main() {
-  printf("============\n");
   FILE *fp = fopen("/share/files/num", "r+");
   assert(fp);
 
@@ -32,8 +31,6 @@ int main() {
     fscanf(fp, "%d", &n);
     assert(n == i + 1 + 1000);
   }
-
-  printf("=====\n");
 
   fclose(fp);
 
