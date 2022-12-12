@@ -7,10 +7,7 @@ void naive_uload(PCB *pcb, const char *filename);
 void halt(int code);
 size_t fs_write(int fd, const void *buf, size_t len);
 
-void sys_yield(Context *c){
-  yield();
-  c->GPRx = 0;
-}
+void sys_yield(Context *c){ yield(); c->GPRx = 0; }
 
 void sys_exit(Context *c){ halt(c->GPRx); }
 
