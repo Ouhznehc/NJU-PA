@@ -148,7 +148,7 @@ config MTRACE
 
 config ETRACE
   depends on TRACE
-  bool "Enable error tracer"
+  bool "Enable exception tracer"
   default n
 
 config DTRACE

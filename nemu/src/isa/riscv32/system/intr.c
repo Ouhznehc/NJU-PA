@@ -19,7 +19,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    * Then return the address of the interrupt/exception vector.
    */
   #ifdef CONFIG_ETRACE
-    color_green(" ERROR TRACE :");
+    color_green(" EXCEPTION TRACE :");
     color_green("pc = 0x%08x   ", epc);
   #endif
   cpu.mepc = epc;
