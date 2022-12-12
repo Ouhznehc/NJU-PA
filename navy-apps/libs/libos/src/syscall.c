@@ -5,7 +5,7 @@
 #include <time.h>
 #include "syscall.h"
 
-extern char _end;
+extern char end;
 void *program_break = &end;
 
 // helper macros
