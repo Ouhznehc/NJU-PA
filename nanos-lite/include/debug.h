@@ -33,7 +33,7 @@
 // ================= my printf =============================
 #define color_red(format, ...) \
   do { \
-    printf("\33[1;31m" format, ## __VA_ARGS__); \
+    printf("\33[1;31m" format "\33[0m", ## __VA_ARGS__); \
   } while (0)
 
 #define color_yellow(format, ...) \
@@ -43,12 +43,12 @@
 
 #define color_blue(format, ...) \
   do { \
-    printf("\33[1;34m" format, ## __VA_ARGS__); \
+    printf("\33[1;34m" format "\33[0m", ## __VA_ARGS__); \
   } while (0)
 
 #define color_green(format, ...) \
   do { \
-    printf("\33[1;32m" format, ## __VA_ARGS__); \
+    printf("\33[1;32m" format "\33[0m", ## __VA_ARGS__); \
   } while (0)
 // ========================================================
 
