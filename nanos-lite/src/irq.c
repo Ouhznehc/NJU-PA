@@ -5,7 +5,7 @@ static Context* do_event(Event e, Context* c) {
   switch (e.event) {
     case EVENT_YIELD: color_yellow("=== event  yield  triggered ===\n"); break;
     case EVENT_SYSCALL:
-      Log("=== event syscall triggered ===\n");
+      color_green("=== event syscall triggered ===\n");
       do_syscall(c);
       break;
     default: panic("Unhandled event ID = %d", e.event);
