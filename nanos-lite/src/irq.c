@@ -3,11 +3,9 @@ void do_syscall(Context *c);
 
 static Context* do_event(Event e, Context* c) {
   switch (e.event) {
-    case 1:
-      printf("Yield has been triggered\n");
-      break;
+    case EVENT_YIELD: color_yellow("=== event  yield  triggered ===\n"); break;
     case EVENT_SYSCALL:
-      //printf("Ask for syscall......\n");
+      color_yellow("=== event syscall triggered ===\n");
       do_syscall(c);
       break;
     default: panic("Unhandled event ID = %d", e.event);
