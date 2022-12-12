@@ -6,17 +6,7 @@ void sys_yield(Context *c) { yield(); c->GPRx = 0; }
 
 void sys_exit (Context *c) { halt(c->GPRx); }
 
-size_t s_write(const void *buf, size_t len) {
-  size_t res = len;
-  char *now = (char *) buf;
-  while(*now++ && len--) {putch(*now);}
-  return res;
-}
-
-void sys_write(Context *c) {
-  //  c->GPRx = fs_write(c->GPR2, (void*)c->GPR3, c->GPR4);
-    c->GPRx = s_write((void*)c->GPR3, c->GPR4);
-  }
+void sys_write(Context *c) { c->GPRx = fs_write(c->GPR2, (void*)c->GPR3, c->GPR4); }
 
 void sys_read (Context *c) { c->GPRx = fs_read(c->GPR2, (void*)c->GPR3, c->GPR4); }
 
