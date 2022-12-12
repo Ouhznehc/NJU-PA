@@ -11,7 +11,9 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
-  //ramdisk_read(0x830003fc, )
+  // Elf_Ehdr elf_header;
+  // Elf_Phdr program_header;
+
   return 0;
 }
 
