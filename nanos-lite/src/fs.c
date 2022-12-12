@@ -59,7 +59,7 @@ size_t fs_read(int fd, void *buf, size_t len){
 
 size_t fs_write(int fd, const void *buf, size_t len){
   Finfo *file = &file_table[fd];
-  if(len > file->size - file->open_offset) len = file->size - file->open_offset;
+  //if(len > file->size - file->open_offset) len = file->size - file->open_offset;
   if(file->write) file->write(buf, file->disk_offset + file->open_offset, len);
   else ramdisk_write(buf, file->disk_offset + file->open_offset, len);
   file->open_offset += len;
