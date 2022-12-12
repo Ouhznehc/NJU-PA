@@ -38,7 +38,7 @@
 
 #define color_yellow(format, ...) \
   do { \
-    printf("\33[1;33m" format "\33[0m\n", ## __VA_ARGS__); \
+    printf("\33[1;33m" format "\33[0m", ## __VA_ARGS__); \
   } while (0)
 
 #define color_blue(format, ...) \
