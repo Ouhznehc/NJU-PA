@@ -20,7 +20,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    */
   #ifdef CONFIG_ETRACE
     color_green(" EXCEPTION TRACE :");
-    color_green("pc = 0x%08x   ", epc);
+    color_green("pc = 0x%08x   \n", epc);
   #endif
   cpu.mepc = epc;
   cpu.mcause = NO;
