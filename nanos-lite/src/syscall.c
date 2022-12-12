@@ -24,7 +24,13 @@ size_t s_write(const void *buf, size_t len){
   return len;
 }
 
-void sys_write(Context *c){ c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4); }
+void sys_write(Context *c){
+  if(c->GPR2 == 1 || c->GPR2 == 2){
+    c->GPRx = s_write((void *)c->GPR3, c->GPR4);
+  }else{
+    c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
+  }
+}
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
