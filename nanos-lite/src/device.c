@@ -15,6 +15,7 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
+  panic("----");
   size_t res = len;
   char *now = (char *) buf;
   while(*now++ && len--) putch(*now);
