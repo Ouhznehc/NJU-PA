@@ -4,108 +4,129 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void *memcpy(void *out, const void *in, size_t n);
-
-
 size_t strlen(const char *s) {
+  const char *temp;
   size_t len = 0;
-  while (*s++ != '\0') len++;
+  for ( temp = s; *temp != '\0'; temp++)
+  {
+    len++;
+  }
   return len;
 }
 
 char *strcpy(char *dst, const char *src) {
-  if(dst == NULL || src == NULL) return NULL;
-  char *ret = dst;
-  while((*dst++ = *src++) != '\0');
-  return ret;
+  char *temp = dst;
+  while((*dst++ = *src++) != '\0'){
+    ;
+  }
+  return temp;
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-  if (dst == NULL || src == NULL) return NULL;
-  char *ret = dst;
-  size_t offset = 0, len = strlen(src);
-  if (n > len) {
-    offset = n - len;
-    n = len;
+  char *temp = dst;
+  while(n){
+    if ((*temp = *src) != 0)
+        src++;
+    temp++;
+    n--;
   }
-  while (n--) *dst++ = *src++;
-  while (offset--) *dst++ = '\0';
-  return ret;
-
+  return dst;  
 }
 
 char *strcat(char *dst, const char *src) {
-  if(dst == NULL || src == NULL) return NULL;
-  char *start = dst + strlen(dst);
-  while((*start++ = *src++) != '\0');
-  return dst;
+  char *temp = dst;
+  while(*dst){
+    dst ++;
+  }
+  while((*dst++ = *src++) != '\0'){
+    ;
+  }
+  return temp;  
 }
 
 int strcmp(const char *s1, const char *s2) {
-  assert(s1 != NULL && s2 != NULL);
-  while((*s1) && (*s1 == *s2)) {
+  while(*s1 == *s2){
+    if(*s1 == '\0'){
+      return 0;
+    }
     s1++;
     s2++;
   }
-  int ret = *(unsigned char*)s1 - *(unsigned char*)s2;
-  if (ret < 0) return -1;
-  else if (ret > 0) return 1;
-  else return 0;
+  return *s1 - *s2;
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  assert(s1 != NULL && s2 != NULL);    
-  unsigned char *str1 = (unsigned char*) s1;
-  unsigned char *str2 = (unsigned char*) s2;   
-  while (n--) { 
-    if (*str1 == *str2) { 
-      str1++;                     
-      str2++; 
-    } 
-    else return *str1 < *str2 ? -1 : 1;
-  }       
-  return 0; 
+  while(*s1 == *s2 && n--){
+    if (*s1 == '\0')
+    {
+      return 0;
+    }
+    s1++;
+    s2++;
+  }
+  return *s1 - *s2;
 }
 
 void *memset(void *s, int c, size_t n) {
-  if (s == NULL) return NULL;
-  unsigned char *str = (unsigned char*) s;
-  while (n--) *str++ = c;
+  char *temp = (char*)s;
+  while(n--){
+    *temp++ = c;
+  }
   return s;
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  return memcpy(dst, src, n);
+	char *ret=(char *)dst;
+	char *dest_t=dst;
+	char *src_t=(char *)src;
+	assert( NULL != src && NULL != dst);
+	
+	if (dest_t<=src_t || dest_t>=src_t+n)
+	{
+        while(n--)
+		{
+			*dest_t++ = *src_t++;
+		}
+	}
+	else
+	{
+		dest_t += n-1;
+		src_t += n-1;
+		while(n--)
+		{
+			*dest_t-- = *src_t--;
+		}
+	}
+	return ret;
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
-  if (out == NULL || in == NULL) return NULL;
-  unsigned char *dst = (unsigned char*) out;
-  unsigned char *src = (unsigned char*) in;
-  if (dst >= src && dst <= src + n - 1) {
-        dst = dst + n - 1;
-        src = src + n - 1;
-        while (n--)
-            *dst-- = *src--;
-    }
-    else {
-        while (n--)
-            *dst++ = *src++;
-    }
-    return out;
+ char *d;
+ const char *s;
+ if ((out > (in + n)) || (out < in)){
+    d = out;
+    s = in;
+    while (n--)
+        *d++ = *s++;        
+ }else{
+    d = (char *)(out + n - 1); /* offset of pointer is from 0 */
+    s = (char *)(out + n - 1);
+    while (n --)
+        *d-- = *s--;
+ }
+ return out;
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  assert(s1 != NULL && s2 != NULL); 
-  unsigned char *str1 = (unsigned char*) s1;
-  unsigned char *str2 = (unsigned char*) s2;      
-  while (n--) { 
-    if (*str1 == *str2) { 
-      str1++;                     
-      str2++; 
-    } 
-    else return *str1 < *str2 ? -1 : 1;
-  }       
-  return 0; 
+  const char *su1=s1, *su2=s2;
+  int res = 0;
+  for (; n; su1++, su2++, n--)
+  {
+    if((res = *su1-*su2) != 0){
+      break;
+    }
+  }
+  return res;
 }
+
 #endif
