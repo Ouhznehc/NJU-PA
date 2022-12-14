@@ -14,14 +14,6 @@ static const char *keyname[256] __attribute__((used)) = {
   AM_KEYS(NAME)
 };
 
-// size_t serial_write(const void *buf, size_t offset, size_t len){
-//   char *temp = (char *)buf;
-//   for(int i = 0; i < len; i++){
-//     putch(temp[i]);
-//   }
-//   return len;
-// }
-
 size_t serial_write(const void *buf, size_t offset, size_t len){
   char *now = (char *)buf;
   size_t res = len;
@@ -39,6 +31,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
+
   return 0;
 }
 
