@@ -9,6 +9,7 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int canvas_w = 0, canvas_h = 0;
 
 uint32_t NDL_GetTicks() {
   struct timeval time;
@@ -26,9 +27,9 @@ int NDL_PollEvent(char *buf, int len) {
 void NDL_OpenCanvas(int *w, int *h) {
   char dispinfo_buf[64];
   int dispinfo = open("/proc/dispinfo", O_RDONLY);
-  int ret = read(dispinfo, dispinfo_buf, 64);
-  ret = sscanf(disp_buf, "WIDTH : %d\nHEIGHT : %d\n", &screen_w, &screen_h);
-  if(*w == 0 && *h == 0){*w = screen_w, *h = screen_h;}
+  read(dispinfo, dispinfo_buf, 64);
+  sscanf(dispinfo_buf, "WIDTH : %d\nHEIGHT : %d\n", &canvas_w, &canvas_h);
+  if(*w == 0 && *h == 0){*w = canvas_w, *h = canvas_h;}
   screen_w = *w; screen_h = *h;
   if (getenv("NWM_APP")) {
     int fbctl = 4;
@@ -50,6 +51,14 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+  int fb = open("/dev/fb", O_WRONLY);
+  int center_w = (canvas_w - screen_w) / 2;
+  int center_h = (canvas_h - screen_h) / 2;
+  for (int i = 0; i < h; i++){
+    size_t offset = (center_h + y + i) * canvas_w + center_w + x;
+    lseek(fb,  offset * sizeof(uint32_t), SEEK_SET);
+    write(fb, pixels + w * i, w * sizeof(uint32_t));
+  }
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
