@@ -2,6 +2,7 @@
 #include "syscall.h"
 #include <proc.h>
 #include <fs.h>
+#include <sys/time.h>
 void yield();
 void naive_uload(PCB *pcb, const char *filename);
 void halt(int code);
@@ -17,16 +18,30 @@ void sys_read (Context *c) {c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4)
 
 void sys_brk (Context *c) {c->GPRx = 0;}
 
+void sys_open (Context *c) {c->GPRx = fs_open((char *)c->GPR2, c->GPR3, c->GPR4);}
+
+void sys_close (Context *c) {c->GPRx = fs_close(c->GPR2);}
+
+void sys_gettimeofday(Context *c) {
+  uint64_t us = io_read(AM_TIMER_UPTIME).us;
+  ((struct timeval *)c->GPR2)->tv_sec = us / 1000000;
+  ((struct timeval *)c->GPR2)->tv_usec = us % 1000000;
+  c->GPRx = 0;
+}
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
 
   switch (a[0]) {
-    case SYS_yield: sys_yield(c);  break;
-    case SYS_exit:  sys_exit(c);   break;
-    case SYS_write: sys_write(c);  break;
-    case SYS_read:  sys_read(c);   break;
-    case SYS_brk:   sys_brk(c);    break;
+    case SYS_yield:        sys_yield(c);        break;
+    case SYS_exit:         sys_exit(c);         break;
+    case SYS_write:        sys_write(c);        break;
+    case SYS_read:         sys_read(c);         break;
+    case SYS_brk:          sys_brk(c);          break;
+    case SYS_open:         sys_open(c);         break;
+    case SYS_close:        sys_close(c);        break;
+    case SYS_gettimeofday: sys_gettimeofday(c); break; 
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }
