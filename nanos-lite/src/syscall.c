@@ -22,6 +22,8 @@ void sys_open (Context *c) {c->GPRx = fs_open((char *)c->GPR2, c->GPR3, c->GPR4)
 
 void sys_close (Context *c) {c->GPRx = fs_close(c->GPR2);}
 
+void sys_lseek (Context *c) {c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);}
+
 void sys_gettimeofday(Context *c) {
   uint64_t us = io_read(AM_TIMER_UPTIME).us;
   ((struct timeval *)c->GPR2)->tv_sec = us / 1000000;
@@ -41,6 +43,7 @@ void do_syscall(Context *c) {
     case SYS_brk:          sys_brk(c);          break;
     case SYS_open:         sys_open(c);         break;
     case SYS_close:        sys_close(c);        break;
+    case SYS_lseek:        sys_lseek(c);        break;
     case SYS_gettimeofday: sys_gettimeofday(c); break; 
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
