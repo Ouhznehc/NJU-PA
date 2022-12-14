@@ -7,7 +7,7 @@ int main() {
   uint32_t time = NDL_GetTicks();
   while(1){
     if(NDL_GetTicks() - time >= 500){
-      printf("now time is %d\n", time);
+      printf("now time is %dms\n", time);
       time = NDL_GetTicks();
     }
   }
