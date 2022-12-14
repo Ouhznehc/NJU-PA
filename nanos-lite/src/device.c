@@ -15,11 +15,19 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t serial_write(const void *buf, size_t offset, size_t len){
-  char *now = (char *)buf;
-  size_t res = len;
-  while(*now++ && len--) putch(*now);
-  return res;
+  char *temp = (char *)buf;
+  for(int i = 0; i < len; i++){
+    putch(temp[i]);
+  }
+  return len;
 }
+
+// size_t serial_write(const void *buf, size_t offset, size_t len){
+//   char *now = (char *)buf;
+//   size_t res = len;
+//   while(*now++ && len--) putch(*now);
+//   return res;
+// }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
   AM_INPUT_KEYBRD_T kbd = io_read(AM_INPUT_KEYBRD);
