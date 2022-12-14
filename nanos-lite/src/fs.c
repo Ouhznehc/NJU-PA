@@ -13,7 +13,7 @@ typedef struct {
   size_t open_offset;
 } Finfo;
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB, FD_EVENTS};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENTS};
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
