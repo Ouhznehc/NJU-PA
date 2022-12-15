@@ -12,9 +12,30 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
-void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
+static uint32_t expand_color(SDL_Color *color){
+  return (color->a << 24) | (color->r << 16) | (color->g << 8) | color->b;
 }
 
+
+void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
+  uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
+  if (s->format->BytesPerPixel == 4){
+    if (w == 0 && h == 0 && x ==0 && y == 0){
+      NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
+      return;
+    }
+    for (int i = 0; i < h; ++i) memcpy(&pixels[i * w], &s->pixels[(y + i) * s->w + x], sizeof(uint32_t) * w);
+    NDL_DrawRect(pixels, x, y, w, h);
+  }
+  else if(s->format->BytesPerPixel == 1){
+    if (w == 0 && h == 0 && x ==0 && y == 0){w = s->w; h = s->h;}
+    for (int i = 0; i < h; ++i)
+      for (int j = 0; j < w; ++j)
+        pixels[i * w + j] = expand_color(&s->format->palette->colors[s->pixels[(y + i) * s->w + x + j]]);
+    NDL_DrawRect(pixels, x, y, w, h);
+  }
+  else panic("not suppported BytesPerPixel !");
+}
 // APIs below are already implemented.
 
 static inline int maskToShift(uint32_t mask) {
