@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
@@ -34,7 +35,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
         pixels[i * w + j] = expand_color(&s->format->palette->colors[s->pixels[(y + i) * s->w + x + j]]);
     NDL_DrawRect(pixels, x, y, w, h);
   }
-  else panic("not suppported BytesPerPixel !");
+  else {printf("not suppported BytesPerPixel !\n"); assert(0);}
 }
 // APIs below are already implemented.
 
