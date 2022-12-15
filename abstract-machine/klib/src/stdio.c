@@ -5,7 +5,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-static char out[1024];
+static char out[4096];
 
 char *int_to_string(int num, char *ans, int zeroflag, int field_width){
   int sign = (num >= 0);
