@@ -17,27 +17,27 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
     h = (int)srcrect->h;
   }
   if(dstrect){dst_x = dstrect->x; dst_y = dstrect->y;}
-  for(int i = 0; i < h; i++)
-    for(int j = 0; j < w; j++)
-        dst->pixels[(i + dst_y) * dst->w + dst_x + j] = src->pixels[(i + src_y) * src->w + src_x + j];
-  // if(src->format->BytesPerPixel == 4){
-  //   uint32_t *dst_pixels = (uint32_t *)dst->pixels;
-  //   uint32_t *src_pixels = (uint32_t *)src->pixels;
-  //   for(int i = 0; i < h; i++){
-  //     for(int j = 0; j < w; j++){
-  //       dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j];
-  //     }
-  //   }
-  // }
-  // else if(src->format->BytesPerPixel == 1){
-  //   uint8_t* dst_pixels = (uint8_t*)dst->pixels;
-  //   uint8_t* src_pixels = (uint8_t*)src->pixels;
-  //   for(int i = 0; i < h; i++){
-  //     for(int j = 0; j < w; j++){
-  //       dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j];
-  //     }
-  //   }
-  // }
+  // for(int i = 0; i < h; i++)
+  //   for(int j = 0; j < w; j++)
+  //       dst->pixels[(i + dst_y) * dst->w + dst_x + j] = src->pixels[(i + src_y) * src->w + src_x + j];
+  if(src->format->BytesPerPixel == 4){
+    uint32_t *dst_pixels = (uint32_t *)dst->pixels;
+    uint32_t *src_pixels = (uint32_t *)src->pixels;
+    for(int i = 0; i < h; i++){
+      for(int j = 0; j < w; j++){
+        dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j];
+      }
+    }
+  }
+  else if(src->format->BytesPerPixel == 1){
+    uint8_t* dst_pixels = (uint8_t*)dst->pixels;
+    uint8_t* src_pixels = (uint8_t*)src->pixels;
+    for(int i = 0; i < h; i++){
+      for(int j = 0; j < w; j++){
+        dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j];
+      }
+    }
+  }
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
