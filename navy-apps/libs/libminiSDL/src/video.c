@@ -56,10 +56,12 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   if (s->format->BytesPerPixel == 4){
     if (w == 0 && h == 0 && x ==0 && y == 0){
       NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
+      free(pixels);
       return;
     }
     for (int i = 0; i < h; ++i) memcpy(&pixels[i * w], &s->pixels[(y + i) * s->w + x], sizeof(uint32_t) * w);
     NDL_DrawRect(pixels, x, y, w, h);
+    free(pixels);
   }
   else if(s->format->BytesPerPixel == 1){ // only for PAL
     if (w == 0 && h == 0 && x ==0 && y == 0){w = s->w; h = s->h;}
@@ -67,6 +69,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
       for (int j = 0; j < w; ++j)
         pixels[i * w + j] = expand_color(&s->format->palette->colors[s->pixels[(y + i) * s->w + x + j]]);
     NDL_DrawRect(pixels, x, y, w, h);
+    free(pixels);
   }
   else {printf("not suppported BytesPerPixel !\n"); assert(0);}
 }
