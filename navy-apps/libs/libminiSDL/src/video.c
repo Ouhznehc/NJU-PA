@@ -5,9 +5,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define copy_pixels for(int i = 0; i < h; i++)\
+                      for(int j = 0; j < w; j++)\
+                        dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j]
+
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
-  assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+  assert(dst->format->BytesPerPixel == src->format->BytesPerPixel);
   int src_x = 0, src_y = 0, w, h, dst_x = 0, dst_y = 0;
   if(!srcrect){w = src->w; h = src->h;}
   else{
@@ -20,20 +24,12 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   if(src->format->BytesPerPixel == 4){
     uint32_t *dst_pixels = (uint32_t *)dst->pixels;
     uint32_t *src_pixels = (uint32_t *)src->pixels;
-    for(int i = 0; i < h; i++){
-      for(int j = 0; j < w; j++){
-        dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j];
-      }
-    }
+    copy_pixels;
   }
   else if(src->format->BytesPerPixel == 1){
     uint8_t* dst_pixels = (uint8_t*)dst->pixels;
     uint8_t* src_pixels = (uint8_t*)src->pixels;
-    for(int i = 0; i < h; i++){
-      for(int j = 0; j < w; j++){
-        dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j];
-      }
-    }
+    copy_pixels;
   }
   else{printf("not suppported BytesPerPixel !\n"); assert(0);}
 }
