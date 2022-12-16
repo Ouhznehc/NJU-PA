@@ -1,13 +1,13 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <string.h>
-
 #define keyname(k) #k,
 #define key_offset 9
 static const char *keyname[] = {
   "NONE",
   _KEYS(keyname)
 };
+static uint8_t keystate[sizeof(keyname) / sizeof(char *)];
 
 int SDL_PushEvent(SDL_Event *ev) {
   return 0;
@@ -26,6 +26,7 @@ int SDL_PollEvent(SDL_Event *ev) {
   for(int i = 0; i < sizeof(keyname) / sizeof(char *); i++)
     if (strcmp(key_name, keyname[i]) == 0){
       ev->key.keysym.sym = i;
+      keystate[i] = ~ev->type;
     }
   return 1;
 }
@@ -43,6 +44,7 @@ int SDL_WaitEvent(SDL_Event *event) {
   for(int i = 0; i < sizeof(keyname) / sizeof(char *); i++)
     if (strcmp(key_name, keyname[i]) == 0){
       event->key.keysym.sym = i;
+      keystate[i] = ~event->type;
       ret = 1;
     }
   return ret;
@@ -53,5 +55,7 @@ int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  return NULL;
+  if(numkeys)
+    *numkeys = sizeof(keystate) / sizeof(keystate[0]);
+  return keystate;
 }
