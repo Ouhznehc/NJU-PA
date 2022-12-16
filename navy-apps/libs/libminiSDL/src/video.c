@@ -22,13 +22,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   }
   if(dstrect){dst_x = dstrect->x; dst_y = dstrect->y;}
   if(src->format->BytesPerPixel == 4){
-    uint32_t *dst_pixels = (uint32_t *)dst->pixels;
-    uint32_t *src_pixels = (uint32_t *)src->pixels;
+    uint32_t *dst_pixels = (uint32_t*)dst->pixels;
+    uint32_t *src_pixels = (uint32_t*)src->pixels;
     copy_pixels;
   }
   else if(src->format->BytesPerPixel == 1){
-    uint8_t* dst_pixels = (uint8_t*)dst->pixels;
-    uint8_t* src_pixels = (uint8_t*)src->pixels;
+    uint8_t *dst_pixels = (uint8_t*)dst->pixels;
+    uint8_t *src_pixels = (uint8_t*)src->pixels;
     copy_pixels;
   }
   else{printf("not suppported BytesPerPixel !\n"); assert(0);}
