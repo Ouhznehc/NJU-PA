@@ -33,7 +33,9 @@ void sys_gettimeofday(Context *c) {
   c->GPRx = 0;
 }
 
-void sys_execve (Context *c) {}
+void sys_execve (Context *c) {
+  naive_uload(NULL, (char*)c->GPR2);
+}
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
