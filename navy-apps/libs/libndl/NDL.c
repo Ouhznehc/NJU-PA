@@ -73,7 +73,7 @@ int NDL_QueryAudio() {
 
 int NDL_Init(uint32_t flags) {
   char dispinfo_buf[64];
-  if (getenv("NWM_APP")) evtdev = 3;
+  //if (getenv("NWM_APP")) evtdev = 3;
   int dispinfo = open("/proc/dispinfo", O_RDONLY);
   read(dispinfo, dispinfo_buf, 64);
   sscanf(dispinfo_buf, "WIDTH : %d\nHEIGHT : %d\n", &screen_w, &screen_h);
