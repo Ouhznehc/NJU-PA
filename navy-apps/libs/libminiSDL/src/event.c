@@ -35,7 +35,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 int SDL_WaitEvent(SDL_Event *event) {
   char key_buf[64], key_name[64];
-  int ret = 0, key_index = 0;
+  int key_index = 0;
   while(!NDL_PollEvent(key_buf, sizeof(key_buf))); // wait event
   if(key_buf[4] == 'd') event->type = SDL_KEYDOWN; // key down xxx
   else event->type = SDL_KEYUP; // key up   xxx
@@ -47,9 +47,8 @@ int SDL_WaitEvent(SDL_Event *event) {
     if (strcmp(key_name, keyname[i]) == 0){
       event->key.keysym.sym = i;
       key_state[i] = ~event->type;
-      ret = 1;
     }
-  return ret;
+  return 1;
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
