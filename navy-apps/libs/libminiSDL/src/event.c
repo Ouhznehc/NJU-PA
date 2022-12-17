@@ -1,6 +1,8 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <string.h>
+#include <assert.h>
+
 #define keyname(k) #k,
 #define key_offset 9
 static const char *keyname[] = {
@@ -9,6 +11,7 @@ static const char *keyname[] = {
 };
 static uint8_t key_state[sizeof(keyname) / sizeof(keyname[0])] = {0};
 int SDL_PushEvent(SDL_Event *ev) {
+  assert(0);
   return 0;
 }
 
