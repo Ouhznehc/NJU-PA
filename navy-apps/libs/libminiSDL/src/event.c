@@ -38,8 +38,8 @@ int SDL_DealEvent(SDL_Event *event, int select) {
   return 1;
 }
 
-int SDL_PollEvent(SDL_Event *ev) {
-  return SDL_DealEvent(ev, PollEvent);
+int SDL_PollEvent(SDL_Event *event) {
+  return SDL_DealEvent(event, PollEvent);
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
