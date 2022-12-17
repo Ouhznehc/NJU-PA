@@ -33,6 +33,8 @@ void sys_gettimeofday(Context *c) {
   c->GPRx = 0;
 }
 
+void sys_execve (Context *c) {}
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
@@ -47,6 +49,7 @@ void do_syscall(Context *c) {
     case SYS_close:        sys_close(c);        break;
     case SYS_lseek:        sys_lseek(c);        break;
     case SYS_gettimeofday: sys_gettimeofday(c); break; 
+    case SYS_execve:       sys_execve(c);       break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }
