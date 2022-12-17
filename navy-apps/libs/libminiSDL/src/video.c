@@ -5,9 +5,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define copy_pixels for(int i = 0; i < h; i++)\
-                      for(int j = 0; j < w; j++)\
-                        dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j]
+#define copy_pixels         for(int i = 0; i < h; i++) \
+                              for(int j = 0; j < w; j++) \
+                                dst_pixels[(i + dst_y) * dst->w + dst_x + j] = src_pixels[(i + src_y) * src->w + src_x + j]
+
+#define copy_color          for(int i = 0; i < h; i++) \
+                              for(int j = 0; j < w; j++) \
+                                dst_pixels[(i + y) * dst->w + x + j] = color
+
+#define copy_expand_color   for (int i = 0; i < h; ++i) \
+                              for (int j = 0; j < w; ++j) \
+                                pixels[i * w + j] = expand_color(&s->format->palette->colors[s->pixels[(y + i) * s->w + x + j]])
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
@@ -39,11 +47,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   if(!dstrect){w = dst->w; h = dst->h;}
   else{x = dstrect->x; y = dstrect->y; w = (int)dstrect->w; h = (int)dstrect->h;}
   uint32_t *dst_pixels = (uint32_t *)dst->pixels;
-  for(int i = 0; i < h; i++){
-    for(int j = 0; j < w; j++){
-      dst_pixels[(i + y) * dst->w + x + j] = color;
-    }
-  }
+  copy_color;
 }
 
 static uint32_t expand_color(SDL_Color *color){
@@ -65,9 +69,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   else if(s->format->BytesPerPixel == 1){ // only for PAL
     if (w == 0 && h == 0 && x ==0 && y == 0){w = s->w; h = s->h;}
     uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
-    for (int i = 0; i < h; ++i)
-      for (int j = 0; j < w; ++j)
-        pixels[i * w + j] = expand_color(&s->format->palette->colors[s->pixels[(y + i) * s->w + x + j]]);
+    copy_expand_color;
     NDL_DrawRect(pixels, x, y, w, h);
     free(pixels);
   }

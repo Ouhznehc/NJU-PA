@@ -27,5 +27,5 @@ int SDL_ShowCursor(int toggle) {
 }
 
 void SDL_WM_SetCaption(const char *title, const char *icon) {
-  printf("SDL_WM_SetCaption Not implemented\n");
+  printf("SDL_WM_SetCaption not implemented\n");
 }
