@@ -20,6 +20,8 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BytesPerPixel == src->format->BytesPerPixel);
+  if(src->format->BytesPerPixel != 1 && src->format->BytesPerPixel != 4)
+  {printf("not suppported BytesPerPixel !\n"); assert(0);}
   int src_x = 0, src_y = 0, w, h, dst_x = 0, dst_y = 0;
   if(!srcrect){w = src->w; h = src->h;}
   else{src_x = srcrect->x; src_y = srcrect->y; w = srcrect->w; h = srcrect->h;}
@@ -29,12 +31,11 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
     uint32_t *src_pixels = (uint32_t*)src->pixels;
     copy_pixels;
   }
-  else if(src->format->BytesPerPixel == 1){
+  if(src->format->BytesPerPixel == 1){
     uint8_t *dst_pixels = (uint8_t*)dst->pixels;
     uint8_t *src_pixels = (uint8_t*)src->pixels;
     copy_pixels;
   }
-  else{printf("not suppported BytesPerPixel !\n"); assert(0);}
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
