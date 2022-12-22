@@ -59,10 +59,19 @@ static inline uint32_t expand_color(SDL_Color *color){
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   if(w == 0 && h == 0){w = s->w; h = s->h;}
   uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
-  if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
-  NDL_DrawRect(pixels, x, y, w, h);
-  if(s->format->BytesPerPixel != 1 && s->format->BytesPerPixel != 4)
-  printf("not suppported BytesPerPixel !\n"); assert(0);
+  // if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
+  // NDL_DrawRect(pixels, x, y, w, h);
+  // free(pixels);
+  if (s->format->BytesPerPixel == 4){
+    NDL_DrawRect(pixels, x, y, w, h);
+    free(pixels);
+  }
+  else if(s->format->BytesPerPixel == 1){ // only for PAL
+    copy_expand_color;
+    NDL_DrawRect(pixels, x, y, w, h);
+    free(pixels);
+  }
+  else {printf("not suppported BytesPerPixel !\n"); assert(0);}
 }
 // APIs below are already implemented.
 
