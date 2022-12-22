@@ -22,14 +22,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   assert(dst->format->BytesPerPixel == src->format->BytesPerPixel);
   int src_x = 0, src_y = 0, w, h, dst_x = 0, dst_y = 0;
   if(!srcrect){w = src->w; h = src->h;}
-  else{
-    src_x = srcrect->x;
-    src_y = srcrect->y;
-    w = srcrect->w;
-    h = srcrect->h;
-  }
-  if(dstrect){dst_x = dstrect->x; dst_y = dstrect->y;}
-  
+  else{src_x = srcrect->x; src_y = srcrect->y; w = srcrect->w; h = srcrect->h;}
+  if(dstrect){dst_x = dstrect->x; dst_y = dstrect->y;} 
   if(src->format->BytesPerPixel == 4){
     uint32_t *dst_pixels = (uint32_t*)dst->pixels;
     uint32_t *src_pixels = (uint32_t*)src->pixels;
