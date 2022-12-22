@@ -60,11 +60,6 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   if(w == 0 && h == 0){w = s->w; h = s->h;}
   uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
   if (s->format->BytesPerPixel == 4){
-    if (x ==0 && y == 0){
-      NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
-      return;
-    }
-    for (int i = 0; i < h; i++) memcpy(&pixels[i * w], &s->pixels[(y + i) * s->w + x], sizeof(uint32_t) * w);
     NDL_DrawRect(pixels, x, y, w, h);
     free(pixels);
   }
