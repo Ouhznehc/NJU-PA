@@ -33,7 +33,7 @@ int SDL_DealEvent(SDL_Event *event, int select) {
   for(int i = 0; i < sizeof(keyname) / sizeof(char *); i++)
     if (strcmp(key_name, keyname[i]) == 0){
       event->key.keysym.sym = i;
-      key_state[i] = ~event->type;
+      key_state[i] = !event->type;
     }
   return 1;
 }
