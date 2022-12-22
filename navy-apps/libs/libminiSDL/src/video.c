@@ -25,8 +25,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   else{
     src_x = srcrect->x;
     src_y = srcrect->y;
-    w = (int)srcrect->w;
-    h = (int)srcrect->h;
+    w = srcrect->w;
+    h = srcrect->h;
   }
   if(dstrect){dst_x = dstrect->x; dst_y = dstrect->y;}
   
@@ -51,24 +51,24 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   copy_color;
 }
 
-static uint32_t expand_color(SDL_Color *color){
+static inline uint32_t expand_color(SDL_Color *color){
   return ((uint32_t)color->a << 24) | ((uint32_t)color->r << 16) | ((uint32_t)color->g << 8) | (uint32_t)color->b;
 }
 
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
+  if(w == 0 && h == 0){w = s->w; h = s->h;}
+  uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
   if (s->format->BytesPerPixel == 4){
-    if (w == 0 && h == 0 && x ==0 && y == 0){
+    if (x ==0 && y == 0){
       NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
       return;
     }
-    uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
     for (int i = 0; i < h; i++) memcpy(&pixels[i * w], &s->pixels[(y + i) * s->w + x], sizeof(uint32_t) * w);
     NDL_DrawRect(pixels, x, y, w, h);
     free(pixels);
   }
   else if(s->format->BytesPerPixel == 1){ // only for PAL
-    if (w == 0 && h == 0 && x ==0 && y == 0){w = s->w; h = s->h;}
     uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
     copy_expand_color;
     NDL_DrawRect(pixels, x, y, w, h);
