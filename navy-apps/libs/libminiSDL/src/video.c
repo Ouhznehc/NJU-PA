@@ -58,7 +58,7 @@ static inline uint32_t expand_color(SDL_Color *color){
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   if(s->format->BytesPerPixel != 1 && s->format->BytesPerPixel != 4)
-  printf("not suppported BytesPerPixel !\n"); assert(0);}
+  printf("not suppported BytesPerPixel !\n"); assert(0);
   if(w == 0 && h == 0){w = s->w; h = s->h;}
   uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
   if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
