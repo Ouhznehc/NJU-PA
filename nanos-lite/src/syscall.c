@@ -12,7 +12,10 @@ size_t fs_write(int fd, const void *buf, size_t len);
 
 void sys_yield (Context *c) {yield(); c->GPRx = 0;}
 
-void sys_exit (Context *c) { naive_uload(NULL, "/bin/nterm");/*halt(c->GPRx); c->GPRx = c->GPR2;*/}
+void sys_exit (Context *c) { 
+  //naive_uload(NULL, "/bin/nterm");
+  halt(c->GPRx); c->GPRx = c->GPR2;
+}
 
 void sys_write (Context *c) {c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);}
 
