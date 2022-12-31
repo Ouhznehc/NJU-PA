@@ -30,6 +30,7 @@ void init_proc() {
   // naive_uload(NULL, "/bin/hello");
 
   context_kload(&pcb[0], hello_fun, (void *)1);
+  context_kload(&pcb[1], hello_fun, (void *)(-1));
   switch_boot_pcb();
 }
 
