@@ -107,12 +107,13 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
     argv_area[i] = string_area;
     strcpy(string_area, argv[i]);
   }
+        printf("--------\n");
   for (int i = 0; i < envc; i++){
     string_area -= rounded4(strlen(envp[i]) + 1);
     envp_area[i] = string_area;
     strcpy(string_area, envp[i]);
   }
-      printf("--------\n");
+
   intptr_t *ptr = (intptr_t *)string_area;
 
   ptr -= 40; 
