@@ -94,7 +94,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   Context *context = ucontext(&pcb->as, kstack, entry);
   pcb->cp = context;
 
-// to allocate space as the picture above, Uspecified is 0
+// to allocate space as the picture above, Unspecified is 0
   int envc = 0, argc = 0;
   while(envp && envp[envc++]);
   while(argv && argv[argc++]);
