@@ -140,7 +140,10 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   for (int i = 0; i < argc; ++i){
     ptr[i] = (intptr_t)(argv_area[i]);
   }
-  
+
+  ptr -= 1;
+  *ptr = argc;
+
   context->GPRx = (intptr_t)ptr;
 }
 
