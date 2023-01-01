@@ -98,19 +98,13 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   int envc = 0, argc = 0;
   while(argv && argv[argc]) {printf("argc = %d, argv[argc] = %s\n", argc, argv[argc]); argc++;}
   while(envp && envp[envc]) {printf("envc = %d, envp[envc] = %s\n", envc, envp[envc]); envc++;}
-  printf("%d %d\n", argc, envc);
   char *argv_area[argc], *envp_area[envc];
   char *string_area = (char *)heap.end;
 
   for (int i = 0; i < argc; i++){
-    printf("%s\n", argv[i]);
-    printf("----1\n");
     string_area -= rounded4(strlen(argv[i]) + 1);
-    printf("----4\n");
     argv_area[i] = string_area;
-    printf("----2\n");
     strcpy(string_area, argv[i]);
-    printf("----3\n");
   }
 
   for (int i = 0; i < envc; i++){
