@@ -98,7 +98,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   int envc = 0, argc = 0;
   while(envp && envp[envc++]);
   while(argv && argv[argc++]);
-  char *argv_area[argc], *envp_area[envc];
+  char *argv_area[envc], *envp_area[envc];
 
   char *string_area = (char *)heap.end;
 
