@@ -52,6 +52,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   kstack.end = &pcb->cp + STACK_SIZE;
   Context *context = ucontext(&pcb->as, kstack, entry);
   pcb->cp = context;
-  context->GPRx = (uintptr_t)heap.end;
+  context->GPRx = (uintptr_t)heap.end - 40;
 }
 
