@@ -126,7 +126,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
     ptr--;
   }
 
-  ptr--; *ptr = argc;
+  *ptr = argc;
   context->GPRx = (intptr_t)ptr;
 }
 
