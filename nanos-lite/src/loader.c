@@ -115,18 +115,32 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
   intptr_t *ptr = (intptr_t *)string_area;
   
-  ptr--; *ptr = (intptr_t)NULL; ptr--;
-  for(int i = envc - 1; i >= 0; i--){
-    *ptr = (intptr_t)envp_area[i];
-    ptr--;
-  }
-  ptr--; *ptr = (intptr_t)NULL; ptr--;
-  for(int i = argc - 1; i >= 0; i--){
-    *ptr = (intptr_t)argv_area[i];
-    ptr--;
+  // ptr--; *ptr = (intptr_t)NULL; ptr--;
+  // for(int i = envc - 1; i >= 0; i--){
+  //   *ptr = (intptr_t)envp_area[i];
+  //   ptr--;
+  // }
+  // ptr--; *ptr = (intptr_t)NULL; ptr--;
+  // for(int i = argc - 1; i >= 0; i--){
+  //   *ptr = (intptr_t)argv_area[i];
+  //   ptr--;
+  // }
+
+  // *ptr = argc;
+  ptr -= 1;
+  *ptr = 0;
+  ptr -= envc;
+  for (int i = 0; i < envc; ++i){
+    ptr[i] = (intptr_t)(envp_area[i]);
   }
 
-  *ptr = argc;
+  ptr -= 1;
+  *ptr = 0;
+  ptr -= argc;
+  for (int i = 0; i < argc; ++i){
+    ptr[i] = (intptr_t)(argv_area[i]);
+  }
+  
   context->GPRx = (intptr_t)ptr;
 }
 
