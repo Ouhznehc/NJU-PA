@@ -31,7 +31,7 @@ void init_proc() {
   // naive_uload(NULL, "/bin/hello");
 
   context_kload(&pcb[0], hello_fun, "zero");
-  char *argv[] = {"--skip"};
+  char *argv[] = {"--skip", NULL};
   context_uload(&pcb[1], "/bin/pal", argv, NULL);
   switch_boot_pcb();
 }
