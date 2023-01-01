@@ -105,6 +105,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   for (int i = 0; i < argc; i++){
     printf("----1\n");
     string_area -= rounded4(strlen(argv[i]) + 1);
+    printf("----4\n");
     argv_area[i] = string_area;
     printf("----2\n");
     strcpy(string_area, argv[i]);
