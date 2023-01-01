@@ -115,7 +115,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
   intptr_t *ptr = (intptr_t *)string_area;
   
-  ptr--; *ptr = (intptr_t)NULL; ptr--;
+  ptr -= 40; 
+
+  *ptr = (intptr_t)NULL; ptr--;
   for(int i = envc - 1; i >= 0; i--){
     *ptr = (intptr_t)envp_area[i];
     ptr--;
