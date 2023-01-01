@@ -51,6 +51,7 @@ static size_t rounded4(size_t byte){
 }
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
+    printf("--------\n");
 
 /*
               |               |
@@ -114,7 +115,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   }
 
   intptr_t *ptr = (intptr_t *)string_area;
-  printf("--------\n");
+
   ptr -= 40; 
 
   *ptr = (intptr_t)NULL; ptr--;
