@@ -50,7 +50,7 @@ void context_uload(PCB *pcb, const char *filename) {
   Area kstack;
   kstack.start = &pcb->cp;
   kstack.end = &pcb->cp + STACK_SIZE;
-
-  pcb->cp = ucontext(NULL, kstack, entry);
+  Context *context = ucontext(NULL, kstack, entry);
+  pcb->cp = context;
 }
 
