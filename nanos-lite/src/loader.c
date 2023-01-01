@@ -102,19 +102,17 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
   char *string_area = (char *)heap.end;
 
-  for (int i = 0; i < envc; i++){
-    string_area -= rounded4(strlen(envp[i]) + 1);
-    envp_area[i] = string_area;
-    strcpy(string_area, envp[i]);
-  }
-
   for (int i = 0; i < argc; i++){
     string_area -= rounded4(strlen(argv[i]) + 1);
     argv_area[i] = string_area;
     strcpy(string_area, argv[i]);
   }
 
-
+  for (int i = 0; i < envc; i++){
+    string_area -= rounded4(strlen(envp[i]) + 1);
+    envp_area[i] = string_area;
+    strcpy(string_area, envp[i]);
+  }
 
   intptr_t *ptr = (intptr_t *)string_area;
 
