@@ -50,7 +50,7 @@ void context_uload(PCB *pcb, const char *filename) {
   Area kstack;
   kstack.start = &pcb->cp;
   kstack.end = &pcb->cp + STACK_SIZE;
-  Context *context = ucontext(NULL, kstack, entry);
+  Context *context = ucontext(&pcb->as, kstack, entry);
   pcb->cp = context;
   context->GPRx = (uintptr_t)heap.end;
 }
