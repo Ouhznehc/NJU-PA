@@ -96,8 +96,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
 // to allocate space as the picture above, Unspecified is 40
   int envc = 0, argc = 0;
-  while(argv && argv[argc]) {printf("argc = %d, argv[argc] = %s\n", argc, argv[argc]); argc++;}
-  while(envp && envp[envc]) {printf("envc = %d, envp[envc] = %s\n", envc, envp[envc]); envc++;}
+  while(argv && argv[argc]) {printf("Argument argv[%d] = %s\n", argc, argv[argc]); argc++;}
+  while(envp && envp[envc]) {printf("Argument envp[%d] = %s\n", envc, envp[envc]); envc++;}
 
   char *argv_area[argc], *envp_area[envc];
   char *string_area = (char *)heap.end;
