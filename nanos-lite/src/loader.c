@@ -51,7 +51,6 @@ static size_t rounded4(size_t byte){
 }
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
-    printf("--------\n");
 
 /*
               |               |
@@ -94,7 +93,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   kstack.end = &pcb->cp + STACK_SIZE;
   Context *context = ucontext(&pcb->as, kstack, entry);
   pcb->cp = context;
-
+    printf("--------\n");
 // to allocate space as the picture above, Unspecified is 0
   int envc = 0, argc = 0;
   while(envp && envp[envc++]);
