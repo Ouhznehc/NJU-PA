@@ -45,15 +45,88 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg){
 
 }
 
+static size_t rounded4(size_t byte){
+  if(byte % 4) return 4 * (byte / 4 + 1);
+  return byte;
+}
+
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
+
+/*
+              |               |
+              +---------------+ <---- ustack.end
+              |  Unspecified  |
+              +---------------+
+              |               | <----------+
+              |    string     | <--------+ |
+              |     area      | <------+ | |
+              |               | <----+ | | |
+              |               | <--+ | | | |
+              +---------------+    | | | | |
+              |  Unspecified  |    | | | | |
+              +---------------+    | | | | |
+              |     NULL      |    | | | | |
+              +---------------+    | | | | |
+              |    ......     |    | | | | |
+              +---------------+    | | | | |
+              |    envp[1]    | ---+ | | | |
+              +---------------+      | | | |
+              |    envp[0]    | -----+ | | |
+              +---------------+        | | |
+              |     NULL      |        | | |
+              +---------------+        | | |
+              | argv[argc-1]  | -------+ | |
+              +---------------+          | |
+              |    ......     |          | |
+              +---------------+          | |
+              |    argv[1]    | ---------+ |
+              +---------------+            |
+              |    argv[0]    | -----------+
+              +---------------+
+              |      argc     |
+              +---------------+ <---- cp->GPRx
+              |               |
+*/
   void *entry = (void *)loader(pcb, filename);
   Area kstack;
   kstack.start = &pcb->cp;
   kstack.end = &pcb->cp + STACK_SIZE;
   Context *context = ucontext(&pcb->as, kstack, entry);
   pcb->cp = context;
-  char *brk = (char *)heap.end;
-  *brk = 0;
-  context->GPRx = (uintptr_t)heap.end - 40;
+
+// to allocate space as the picture above, Uspecified is 0
+  int envc = 0, argc = 0;
+  while(envp && envp[envc++]);
+  while(argv && argv[argc++]);
+  char *argv_area[argc], *envp_area[envc];
+
+  char *string_area = (char *)heap.end;
+  
+  for (int i = 0; i < argc; i++){
+    string_area -= rounded4(strlen(argv[i]) + 1);
+    argv_area[i] = string_area;
+    strcpy(string_area, argv[i]);
+  }
+  for (int i = 0; i < envc; i++){
+    string_area -= rounded4(strlen(envp[i]) + 1);
+    envp_area[i] = string_area;
+    strcpy(string_area, envp[i]);
+  }
+
+  intptr_t *ptr = (intptr_t *)string_area;
+  
+  ptr--; *ptr = (intptr_t)NULL; ptr--;
+  for(int i = envc - 1; i >= 0; i--){
+    *ptr = (intptr_t)envp_area[i];
+    ptr--;
+  }
+  ptr--; *ptr = (intptr_t)NULL; ptr--;
+  for(int i = argc - 1; i >= 0; i--){
+    *ptr = (intptr_t)argv_area[i];
+    ptr--;
+  }
+
+  ptr--; *ptr = argc;
+  context->GPRx = (intptr_t)ptr;
 }
 
