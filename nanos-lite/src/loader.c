@@ -99,12 +99,12 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   int envc = 0, argc = 0;
   while(argv && argv[argc]) {printf("Argument argv[%d] = %s\n", argc, argv[argc]); argc++;}
   if(envp && envp[envc]) printf("%s\n", envp[envc]);
+  printf("----\n");
   while(envp && envp[envc]) {printf("Argument envp[%d] = %s\n", envc, envp[envc]); envc++;}
 
   char *argv_area[argc], *envp_area[envc];
   char *string_area = (char *)new_page(nr_page);
   //char *string_area = (char *)heap.end;
-    printf("----\n");
   for (int i = 0; i < argc; i++){
     string_area -= rounded4(strlen(argv[i]) + 1);
     argv_area[i] = string_area;
