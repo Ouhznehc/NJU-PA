@@ -34,7 +34,6 @@ int SDL_DealEvent(SDL_Event *event, int select) {
       event->key.keysym.sym = i;
       key_state[i] = !event->type;
     }
-  printf("-----\n");
   return 1;
 }
 
