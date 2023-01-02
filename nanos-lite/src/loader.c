@@ -2,6 +2,7 @@
 #include <elf.h>
 #include <fs.h>
 
+#define nr_page 8
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -100,7 +101,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   while(envp && envp[envc]) {printf("Argument envp[%d] = %s\n", envc, envp[envc]); envc++;}
 
   char *argv_area[argc], *envp_area[envc];
-  char *string_area = (char *)heap.end;
+  char *string_area = (char *)new_page(nr_page);
 
   for (int i = 0; i < argc; i++){
     string_area -= rounded4(strlen(argv[i]) + 1);
