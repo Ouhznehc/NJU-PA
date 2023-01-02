@@ -29,7 +29,7 @@ void init_proc() {
   // Log("Initializing processes...");
 
 
-  // context_kload(&pcb[0], hello_fun, "zero");
+   context_kload(&pcb[0], hello_fun, "zero");
   // char *argv[] = {"--skip", "--splash", NULL};
   // context_uload(&pcb[1], "/bin/pal", argv, NULL);
   context_uload(&pcb[0], "/bin/exec-test", NULL, NULL);
