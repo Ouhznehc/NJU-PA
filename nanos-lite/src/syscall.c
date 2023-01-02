@@ -42,6 +42,7 @@ void sys_execve (Context *c) {
   // char **envp = (char **)c->GPR4;
   // c->GPRx = execve(filename, argv, envp); 
   naive_uload(NULL, filename);
+  c->GPRx = 0;
 }
 
 void do_syscall(Context *c) {
