@@ -37,9 +37,9 @@ void sys_gettimeofday(Context *c) {
 }
 
 void sys_execve (Context *c) {
-  char *filename = (char *)c->GPR2;
-  char **argv = (char **)c->GPR3;
-  char **envp = (char **)c->GPR4;
+  char *filename = (char *) c->GPR2;
+  char **argv    = (char **)c->GPR3;
+  char **envp    = (char **)c->GPR4;
   c->GPRx = execve(filename, argv, envp); 
 }
 
