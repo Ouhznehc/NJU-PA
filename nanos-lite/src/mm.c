@@ -4,6 +4,7 @@ static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
   //void *head = pf;
+  printf("----\n");
   pf += nr_page * 4 * 1024; // malloc nr_page * 4KB
   return pf;
 }
