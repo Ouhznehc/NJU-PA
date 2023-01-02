@@ -3,9 +3,9 @@
 static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
-  void *head = pf;
+  //void *head = pf;
   pf += nr_page * 4 * 1024; // malloc nr_page * 4KB
-  return head;
+  return pf;
 }
 
 #ifdef HAS_VME
