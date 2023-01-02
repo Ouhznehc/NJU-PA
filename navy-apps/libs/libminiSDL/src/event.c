@@ -29,12 +29,12 @@ int SDL_DealEvent(SDL_Event *event, int select) {
   for(key_index = 0; key_buf[key_index + key_offset] != '\n'; key_index++)
     key_name[key_index] = key_buf[key_index + key_offset];
   key_name[key_index] = '\0';
-  printf("-----\n");
   for(int i = 0; i < sizeof(keyname) / sizeof(char *); i++)
     if (strcmp(key_name, keyname[i]) == 0){
       event->key.keysym.sym = i;
       key_state[i] = !event->type;
     }
+  printf("-----\n");
   return 1;
 }
 
