@@ -2,6 +2,7 @@
 
 #define MAX_NR_PROC 4
 
+
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
@@ -38,12 +39,17 @@ void init_proc() {
 
 Context* schedule(Context *prev) {
   // save the context pointer
-current->cp = prev;
+  current->cp = prev;
 
-// always select pcb[0] as the new process
-//current = &pcb[0];
-current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+  pcb_select;
 
-// then return the new context
-return current->cp;
+  // then return the new context
+  return current->cp;
+}
+
+int execve(const char *filename, char *const argv[], char *const envp[]){
+    context_uload(pcb_select, filename, argv, envp);
+    switch_boot_pcb();
+    yield();
+    return 0;
 }
