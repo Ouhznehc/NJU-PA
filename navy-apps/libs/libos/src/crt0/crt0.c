@@ -9,7 +9,6 @@ void call_main(uintptr_t *args) {
   int argc = *args;
   char **argv = (char **)(args + 1);
   while(*(++args));
-  //for (args += 1; *args; ++args){}
   char **envp = (char **)(args + 1);
   environ = envp;
   exit(main(argc, argv, envp));
