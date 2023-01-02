@@ -52,29 +52,14 @@ static inline uint32_t expand_color(SDL_Color *color){
 
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-  // if(s->format->BytesPerPixel != 1 && s->format->BytesPerPixel != 4)
-  // {printf("not suppported BytesPerPixel !\n"); assert(0);}
-  // if(w == 0 && h == 0){w = s->w; h = s->h;}
-  // uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
-  // if(s->format->BytesPerPixel == 4) pixels = s->pixels;
-  // if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
-  // NDL_DrawRect(pixels, x, y, w, h);
-  // free(pixels);
-    if(w == 0 && h == 0){w = s->w; h = s->h; }
-  uint32_t *s_ptr = malloc(w * h * sizeof(uint32_t));
-  if(s->format->BytesPerPixel == 1){
-    for(int i = 0; i < h; i++){
-      for(int j = 0; j < w; j++){
-        SDL_Palette *palette = s->format->palette;
-        SDL_Color colors = palette->colors[s->pixels[(i + y) * s->w + j + x]];
-        uint32_t color = ((uint32_t)colors.a << 24) | ((uint32_t)colors.r << 16) | ((uint32_t)colors.g << 8) | (uint32_t)colors.b;
-        s_ptr[i * w + j] = color;
-      }
-    }
-  }
-  uint32_t *src = s->format->BytesPerPixel == 1 ? s_ptr : s->pixels;
-  NDL_DrawRect(src, x, y, w, h);
-  free(s_ptr);
+  if(s->format->BytesPerPixel != 1 && s->format->BytesPerPixel != 4)
+  {printf("not suppported BytesPerPixel !\n"); assert(0);}
+  if(w == 0 && h == 0){w = s->w; h = s->h;}
+  uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
+  if(s->format->BytesPerPixel == 4) pixels = s->pixels;
+  if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
+  NDL_DrawRect(s->pixels, x, y, w, h);
+  free(pixels);
 }
 // APIs below are already implemented.
 
