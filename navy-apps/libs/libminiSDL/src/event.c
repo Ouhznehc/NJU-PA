@@ -24,13 +24,12 @@ int SDL_DealEvent(SDL_Event *event, int select) {
     if(!NDL_PollEvent(key_buf, sizeof(key_buf))) return 0; // return intsantly
   if(select == WaitEvent)
     while(!NDL_PollEvent(key_buf, sizeof(key_buf))); // wait event
-  return 1;
   if(key_buf[4] == 'u')event->type = SDL_KEYUP; // key up   xxx
   else event->type = SDL_KEYDOWN; // key down xxx
   for(key_index = 0; key_buf[key_index + key_offset] != '\n'; key_index++)
     key_name[key_index] = key_buf[key_index + key_offset];
   key_name[key_index] = '\0';
-
+  return 1;
   for(int i = 0; i < sizeof(keyname) / sizeof(char *); i++)
     if (strcmp(key_name, keyname[i]) == 0){
       event->key.keysym.sym = i;
