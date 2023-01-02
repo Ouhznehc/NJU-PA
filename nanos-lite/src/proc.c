@@ -36,7 +36,7 @@ void init_proc() {
   char* test[]={"/bin/exec-test",0};
   char* empt[]={0};
   //context_kload(new_pcb(), hello_fun, (void*)1234);
-  context_uload(&pcb[1], "/bin/exec",test,empt);
+  context_uload(&pcb[1], "/bin/exec-test",test,empt);
   switch_boot_pcb();
 }
 
