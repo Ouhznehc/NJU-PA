@@ -50,6 +50,6 @@ int execve(const char *filename, char *const argv[], char *const envp[]){
     context_uload(pcb_select, filename, argv, envp);
     printf("execve loaded %p\n", pcb_select->cp->mepc);
     switch_boot_pcb();
-    yield();
+    //yield();
     return 0;
 }
