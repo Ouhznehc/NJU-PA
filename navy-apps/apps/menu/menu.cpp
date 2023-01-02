@@ -85,7 +85,6 @@ int main(int argc, char *argv[], char *envp[]) {
     } while (e.type != SDL_KEYDOWN);
 
     int i = -1;
-    printf("dasdasdas\n");
     switch (e.key.keysym.sym) {
       case SDLK_0: i = 0; break;
       case SDLK_1: i = 1; break;
@@ -100,21 +99,16 @@ int main(int argc, char *argv[], char *envp[]) {
       case SDLK_LEFT: prev(); break;
       case SDLK_RIGHT: next(); break;
     }
-    printf("dasdasdas     %d\n", i);
     if (i != -1 && i <= i_max) {
       i += page * 10;
-      printf("-----1111\n");
       auto *item = &items[i];
       const char *exec_argv[3];
       exec_argv[0] = item->bin;
       exec_argv[1] = item->arg1;
       exec_argv[2] = NULL;
       clear_display();
-      printf("-----2222\n");
       SDL_UpdateRect(screen, 0, 0, 0, 0);
-      printf("-----3333\n");
       execve(exec_argv[0], (char**)exec_argv, (char**)envp);
-      printf("-----4444\n");
       fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed.\n\n", exec_argv[0]);
     } else {
       fprintf(stderr, "Choose a number between %d and %d\n\n", 0, i_max);
