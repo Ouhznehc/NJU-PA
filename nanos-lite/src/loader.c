@@ -125,12 +125,12 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
     ptr--;
   }
   *ptr = argc;
-  
+
   void *entry = (void *)loader(pcb, filename);
   Area kstack;
   kstack.start = &pcb->cp;
   kstack.end = &pcb->cp + STACK_SIZE;
-  Context *context = ucontext(&pcb->as, kstack, entry);
+  Context *context = ucontext(NULL, kstack, entry);
   pcb->cp = context;
   context->GPRx = (intptr_t)ptr;
 }
