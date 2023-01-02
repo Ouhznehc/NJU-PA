@@ -102,6 +102,7 @@ int main(int argc, char *argv[], char *envp[]) {
 
     if (i != -1 && i <= i_max) {
       i += page * 10;
+      printf("-----1111\n");
       auto *item = &items[i];
       const char *exec_argv[3];
       exec_argv[0] = item->bin;
