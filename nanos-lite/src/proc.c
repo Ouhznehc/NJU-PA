@@ -1,7 +1,7 @@
 #include <proc.h>
 
 #define MAX_NR_PROC 4
-#define pcb_select current == &pcb[0] ? &pcb[1] : &pcb[0]
+#define pcb_select (current == &pcb[0] ? &pcb[1] : &pcb[0])
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
