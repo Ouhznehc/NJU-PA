@@ -49,6 +49,7 @@ Context* schedule(Context *prev) {
 int execve(const char *filename, char *const argv[], char *const envp[]){
   if(envp){
     for(int i = 0; envp[i]; i++){
+      printf("----\n");
       printf("%s\n", envp[i]);
     }
   }
