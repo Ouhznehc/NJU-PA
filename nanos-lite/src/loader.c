@@ -102,7 +102,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   char *argv_area[argc], *envp_area[envc];
   char *string_area = (char *)new_page(nr_page);
   //char *string_area = (char *)heap.end;
-    printf("----\n");
+   // printf("----\n");
   for (int i = 0; i < argc; i++){
     string_area -= rounded4(strlen(argv[i]) + 1);
     argv_area[i] = string_area;
