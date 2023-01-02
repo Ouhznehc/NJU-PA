@@ -98,9 +98,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 // to allocate space as the graph above
   int envc = 0, argc = 0;
   while(argv && argv[argc]) {printf("Argument argv[%d] = %s\n", argc, argv[argc]); argc++;}
-  if(envp) {printf("check\n"); printf("%s\n", envp[0]);}
-  printf("-----\n");
-  while(envp && envp[envc]) {printf("Argument envp[%d] = %s\n", envc, envp[envc]); envc++;}
+  while(envp && envp[envc]) {envc++;}
 
   char *argv_area[argc], *envp_area[envc];
   char *string_area = (char *)new_page(nr_page);
