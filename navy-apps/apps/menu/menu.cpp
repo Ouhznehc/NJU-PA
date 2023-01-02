@@ -85,6 +85,7 @@ int main(int argc, char *argv[], char *envp[]) {
     } while (e.type != SDL_KEYDOWN);
 
     int i = -1;
+    printf("dasdasdas\n");
     switch (e.key.keysym.sym) {
       case SDLK_0: i = 0; break;
       case SDLK_1: i = 1; break;
@@ -99,7 +100,7 @@ int main(int argc, char *argv[], char *envp[]) {
       case SDLK_LEFT: prev(); break;
       case SDLK_RIGHT: next(); break;
     }
-
+    printf("dasdasdas\n");
     if (i != -1 && i <= i_max) {
       i += page * 10;
       printf("-----1111\n");
