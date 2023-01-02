@@ -5,7 +5,6 @@
 #include <memory.h>
 
 #define STACK_SIZE (8 * PGSIZE)
-#define pcb_select current = (current == &pcb[0] ? &pcb[1] : &pcb[0])
 
 typedef union {
   uint8_t stack[STACK_SIZE] PG_ALIGN;
