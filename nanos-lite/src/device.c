@@ -29,6 +29,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   if(kbd.keycode == AM_KEY_NONE) return 0;
   if(kbd.keydown) res = sprintf(buf, "key down %s\n", keyname[kbd.keycode]);
   else res = sprintf(buf, "key up   %s\n", keyname[kbd.keycode]);
+  printf("key %s \n", keyname[kbd.keycode]);
   return res;
 }
 
