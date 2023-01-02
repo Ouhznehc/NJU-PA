@@ -38,11 +38,9 @@ void sys_gettimeofday(Context *c) {
 
 void sys_execve (Context *c) {
   const char *filename = (const char *)c->GPR2;
-  // char **argv = (char **)c->GPR3;
-  // char **envp = (char **)c->GPR4;
-  // c->GPRx = execve(filename, argv, envp); 
-  naive_uload(NULL, filename);
-  c->GPRx = 0;
+  char **argv = (char **)c->GPR3;
+  char **envp = (char **)c->GPR4;
+  c->GPRx = execve(filename, argv, envp); 
 }
 
 void do_syscall(Context *c) {
