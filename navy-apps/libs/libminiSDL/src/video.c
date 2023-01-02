@@ -52,57 +52,14 @@ static inline uint32_t expand_color(SDL_Color *color){
 
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-  // if(s->format->BytesPerPixel != 1 && s->format->BytesPerPixel != 4)
-  // {printf("not suppported BytesPerPixel !\n"); assert(0);}
-  // printf("-----1\n");
-  // if(w == 0 && h == 0){w = s->w; h = s->h;}
-  //   printf("-----2\n");
-  // uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
-  //   printf("-----3\n");
-  // if(s->format->BytesPerPixel == 4) pixels = s->pixels;
-  //   printf("-----4\n");
-  // if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
-  //   printf("-----5\n");
-  // NDL_DrawRect(pixels, x, y, w, h);
-  //   printf("-----6\n");
-  // free(pixels);
-    if (s->format->BitsPerPixel == 32){
-    if (w == 0 && h == 0 && x ==0 && y == 0){
-      //printf("%d %d\n", s->w, s->h);
-      NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
-      return ;
-    }
-    
-    uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
-    assert(pixels);
-    uint32_t *src = (uint32_t *)s->pixels;
-    for (int i = 0; i < h; ++i){
-      memcpy(&pixels[i * w], &src[(y + i) * s->w + x], sizeof(uint32_t) * w);
-    }
-    NDL_DrawRect(pixels, x, y, w, h);
-
-    free(pixels);
-  }else if(s->format->BitsPerPixel == 8){
-    if (w == 0 && h == 0 && x ==0 && y == 0){
-      w = s->w; h = s->h;
-      x = 0;    y = 0;
-    }
-
-    uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
-    assert(pixels);
-    uint8_t *src = (uint8_t *)s->pixels;
-
-    for (int i = 0; i < h; ++i){
-      for (int j = 0; j < w; ++j){
-        pixels[i * w + j] = expand_color(&s->format->palette->colors[src[(y + i) * s->w + x + j]]);
-      }
-    }
-    NDL_DrawRect(pixels, x, y, w, h);
-
-    free(pixels);
-  }else {
-    assert(0);
-  }
+  if(s->format->BytesPerPixel != 1 && s->format->BytesPerPixel != 4)
+  {printf("not suppported BytesPerPixel !\n"); assert(0);}
+  if(w == 0 && h == 0){w = s->w; h = s->h;}
+  uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
+  if(s->format->BytesPerPixel == 4) pixels = s->pixels;
+  if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
+  NDL_DrawRect(pixels, x, y, w, h);
+  free(pixels);
 }
 // APIs below are already implemented.
 
