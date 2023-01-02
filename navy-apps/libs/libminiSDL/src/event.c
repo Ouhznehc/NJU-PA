@@ -18,7 +18,6 @@ int SDL_PushEvent(SDL_Event *ev) {
 }
 
 int SDL_DealEvent(SDL_Event *event, int select) {
-  printf("-----\n");
  char key_buf[64], key_name[64];
   int key_index = 0;
   if(select == PollEvent)
