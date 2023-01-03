@@ -49,7 +49,9 @@ int fs_open(const char *pathname, int flags, int mode){
       file_table[i].open_offset = 0;
       return i;
     }
-  panic("invalid filename!");
+  printf("filename not found!\n");
+  return -2;
+  panic("should not reach here!");
 }
 
 size_t fs_read(int fd, void *buf, size_t len){

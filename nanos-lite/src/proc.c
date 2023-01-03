@@ -1,4 +1,5 @@
 #include <proc.h>
+#include <fs.h>
 
 #define MAX_NR_PROC 4
 #define pcb_select (current == &pcb[0] ? &pcb[1] : &pcb[0])
@@ -47,6 +48,10 @@ Context* schedule(Context *prev) {
 }
 
 int execve(const char *filename, char *const argv[], char *const envp[]){
+  if(fs_open(filename, 0, 0) == -2){
+    printf("Invalid filename!\n");
+    return -2;
+  }
   context_uload(&pcb[1], filename, argv, envp);
   switch_boot_pcb();
   yield();
