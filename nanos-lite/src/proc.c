@@ -49,7 +49,6 @@ Context* schedule(Context *prev) {
 
 int execve(const char *filename, char *const argv[], char *const envp[]){
   if(fs_open(filename, 0, 0) == -2){
-    printf("Invalid filename!\n");
     return -2;
   }
   context_uload(&pcb[1], filename, argv, envp);
