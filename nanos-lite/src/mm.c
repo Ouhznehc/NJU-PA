@@ -1,19 +1,18 @@
 #include <memory.h>
 
-#define page_size 4096
 
 static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
   //void *head = pf;
-  pf += nr_page * page_size; // malloc nr_page * 4KB
+  pf += nr_page * PGSIZE; // malloc nr_page * 4KB
   return pf;
 }
 
 #ifdef HAS_VME
 static void* pg_alloc(int n) {
-  assert(n % page_size == 0);
-  void *page = new_page(n / page_size);
+  assert(n % PGSIZE == 0);
+  void *page = new_page(n / PGSIZE);
   memset(page, 0, n);
   return page;
 }
