@@ -1,5 +1,12 @@
 #include <memory.h>
 
+#define PPN_MASK 0xfffffc00u
+#define PPN(x) (((uintptr_t)x & PPN_MASK) >> 10)
+#define OFFSET(x) ((uintptr_t)x & 0x00000fffu)
+#define m
+
+
+
 
 static void *pf = NULL;
 
