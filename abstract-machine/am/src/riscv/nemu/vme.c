@@ -86,7 +86,7 @@ void __am_switch(Context *c) {
 #define PPN_MASK  (0xfffffc00u)
 #define SET_PPN(x, y)   do{ \
                         *x = (*x & ~PPN_MASK) | (PPN_MASK & ((uintptr_t)y / 4)); \
-                        *x |= PTE_V;}while(0)
+                        *x |= PTE_V | PTE_R | PTE_W | PTE_X;}while(0)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   PTE *pte = as->ptr + VPN_1(va) * 4;
