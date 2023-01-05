@@ -86,8 +86,8 @@ void __am_switch(Context *c) {
 #define PPN_MASK  (0xfffffc00u)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-  // PTE *pte = as->ptr + VPN_1(va) * 4;
-  // if((*pte & PTE_V) == 0) *pte |= (PPN_MASK & ((PTE)pgalloc_usr(PGSIZE) / 4));
+  PTE *pte = as->ptr + VPN_1(va) * 4;
+  if((*pte & PTE_V) == 0) *pte |= (PPN_MASK & ((PTE)pgalloc_usr(PGSIZE) / 4));
   // PTE *leaf_pte = (PTE *)(PPN(*pte) * 4096 + VPN_0(va) * 4);
   // *leaf_pte |= (PPN_MASK & ((PTE)pa / 4));
   // *leaf_pte |= PTE_V;
