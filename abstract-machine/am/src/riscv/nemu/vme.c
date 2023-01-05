@@ -77,13 +77,12 @@ void __am_switch(Context *c) {
               Riscv32 Sv32 PTE(page-table entry)
 
 */
-#define BITMASK(bits) ((1ull << (bits)) - 1)
+#define BITMASK(bits) ((1u << (bits)) - 1)
 #define BITS(x, hi, lo) (((PTE)(x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
-#define VPN_0(x)  (((uintptr_t)x & 0x003FF000u) >> 12)
+#define VPN_0(x)  BITS(x, 21, 12)
 #define VPN_1(x)  BITS(x, 31, 22)
 #define OFFSET(x) BITS(x, 11, 0)
-//#define PPN(x)    BITS(x, 31, 10)
-#define PPN(x)    (((uintptr_t)x & PPN_MASK) >> 10)
+#define PPN(x)    BITS(x, 31, 10)
 #define PPN_MASK  (0xfffffc00u)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
