@@ -84,6 +84,9 @@ void __am_switch(Context *c) {
 #define OFFSET(x) BITS(x, 11, 0)
 #define PPN(x)    BITS(x, 31, 10)
 #define PPN_MASK  (0xfffffc00u)
+#define SET_PPN(x)   do{ \
+                        *x = (*x & ~PPN_MASK) | (PPN_MASK & ((uintptr_t)pgalloc_usr(PGSIZE) / 4)); \
+                        *x = *x | PTE_V;}while(0)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   PTE *pte = as->ptr + VPN_1(va) * 4;
