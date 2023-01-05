@@ -91,6 +91,7 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   printf("map\n");
   PTE *pte = as->ptr + VPN_1(va) * 4;
+  printf("fuck\n");
   if((*pte & PTE_V) == 0) {
     printf("special\n");
     SET_PPN(pte, pgalloc_usr(PGSIZE));
