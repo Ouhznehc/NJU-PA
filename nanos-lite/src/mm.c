@@ -1,10 +1,23 @@
 #include <memory.h>
 
-#define PPN_MASK 0xfffffc00u
-#define PPN(x) (((uintptr_t)x & PPN_MASK) >> 10)
-#define OFFSET(x) ((uintptr_t)x & 0x00000fffu)
-#define m
+#define BITMASK(bits) ((1ull << (bits)) - 1)
+#define BITS(x, hi, lo) (((uintptr_t)(x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 
+/*
+-------------------------------------------------------------------
+|31        20|19        10|9     8| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+|   PPN[1]   |   PPN[0]   |  RSW  | D | A | G | U | X | W | R | V |
+|    12      |    10      |   2   | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+-------------------------------------------------------------------
+
+              Riscv32 Sv32 PTE(page-table entry)
+
+*/
+
+#define VPN_0(x)  BITS(x, 21, 12)
+#define VPN_1(x)  BITS(x, 31, 22)
+#define OFFSET(x) BITS(x, 11, 0)
+#define PPN(x)    BITS(x, 31, 10)
 
 
 
