@@ -89,6 +89,7 @@ void __am_switch(Context *c) {
                         *x |= PTE_V;}while(0)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
+  printf("map\n");
   PTE *pte = as->ptr + VPN_1(va) * 4;
   if((*pte & PTE_V) == 0) {
     printf("special\n");
