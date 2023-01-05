@@ -93,6 +93,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
   if((*pte & PTE_V) == 0) {
     SET_PPN(pte, pgalloc_usr(PGSIZE));
   }
+  printf("fuck\n");
   PTE *leaf_pte = (PTE *)(PPN(*pte) * 4096 + VPN_0(va) * 4);
   SET_PPN(leaf_pte, pa);
 }
