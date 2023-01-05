@@ -91,9 +91,10 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   PTE *pte = as->ptr + VPN_1(va) * 4;
   if((*pte & PTE_V) == 0) {
-    printf("-----\n");
+    printf("special\n");
     SET_PPN(pte, pgalloc_usr(PGSIZE));
   }
+  printf("normal\n");
   PTE *leaf_pte = (PTE *)(PPN(*pte) * 4096 + VPN_0(va) * 4);
   SET_PPN(leaf_pte, pa);
 }
