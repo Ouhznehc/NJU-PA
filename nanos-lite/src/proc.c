@@ -30,10 +30,10 @@ void init_proc() {
 
 
    context_kload(&pcb[0], hello_fun, "zero");
-  //char *argv[] = {"--skip", "--splash", NULL};
+  char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/bin/exec-test", "0", NULL};
-  context_uload(&pcb[1], "/bin/menu", NULL, NULL);
+  context_uload(&pcb[1], "/bin/pal", argv, NULL);
   switch_boot_pcb();
 }
 
