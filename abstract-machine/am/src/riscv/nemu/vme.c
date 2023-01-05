@@ -91,7 +91,7 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   PTE *pte = as->ptr + VPN_1(va) * 4;
   printf("%p\t%p\n", as->ptr, get_satp() + VPN_1(va) * 4);
-  assert((uintptr_t)as->ptr == get_satp() + VPN_1(va) * 4);
+  assert((uintptr_t)as->ptr + VPN_1(va) * 4 == get_satp() + VPN_1(va) * 4);
   if((*pte & PTE_V) == 0) {
     SET_PPN(pte, pgalloc_usr(PGSIZE));
   }
