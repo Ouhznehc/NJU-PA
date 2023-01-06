@@ -59,7 +59,6 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   if(s->format->BytesPerPixel == 4) pixels = s->pixels;
   if(s->format->BytesPerPixel == 1) copy_expand_color; // only for PAL
   NDL_DrawRect(pixels, x, y, w, h);
-  free(pixels);
 }
 // APIs below are already implemented.
 
