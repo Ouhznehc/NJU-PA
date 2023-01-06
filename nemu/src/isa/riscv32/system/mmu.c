@@ -30,11 +30,11 @@ typedef uintptr_t PTE;
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   paddr_t pte_addr = (cpu.satp << 12) + VPN_1(vaddr) * 4;
   PTE pte = paddr_read(pte_addr, 4);
-  assert(pte & PTE_V);
+  //assert(pte & PTE_V);
 
   paddr_t leaf_pte_addr = PPN(pte) * 4096 + VPN_0(vaddr) * 4;
   PTE leaf_pte = paddr_read(leaf_pte_addr, 4);
-  //assert((leaf_pte & PTE_V) == 1);
+  assert((leaf_pte & PTE_V) == 1);
 
   paddr_t pa = PPN(leaf_pte) * 4096 + OFFSET(vaddr);
   assert(pa == vaddr);
