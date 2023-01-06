@@ -33,7 +33,6 @@ void init_proc() {
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/bin/exec-test", "0", NULL};
-  printf("------\n");
   context_uload(&pcb[1], "/bin/nterm", NULL, NULL);
   switch_boot_pcb();
 }

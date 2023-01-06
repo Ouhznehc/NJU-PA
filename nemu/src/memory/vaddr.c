@@ -19,16 +19,16 @@
 #define MMU_CHECK if(isa_mmu_check(addr, len, 0) == MMU_TRANSLATE) addr = isa_mmu_translate(addr, len, 0)
 
 word_t vaddr_ifetch(vaddr_t addr, int len) {
-  MMU_CHECK;
+  //MMU_CHECK;
   return paddr_read(addr, len);
 }
 
 word_t vaddr_read(vaddr_t addr, int len) {
-  MMU_CHECK;
+  //MMU_CHECK;
   return paddr_read(addr, len);
 }
 
 void vaddr_write(vaddr_t addr, int len, word_t data) {
-  MMU_CHECK;
+  //MMU_CHECK;
   paddr_write(addr, len, data);
 }
