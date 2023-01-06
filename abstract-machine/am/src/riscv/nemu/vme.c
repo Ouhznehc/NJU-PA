@@ -88,7 +88,6 @@ void __am_switch(Context *c) {
                         *x |= PTE_V | PTE_R | PTE_W | PTE_X;}while(0)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-  printf("----\n");
   PTE *pte = as->ptr + VPN_1(va) * 4;
   if((*pte & PTE_V) == 0) {
     SET_PPN(pte, pgalloc_usr(PGSIZE));
