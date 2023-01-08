@@ -54,6 +54,13 @@ static size_t rounded4(size_t byte){
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
 
+  AddrSpace *as = &pcb->as;
+  protect(as);
+
+  void *page = new_page(nr_page) + nr_page * PGSIZE;
+  for(int i = 8; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, 1);
+
+
 /*
               |               |
               +---------------+ <---- ustack.end
@@ -96,7 +103,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   while(envp && envp[envc]) {printf("Argument envp[%d] is %s\n", envc, envp[envc]); envc++;}
 
   char *argv_area[argc], *envp_area[envc];
-  char *string_area = (char *)new_page(nr_page);
+  char *string_area = (char *)(page - 4);
   //char *string_area = (char *)heap.end;
 
   for (int i = 0; i < argc; i++){
