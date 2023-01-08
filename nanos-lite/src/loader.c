@@ -48,7 +48,7 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg){
 }
 
 static size_t rounded4(size_t byte){
-  if(byte & 0x3) return (byte & (~0x3)) + 0x4;
+  if(byte % 4) return (byte / 4 + 1) * 4;
   return byte;
 }
 
