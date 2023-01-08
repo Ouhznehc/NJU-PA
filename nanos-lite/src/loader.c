@@ -136,6 +136,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   }
   *ptr = argc;
 
+  printf("ending...\n");
+
   void *entry = (void *)loader(pcb, filename);
   Area kstack;
   kstack.start = &pcb->cp;
