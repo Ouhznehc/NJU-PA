@@ -31,7 +31,7 @@
 #define OFFSET(x) MYBITS(x, 11, 0)
 #define PPN(x)    MYBITS(x, 31, 10)
 #define PPN_MASK  (0xfffffc00u)
-typedef uint32_t PTE;
+typedef uintptr_t PTE;
 #define pte_addr (cpu.satp << 12) + VPN_1(vaddr) * 4
 #define leaf_pte_addr PPN(pte) * 4096 + VPN_0(vaddr) * 4
 #define WRITE 1
