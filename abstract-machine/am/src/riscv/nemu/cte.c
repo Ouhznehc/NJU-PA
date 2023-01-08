@@ -1,10 +1,12 @@
 #include <am.h>
 #include <riscv/riscv.h>
 #include <klib.h>
-
+void __am_get_cur_as(Context *c);
+void __am_switch(Context *c);
 static Context* (*user_handler)(Event, Context*) = NULL;
 #define EVENT 0
 Context* __am_irq_handle(Context *c) {
+   __am_get_cur_as(c);
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
@@ -19,7 +21,7 @@ Context* __am_irq_handle(Context *c) {
     assert(c != NULL);
     c->mepc += 4;
   }
-
+  __am_switch(c);
   return c;
 }
 
