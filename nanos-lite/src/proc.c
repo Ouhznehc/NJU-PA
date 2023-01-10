@@ -33,7 +33,7 @@ void init_proc() {
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   char *argv[] = {"aaaa", NULL};
-  context_uload(&pcb[1], "usr/bin/echo", argv, NULL);
+  context_uload(&pcb[1], "/bin/echo", argv, NULL);
   switch_boot_pcb();
 }
 
