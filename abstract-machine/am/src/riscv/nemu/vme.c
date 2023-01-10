@@ -2,7 +2,7 @@
 #include <nemu.h>
 #include <klib.h>
 
-static AddrSpace kas = { };
+static AddrSpace kas = {};
 static void* (*pgalloc_usr)(int) = NULL;
 static void (*pgfree_usr)(void*) = NULL;
 static int vme_enable = 0;
@@ -92,7 +92,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
     *pde = (uintptr_t)new_page >> 2;
     *pde |= PTE_V;
   }
-  uint32_t *pte = (uint32_t *)(PPN(*pde) + VPN_0(va) * 4);
+  uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
   *pte |= (uintptr_t)pa >> 2;
   *pte |= PTE_V;
 }
