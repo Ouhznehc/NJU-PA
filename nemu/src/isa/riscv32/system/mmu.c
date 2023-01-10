@@ -30,7 +30,6 @@
 #define VPN_1(x)  MYBITS(x, 31, 22)
 #define OFFSET(x) MYBITS(x, 11, 0)
 #define PPN(x)    MYBITS(x, 31, 10)
-#define PPN_MASK  (0xfffffc00u)
 #define pde_addr cpu.satp * 4096 + VPN_1(vaddr) * 4
 #define pte_addr PPN(pde) * 4096 + VPN_0(vaddr) * 4
 #define WRITE 1
