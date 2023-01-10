@@ -32,6 +32,7 @@ static void sh_handle_cmd(const char *cmd) {
 
   token = strtok(cmd_line, " ");
   filename = token;
+  argv[argc++] = token;
   while(token = strtok(NULL, " ")){
     argv[argc++] = token;
   }
