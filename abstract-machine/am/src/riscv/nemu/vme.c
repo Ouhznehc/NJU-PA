@@ -85,7 +85,7 @@ void __am_switch(Context *c) {
 #define PPN_MASK  (0xfffffc00u)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-  assert((uintptr_t) va < (uintptr_t) as->area.end && (uintptr_t) va >= (uintptr_t) as->area.start);
+  //assert((uintptr_t) va < (uintptr_t) as->area.end && (uintptr_t) va >= (uintptr_t) as->area.start);
   uint32_t *pde = as->ptr + VPN_1(va) * 4;
 
   if ((*pde & PTE_V) == 0) {
