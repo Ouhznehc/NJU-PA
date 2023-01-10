@@ -83,17 +83,19 @@ void __am_switch(Context *c) {
 #define OFFSET(x) BITS(x, 11, 0)
 #define PPN(x)    BITS(x, 31, 10)
 #define PPN_MASK  (0xfffffc00u)
-#define SET_PPN(x, y)   do{ \
-                        *x = (*x & ~PPN_MASK) | (PPN_MASK & ((uintptr_t)y / 4)); \
-                        *x |= PTE_V | PTE_R | PTE_W | PTE_X;}while(0)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-  PTE *pte = as->ptr + VPN_1(va) * 4;
-  if((*pte & PTE_V) == 0) {
-    SET_PPN(pte, pgalloc_usr(PGSIZE));
+  assert((uintptr_t) va < (uintptr_t) as->area.end && (uintptr_t) va >= (uintptr_t) as->area.start);
+  uint32_t *pde = as->ptr + VPN_1(va) * 4;
+
+  if ((*pde & PTE_V) == 0) {
+    uint32_t *new_page = pgalloc_usr(PGSIZE);
+    *pde = ((uintptr_t)new_page >> 12) << 10;
+    *pde |= PTE_V;
   }
-  PTE *leaf_pte = (PTE *)(PPN(*pte) * 4096 + VPN_0(va) * 4);
-  SET_PPN(leaf_pte, pa);
+  uint32_t *pte = (uint32_t *)(PPN(*pde) + VPN_0(va) * 4);
+  *pte |= ((uintptr_t) pa >> 12) << 10;
+  *pte |= PTE_V;
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
