@@ -32,8 +32,8 @@ void init_proc() {
    context_kload(&pcb[0], hello_fun, "zero");
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
-  char *argv[] = {"/bin/echo", "aaa", NULL};
-  context_uload(&pcb[1], "/bin/busybox", argv, NULL);
+  //char *argv[] = {"/bin/echo", "aaa", NULL};
+  context_uload(&pcb[1], "/bin/dummy", NULL, NULL);
   switch_boot_pcb();
 }
 
