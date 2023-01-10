@@ -31,22 +31,21 @@
 #define OFFSET(x) MYBITS(x, 11, 0)
 #define PPN(x)    MYBITS(x, 31, 10)
 #define PPN_MASK  (0xfffffc00u)
-typedef uintptr_t PTE;
 #define pte_addr (cpu.satp << 12) + VPN_1(vaddr) * 4
 #define leaf_pte_addr PPN(pte) * 4096 + VPN_0(vaddr) * 4
 #define WRITE 1
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
-  PTE pte = paddr_read(pte_addr, 4);
+  uint32_t pte = paddr_read(pte_addr, 4);
   assert(pte & PTE_V);
 
-  PTE leaf_pte = paddr_read(leaf_pte_addr, 4);
+  uint32_t leaf_pte = paddr_read(leaf_pte_addr, 4);
   assert(leaf_pte & PTE_V);
 
   if(type == WRITE) paddr_write(leaf_pte_addr, 4, leaf_pte | PTE_D);
   else paddr_write(leaf_pte_addr, 4, leaf_pte | PTE_A);
 
-  paddr_t pa = PPN(leaf_pte) * 4096 + OFFSET(vaddr);
+  uint32_t pa = PPN(leaf_pte) * 4096 + OFFSET(vaddr);
   assert(pa == vaddr);
   return pa;
 }
