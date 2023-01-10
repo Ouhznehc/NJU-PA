@@ -80,9 +80,7 @@ void __am_switch(Context *c) {
 #define BITS(x, hi, lo) (((PTE)(x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 #define VPN_0(x)  BITS(x, 21, 12)
 #define VPN_1(x)  BITS(x, 31, 22)
-#define OFFSET(x) BITS(x, 11, 0)
 #define PPN(x)    BITS(x, 31, 10)
-#define PPN_MASK  (0xfffffc00u)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   uint32_t *pde = as->ptr + VPN_1(va) * 4;
