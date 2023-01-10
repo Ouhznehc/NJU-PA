@@ -54,13 +54,11 @@ static size_t rounded4(size_t byte){
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
 
-  printf("Loading...\n");
-
   AddrSpace *as = &pcb->as;
   protect(as);
 
-  void *page = new_page(nr_page) + nr_page * PGSIZE;
-  for(int i = 8; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, 1);
+  // void *page = new_page(nr_page) + nr_page * PGSIZE;
+  // for(int i = 8; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, 1);
 
 
 /*
@@ -105,7 +103,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   while(envp && envp[envc]) {printf("Argument envp[%d] is %s\n", envc, envp[envc]); envc++;}
 
   char *argv_area[argc], *envp_area[envc];
-  char *string_area = (char *)(page - 4);
+  char *string_area = (char *)(new_page(nr_page) - PGSIZE * nr_page);
   //char *string_area = (char *)heap.end;
 
   for (int i = 0; i < argc; i++){
@@ -136,8 +134,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   }
   *ptr = argc;
 
-  printf("ending...\n");
-
   void *entry = (void *)loader(pcb, filename);
   Area kstack;
   kstack.start = &pcb->cp;
@@ -145,6 +141,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   Context *context = ucontext(as, kstack, entry);
   pcb->cp = context;
 
-  context->GPRx = (intptr_t)ptr - (uintptr_t)page + (uintptr_t)as->area.end + 4;
+  context->GPRx = (intptr_t)ptr;
 }
 
