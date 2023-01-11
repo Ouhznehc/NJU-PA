@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include "syscall.h"
 
-extern char end;
-void *program_break = &end;
 
 // helper macros
 #define _concat(x, y) x ## y
@@ -69,14 +67,36 @@ int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);
 }
 
+// extern char end;
+// void *program_break = &end;
+
+// void *_sbrk(intptr_t increment) {
+//   //printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
+//   //increment = 0;
+//   void *former_program_break = program_break;
+//   intptr_t sys = _syscall_(SYS_brk, (intptr_t)program_break + increment, 0, 0);
+//   if(!sys) {program_break += increment; return (void*)former_program_break;}
+//   else assert(0);
+//   return (void*)(-1);
+// }
+
+extern char end;
+void * program_break = NULL;
+
 void *_sbrk(intptr_t increment) {
-  //printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
-  //increment = 0;
-  void *former_program_break = program_break;
-  intptr_t sys = _syscall_(SYS_brk, (intptr_t)program_break + increment, 0, 0);
-  if(!sys) {program_break += increment; return (void*)former_program_break;}
-  else assert(0);
-  return (void*)(-1);
+  if (program_break == NULL){// 初始化
+    program_break = &end;
+  }
+  void *old_program_break = program_break;
+  
+  int ret = _syscall_(SYS_brk, (intptr_t)(program_break + increment), 0, 0);
+  if (ret == 0){
+    program_break = program_break + increment;
+  }else {
+    assert(0);
+  }
+  
+  return old_program_break;
 }
 
 int _read(int fd, void *buf, size_t count) {
