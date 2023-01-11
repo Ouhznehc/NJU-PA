@@ -67,19 +67,26 @@ int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);
 }
 
+// extern char end;
+// void *program_break = &end;
+
+// void *_sbrk(intptr_t increment) {
+//   //printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
+//   //increment = 0;
+//   void *former_program_break = program_break;
+//   int ret = _syscall_(SYS_brk, (intptr_t)(program_break + increment), 0, 0);
+//   if(ret == 0) program_break += increment;
+//   else assert(0);
+//   return (void*)former_program_break;
+// }
 extern char end;
-void *program_break = &end;
+static void *heap_end = &end;
 
-void *_sbrk(intptr_t increment) {
-  //printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
-  //increment = 0;
-  void *former_program_break = program_break;
-  int ret = _syscall_(SYS_brk, (intptr_t)(program_break + increment), 0, 0);
-  if(ret == 0) program_break += increment;
-  else assert(0);
-  return (void*)former_program_break;
+void* _sbrk(intptr_t increment) {
+  void *last_end = heap_end;
+  _syscall_(SYS_brk, (intptr_t) (heap_end += increment), 0, 0);
+  return last_end;
 }
-
 // extern char end;
 // void * program_break = NULL;
 
