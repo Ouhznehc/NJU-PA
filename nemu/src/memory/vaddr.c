@@ -16,7 +16,7 @@
 #include <isa.h>
 #include <memory/paddr.h>
 
-#define MMU_CHECK(type) if(isa_mmu_check(addr, len, 0) == MMU_TRANSLATE) addr = isa_mmu_translate(addr, len, type)
+#define MMU_CHECK(type) if(isa_mmu_check(addr, len, 0) == MMU_TRANSLATE) {addr = isa_mmu_translate(addr, len, type); Log("fuck");}
 
 word_t vaddr_ifetch(vaddr_t addr, int len) {
   MMU_CHECK(0);
