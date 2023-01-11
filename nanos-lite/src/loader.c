@@ -56,95 +56,148 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg){
 
 }
 
-void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
+// void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
  
-  AddrSpace *as = &pcb->as;
-  protect(as);
-  void *page = new_page(NR_PAGE) + NR_PAGE * PGSIZE;
-  for(int i = NR_PAGE; i >= 1; i--) {
-  map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
-  printf("context_uload map from va = %08p to pa = %08p\n", as->area.end - i * PGSIZE ,page - i * PGSIZE, MMAP_READ);
+//   AddrSpace *as = &pcb->as;
+//   protect(as);
+//   void *page = new_page(NR_PAGE) + NR_PAGE * PGSIZE;
+//   for(int i = NR_PAGE; i >= 1; i--) {
+//   map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
+//   printf("context_uload map from va = %08p to pa = %08p\n", as->area.end - i * PGSIZE ,page - i * PGSIZE, MMAP_READ);
+//   }
+// /*
+//               |               |
+//               +---------------+ <---- ustack.end
+//               |  Unspecified  |
+//               +---------------+
+//               |               | <----------+
+//               |    string     | <--------+ |
+//               |     area      | <------+ | |
+//               |               | <----+ | | |
+//               |               | <--+ | | | |
+//               +---------------+    | | | | |
+//               |  Unspecified  |    | | | | |
+//               +---------------+    | | | | |
+//               |     NULL      |    | | | | |
+//               +---------------+    | | | | |
+//               |    ......     |    | | | | |
+//               +---------------+    | | | | |
+//               |    envp[1]    | ---+ | | | |
+//               +---------------+      | | | |
+//               |    envp[0]    | -----+ | | |
+//               +---------------+        | | |
+//               |     NULL      |        | | |
+//               +---------------+        | | |
+//               | argv[argc-1]  | -------+ | |
+//               +---------------+          | |
+//               |    ......     |          | |
+//               +---------------+          | |
+//               |    argv[1]    | ---------+ |
+//               +---------------+            |
+//               |    argv[0]    | -----------+
+//               +---------------+
+//               |      argc     |
+//               +---------------+ <---- cp->GPRx
+//               |               |
+// */
+
+// // to allocate space as the graph above
+//   int envc = 0, argc = 0;
+//   while(argv && argv[argc]) {printf("Argument argv[%d] is %s\n", argc, argv[argc]); argc++;}
+//   while(envp && envp[envc]) {printf("Argument envp[%d] is %s\n", envc, envp[envc]); envc++;}
+
+//   char *argv_area[argc], *envp_area[envc];
+//   char *string_area = (char *)page;
+//   //char *string_area = (char *)heap.end;
+
+//   for (int i = 0; i < argc; i++){
+//     string_area -= strlen(argv[i]) + 1;
+//     argv_area[i] = string_area;
+//     strcpy(string_area, argv[i]);
+//   }
+
+//   for (int i = 0; i < envc; i++){
+//     string_area -= strlen(envp[i]) + 1;
+//     envp_area[i] = string_area;
+//     strcpy(string_area, envp[i]);
+//   }
+
+//   intptr_t *ptr = (intptr_t *)string_area;
+
+//   ptr -= 40;  // Unspecified
+
+//   *ptr = (intptr_t)NULL; ptr--;
+//   for(int i = envc - 1; i >= 0; i--){
+//     *ptr = (intptr_t)envp_area[i];
+//     ptr--;
+//   }
+//   *ptr = (intptr_t)NULL; ptr--;
+//   for(int i = argc - 1; i >= 0; i--){
+//     *ptr = (intptr_t)argv_area[i];
+//     ptr--;
+//   }
+//   *ptr = argc;
+
+//   void *entry = (void *)loader(pcb, filename);
+//   Area kstack;
+//   kstack.start = &pcb->cp;
+//   kstack.end = &pcb->cp + STACK_SIZE;
+//   Context *context = ucontext(as, kstack, entry);
+//   pcb->cp = context;
+
+//   context->GPRx = (intptr_t)ptr;
+// }
+
+void context_uload(PCB *pcb, const char *filename, const char *argv[], const char *envp[]) {
+
+  protect(&pcb->as);
+
+  size_t argc = 0, envc = 0, argsz = 0, envsz = 0;
+
+
+  if (argv) for (; argv[argc]; argc++) {
+//    Log("%s", argv[argc]);
+    argsz += strlen(argv[argc]) + 1;
   }
-/*
-              |               |
-              +---------------+ <---- ustack.end
-              |  Unspecified  |
-              +---------------+
-              |               | <----------+
-              |    string     | <--------+ |
-              |     area      | <------+ | |
-              |               | <----+ | | |
-              |               | <--+ | | | |
-              +---------------+    | | | | |
-              |  Unspecified  |    | | | | |
-              +---------------+    | | | | |
-              |     NULL      |    | | | | |
-              +---------------+    | | | | |
-              |    ......     |    | | | | |
-              +---------------+    | | | | |
-              |    envp[1]    | ---+ | | | |
-              +---------------+      | | | |
-              |    envp[0]    | -----+ | | |
-              +---------------+        | | |
-              |     NULL      |        | | |
-              +---------------+        | | |
-              | argv[argc-1]  | -------+ | |
-              +---------------+          | |
-              |    ......     |          | |
-              +---------------+          | |
-              |    argv[1]    | ---------+ |
-              +---------------+            |
-              |    argv[0]    | -----------+
-              +---------------+
-              |      argc     |
-              +---------------+ <---- cp->GPRx
-              |               |
-*/
-
-// to allocate space as the graph above
-  int envc = 0, argc = 0;
-  while(argv && argv[argc]) {printf("Argument argv[%d] is %s\n", argc, argv[argc]); argc++;}
-  while(envp && envp[envc]) {printf("Argument envp[%d] is %s\n", envc, envp[envc]); envc++;}
-
-  char *argv_area[argc], *envp_area[envc];
-  char *string_area = (char *)page;
-  //char *string_area = (char *)heap.end;
-
-  for (int i = 0; i < argc; i++){
-    string_area -= strlen(argv[i]) + 1;
-    argv_area[i] = string_area;
-    strcpy(string_area, argv[i]);
+  if (envp) for (; envp[envc]; envc++) {
+//    Log("%s", envp[envc]);
+    envsz += strlen(envp[envc]) + 1;
   }
 
-  for (int i = 0; i < envc; i++){
-    string_area -= strlen(envp[i]) + 1;
-    envp_area[i] = string_area;
-    strcpy(string_area, envp[i]);
+  for (int i = 0; i < STACK_SIZE / PGSIZE; i++) {
+    void *n_pgpa = new_page(1);
+    map(&pcb->as, pcb->as.area.end - STACK_SIZE + i * PGSIZE, n_pgpa, MMAP_READ | MMAP_WRITE);
   }
 
-  intptr_t *ptr = (intptr_t *)string_area;
+  char      *n_area = new_page(0) - argsz - envsz;
+  uintptr_t *n_envp = (uintptr_t *) n_area - envc - 1;
+  uintptr_t *n_argv = (uintptr_t *) n_envp - argc - 1;
+  size_t    *n_argc = (size_t *)    n_argv - 1;
 
-  ptr -= 40;  // Unspecified
 
-  *ptr = (intptr_t)NULL; ptr--;
-  for(int i = envc - 1; i >= 0; i--){
-    *ptr = (intptr_t)envp_area[i];
-    ptr--;
+  for (int i = 0; i < argc; i++, *n_area++ = '\0') {
+    n_argv[i] = (uintptr_t) n_area;
+    memcpy(n_area, argv[i], strlen(argv[i]));
+    n_area += strlen(argv[i]);
   }
-  *ptr = (intptr_t)NULL; ptr--;
-  for(int i = argc - 1; i >= 0; i--){
-    *ptr = (intptr_t)argv_area[i];
-    ptr--;
+  n_argv[argc] = 0;
+  for (int i = 0; i < envc; i++, *n_area++ = '\0'){
+    n_envp[i] = (uintptr_t) n_area;
+    memcpy(n_area, envp[i], strlen(envp[i]));
+    n_area += strlen(envp[i]);
   }
-  *ptr = argc;
+  n_envp[envc] = 0;
 
-  void *entry = (void *)loader(pcb, filename);
-  Area kstack;
-  kstack.start = &pcb->cp;
-  kstack.end = &pcb->cp + STACK_SIZE;
-  Context *context = ucontext(as, kstack, entry);
-  pcb->cp = context;
+  *n_argc = argc;
 
-  context->GPRx = (intptr_t)ptr;
+  Area nstack = {
+    .start = (void *) pcb,
+    .end = ((void *) pcb) + STACK_SIZE
+  };
+  
+  void (*entry)() = (void (*)()) loader(pcb, filename);
+  pcb->cp = ucontext(&pcb->as, nstack, entry);
+  pcb->cp->GPRx = (uintptr_t) n_argc;
+  return;
 }
 
