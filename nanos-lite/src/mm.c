@@ -24,28 +24,14 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-  // if(brk < current->max_brk) return 0;
-  // uint32_t max_nr_page = ROUNDUP(current->max_brk, PGSIZE) / PGSIZE - 1;
-  // uint32_t now_nr_page = ROUNDUP(brk,              PGSIZE) / PGSIZE - 1;
-  // int nr_page = now_nr_page - max_nr_page;
-  // void *page = new_page(nr_page);
-  // void *vaddr = (void *)ROUNDUP(current->max_brk, PGSIZE);
-  // for(int i = 0; i < nr_page; i++) map(&current->as, vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
-  // return 0;
-  uintptr_t max_page_end = current->max_brk; 
-  uintptr_t max_page_pn = (max_page_end >> 12) - 1;
-  uintptr_t brk_pn = brk >> 12;//12
-  if (brk >= max_page_end){
-    void *allocted_page =  new_page(brk_pn - max_page_pn + 1);
-    for (int i = 0; i < brk_pn - max_page_pn + 1; ++i){
-      map(&current->as, (void *)(max_page_end + i * 0xfff),
-       (void *)(allocted_page + i * 0xfff), 1);
-    }
-
-    current->max_brk = (brk_pn + 1) << 12;
-    assert(current->max_brk > brk);
-}
-return 0;
+  if(brk < current->max_brk) return 0;
+  uint32_t max_nr_page = ROUNDUP(current->max_brk, PGSIZE) / PGSIZE - 1;
+  uint32_t now_nr_page = ROUNDUP(brk,              PGSIZE) / PGSIZE - 1;
+  int nr_page = now_nr_page - max_nr_page;
+  void *page = new_page(nr_page);
+  void *vaddr = (void *)ROUNDUP(current->max_brk, PGSIZE);
+  for(int i = 0; i < nr_page; i++) map(&current->as, vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
+  return 0;
 }
 
 extern PCB *current;
