@@ -41,6 +41,6 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   assert(pte & PTE_V);
 
   uint32_t paddr = PPN(pte) * 4096 + OFFSET(vaddr);
-  assert(paddr == vaddr);
+  //assert(paddr == vaddr);
   return paddr;
 }
