@@ -74,7 +74,7 @@ void *_sbrk(intptr_t increment) {
   //printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
   //increment = 0;
   void *former_program_break = program_break;
-  intptr_t sys = _syscall_(SYS_brk, (intptr_t)program_break + increment, 0, 0);
+  intptr_t sys = _syscall_(SYS_brk, (intptr_t)(program_break + increment), 0, 0);
   if(sys == 0) program_break += increment;
   else assert(0);
   return (void*)former_program_break;
