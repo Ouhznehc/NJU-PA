@@ -33,7 +33,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     fs_read (fd, page, phdr[i].p_memsz);
     pcb->max_brk = MAX(phdr[i].p_vaddr + phdr[i].p_memsz, pcb->max_brk);
   }
-  Log("max brk is %08p", pcb->max_brk);
+  printf("max brk is %08p\n", pcb->max_brk);
   return ehdr.e_entry;
 }
 
