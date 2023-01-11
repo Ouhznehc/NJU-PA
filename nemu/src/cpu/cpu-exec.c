@@ -80,12 +80,19 @@ static void exec_once(Decode *s, vaddr_t pc) {
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
-    if(n == 1) TODO();
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
+    word_t intr = isa_query_intr();
+    if (intr != INTR_EMPTY) {
+      #ifdef CONFIG_ETRACE
+        color_green("EXCEPTION TRACE : time interupt");
+        color_green("pc = 0x%08x   \n", cpu.pc);
+      #endif
+      cpu.pc = isa_raise_intr(intr, cpu.pc);
+    }
   }
 }
 

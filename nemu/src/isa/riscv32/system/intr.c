@@ -14,21 +14,29 @@
 ***************************************************************************************/
 
 #include <isa.h>
+
+#define IRQ_TIMER 0x80000007
+
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
   #ifdef CONFIG_ETRACE
-    color_green(" EXCEPTION TRACE :");
+    color_green(" EXCEPTION TRACE : normal");
     color_green("pc = 0x%08x   \n", epc);
   #endif
   cpu.mepc = epc;
   cpu.mcause = NO;
-  return cpu.mtvec;
 
-  return 0;
+
+  return cpu.mtvec;
 }
 
 word_t isa_query_intr() {
+  if (cpu.intr) {
+    cpu.intr = false;
+    return IRQ_TIMER;
+  }
   return INTR_EMPTY;
 }
