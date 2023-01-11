@@ -89,7 +89,7 @@ void *_sbrk(intptr_t increment) {
   }
   void *old_program_break = program_break;
   
-  int ret = _syscall_(SYS_brk, (intptr_t)(program_break + increment), 0, 0);
+  uintptr_t ret = _syscall_(SYS_brk, (intptr_t)(program_break + increment), 0, 0);
   if (ret == 0){
     program_break = program_break + increment;
   }else {
