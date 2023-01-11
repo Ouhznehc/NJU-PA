@@ -29,6 +29,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       int nr_page = ROUNDUP(phdr[i].p_memsz, PGSIZE) / PGSIZE;
       void *page = new_page(nr_page);
       memset(page, 0, nr_page * PGSIZE);
+      Log("this is loader");
       for(int i = 0; i < nr_page; i++) map(&pcb->as, (void *)phdr[i].p_vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
       fs_read (fd, page, phdr[i].p_memsz);
     }
@@ -56,6 +57,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   AddrSpace *as = &pcb->as;
   protect(as);
   void *page = new_page(NR_PAGE) + NR_PAGE * PGSIZE;
+  Log("this is uload");
   for(int i = NR_PAGE; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
 /*
               |               |
