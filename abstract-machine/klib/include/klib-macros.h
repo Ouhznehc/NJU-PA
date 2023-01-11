@@ -6,7 +6,11 @@
 #define LENGTH(arr)         (sizeof(arr) / sizeof((arr)[0]))
 #define RANGE(st, ed)       (Area) { .start = (void *)(st), .end = (void *)(ed) }
 #define IN_RANGE(ptr, area) ((area).start <= (ptr) && (ptr) < (area).end)
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define CEIL(a, sz)         ((((uintptr_t)a) + (sz) - 1) / (sz))
+
+
 
 #define STRINGIFY(s)        #s
 #define TOSTRING(s)         STRINGIFY(s)
