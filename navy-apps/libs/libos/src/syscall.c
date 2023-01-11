@@ -68,7 +68,7 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 extern char _end;
-void *program_break = &end;
+void *program_break = &_end;
 
 void *_sbrk(intptr_t increment) {
   //printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
