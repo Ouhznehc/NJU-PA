@@ -7,6 +7,7 @@
 void yield();
 void naive_uload(PCB *pcb, const char *filename);
 void halt(int code);
+int mm_brk(uintptr_t brk);
 
 size_t fs_write(int fd, const void *buf, size_t len);
 
@@ -22,7 +23,7 @@ void sys_write (Context *c) {c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR
 
 void sys_read (Context *c) {c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);}
 
-void sys_brk (Context *c) {c->GPRx = 0;} // always success
+void sys_brk (Context *c) {c->GPRx = mm_brk((uintptr_t)c->GPR2);} // always success
 
 void sys_open (Context *c) {c->GPRx = fs_open((char *)c->GPR2, c->GPR3, c->GPR4);}
 
