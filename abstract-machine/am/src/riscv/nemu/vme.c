@@ -83,7 +83,7 @@ void __am_switch(Context *c) {
 #define PPN(x)    BITS(x, 31, 10)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-  printf("map from va = %p to pa = %p\n", va, pa);
+  if(pa != va) printf("map from va = %p to pa = %p\n", va, pa);
   uint32_t *pde = as->ptr + VPN_1(va) * 4;
   if ((*pde & PTE_V) == 0) {
     uint32_t *new_page = pgalloc_usr(PGSIZE);
