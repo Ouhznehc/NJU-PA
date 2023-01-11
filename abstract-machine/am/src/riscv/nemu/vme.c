@@ -84,15 +84,35 @@ void __am_switch(Context *c) {
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   //if(pa != va) printf("map from va = %08p to pa = %08p\n", va, pa);
-  uint32_t *pde = as->ptr + VPN_1(va) * 4;
-  if ((*pde & PTE_V) == 0) {
-    uint32_t *new_page = pgalloc_usr(PGSIZE);
-    *pde = (uint32_t)new_page >> 2;
-    *pde |= PTE_V;
+  // uint32_t *pde = as->ptr + VPN_1(va) * 4;
+  // if ((*pde & PTE_V) == 0) {
+  //   uint32_t *new_page = pgalloc_usr(PGSIZE);
+  //   *pde = (uint32_t)new_page >> 2;
+  //   *pde |= PTE_V;
+  // }
+  // uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
+  // *pte |= (uint32_t)pa >> 2;
+  // *pte |= PTE_V;
+
+
+  // assert((uintptr_t) va < (uintptr_t) as->area.end && (uintptr_t) va >= (uintptr_t) as->area.start);
+  //if (va != pa) Log("Mapping %p to %p", va, pa);
+  PTE *p_target_pde = as->ptr;
+  p_target_pde += VPN_1(va);
+  
+  PTE *p_target_pte;
+
+  if (*p_target_pde & PTE_V) 
+    p_target_pte = (void *)((*p_target_pde >> 10) << 12);
+  else {
+    p_target_pte = pgalloc_usr(PGSIZE);
+    *p_target_pde |= ((uint32_t)p_target_pte >> 12) << 10;
+    *p_target_pde |= PTE_V;
   }
-  uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
-  *pte |= (uint32_t)pa >> 2;
-  *pte |= PTE_V;
+
+  p_target_pte += VPN_0(va);
+  *p_target_pte |= ((uint32_t)pa >> 12) << 10;
+  *p_target_pte |= PTE_V;
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
