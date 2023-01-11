@@ -71,7 +71,7 @@ extern char end;
 void *program_break = &end;
 void *_sbrk(intptr_t increment) {
   //printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
-  //increment = 0;
+  increment = 0;
   void *former_program_break = program_break;
   int ret = _syscall_(SYS_brk, (intptr_t)(program_break + increment), 0, 0);
   if(ret == 0) program_break += increment;
