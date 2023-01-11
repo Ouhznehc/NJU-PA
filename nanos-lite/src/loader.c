@@ -32,7 +32,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       for(int j = 0; j < nr_page; j++) map(&pcb->as, (void *)phdr[i].p_vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
       fs_read (fd, page, phdr[i].p_memsz);
     if(phdr[i].p_filesz < phdr[i].p_memsz)//data segment
-        pcb->max_brk = phdr[i].p_vaddr + phdr[i].p_memsz;
+        pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
   }
   return ehdr.e_entry;
 }
