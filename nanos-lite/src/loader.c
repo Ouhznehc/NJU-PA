@@ -58,6 +58,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   protect(as);
   void *page = new_page(NR_PAGE) + NR_PAGE * PGSIZE;
   for(int i = NR_PAGE; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
+  assert(0);
 /*
               |               |
               +---------------+ <---- ustack.end
