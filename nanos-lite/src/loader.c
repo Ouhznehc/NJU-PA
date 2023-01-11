@@ -28,7 +28,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
     int nr_page = ROUNDUP(phdr[i].p_memsz, PGSIZE) / PGSIZE;
     void *page = new_page(nr_page);
-    void *vaddr = (void *)ROUNDUP(phdr[i].p_vaddr, PGSIZE) - PGSIZE;
+    void *vaddr = (void *)(ROUNDUP(phdr[i].p_vaddr, PGSIZE) - PGSIZE);
     memset(page, 0, nr_page * PGSIZE);
     for(int j = 0; j < nr_page; j++) {
       map(&pcb->as, vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
