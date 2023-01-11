@@ -23,7 +23,10 @@ void sys_write (Context *c) {c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR
 
 void sys_read (Context *c) {c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);}
 
-void sys_brk (Context *c) {c->GPRx = mm_brk((uintptr_t)c->GPR2);} // always success
+void sys_brk (Context *c) {
+  printf("try brk = %08p\n", (uintptr_t)c->GPR2);
+  c->GPRx = mm_brk((uintptr_t)c->GPR2); // always success
+}
 
 void sys_open (Context *c) {c->GPRx = fs_open((char *)c->GPR2, c->GPR3, c->GPR4);}
 
