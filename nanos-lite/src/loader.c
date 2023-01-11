@@ -42,7 +42,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     pcb->max_brk = MAX(phdr[i].p_vaddr + phdr[i].p_memsz, pcb->max_brk);
   }
   //pcb->max_brk = 0xe0000000;
-  printf("max_brk initial value is %08p\n", pcb->max_brk);
+  //printf("max_brk initial value is %08p\n", pcb->max_brk);
   return ehdr.e_entry;
 }
 
@@ -67,8 +67,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   protect(as);
   void *page = new_page(NR_PAGE) + NR_PAGE * PGSIZE;
   for(int i = NR_PAGE; i >= 1; i--) {
-  map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
-  printf("context_uload map from va = %08p to pa = %08p\n", as->area.end - i * PGSIZE ,page - i * PGSIZE, MMAP_READ);
+    map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
+    //printf("context_uload map from va = %08p to pa = %08p\n", as->area.end - i * PGSIZE ,page - i * PGSIZE, MMAP_READ);
   }
 /*
               |               |
