@@ -27,7 +27,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     if(phdr[i].p_type != PT_LOAD) continue;
     fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
     //! we assume that different segment would not in the same page
-    uint32_t memsz_nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz - 1) / PGSIZE;
+    uint32_t memsz_nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz) / PGSIZE;
     uint32_t vaddr_nr_page = phdr[i].p_vaddr / PGSIZE;
     int nr_page = memsz_nr_page - vaddr_nr_page + 1;
     void *page = new_page(nr_page);
