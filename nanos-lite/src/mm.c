@@ -26,12 +26,12 @@ void free_page(void *p) {
 int mm_brk(uintptr_t brk) {
   printf("mm_brk is called! brk is %08p\n", brk);
   if(brk < current->max_brk) return 0;
-  printf("new page malloc!\n");
   uint32_t max_nr_page = ROUNDUP(current->max_brk, PGSIZE) / PGSIZE - 1;
   uint32_t now_nr_page = ROUNDUP(brk,              PGSIZE) / PGSIZE - 1;
   int nr_page = now_nr_page - max_nr_page;
   void *page = new_page(nr_page);
   void *vaddr = (void *)ROUNDUP(current->max_brk, PGSIZE);
+  printf("new page malloc: begin %08p , malloc %d pages\n", vaddr, nr_page);
   for(int i = 0; i < nr_page; i++) map(&current->as, vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
   return 0;
 }
