@@ -2,7 +2,7 @@
 #include <elf.h>
 #include <fs.h>
 
-#define nr_page 8
+#define NR_PAGE 8
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -26,8 +26,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   for(size_t i = 0; i < ehdr.e_phnum; i++){
     if(phdr[i].p_type == PT_LOAD){
       fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-      fs_read (fd, (void *)phdr[i].p_vaddr, phdr[i].p_memsz);
-      memset((void *)(phdr[i].p_vaddr + phdr[i].p_filesz), 0, phdr[i].p_memsz - phdr[i].p_filesz);
+      int nr_page = ROUNDUP(phdr[i].p_memsz, PGSIZE) / PGSIZE;
+      void *page = new_page(nr_page);
+      memset(page, 0, nr_page * PGSIZE);
+      for(int i = 0; i < nr_page; i++) map(&pcb->as, (void *)phdr[i].p_vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
+      fs_read (fd, page, phdr[i].p_memsz);
+      memset(page + phdr[i].p_filesz, 0, phdr[i].p_memsz - phdr[i].p_filesz);
     }
   }
   return ehdr.e_entry;
@@ -52,8 +56,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
  
   AddrSpace *as = &pcb->as;
   protect(as);
-  void *page = new_page(nr_page) + nr_page * PGSIZE;
-  for(int i = nr_page; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
+  void *page = new_page(NR_PAGE) + NR_PAGE * PGSIZE;
+  for(int i = NR_PAGE; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
 /*
               |               |
               +---------------+ <---- ustack.end
