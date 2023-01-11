@@ -107,7 +107,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   while(envp && envp[envc]) {printf("Argument envp[%d] is %s\n", envc, envp[envc]); envc++;}
 
   char *argv_area[argc], *envp_area[envc];
-  char *string_area = (char *)page;
+  char *string_area = (char *)(page - 4);
   //char *string_area = (char *)heap.end;
 
   for (int i = 0; i < argc; i++){
