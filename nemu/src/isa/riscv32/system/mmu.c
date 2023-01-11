@@ -32,6 +32,7 @@
 #define PPN(x)    MYBITS(x, 31, 10)
 #define pde_addr cpu.satp * 4096 + VPN_1(vaddr) * 4
 #define pte_addr PPN(pde) * 4096 + VPN_0(vaddr) * 4
+#define WRITE 1
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   uint32_t pde = paddr_read(pde_addr, 4);
@@ -40,7 +41,10 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   uint32_t pte = paddr_read(pte_addr, 4);
   assert(pte & PTE_V);
 
+  if(type == WRITE) paddr_write(pte_addr, 4, pte | PTE_D);
+  else paddr_write(pte_addr, 4, pte | PTE_A);
+
   uint32_t paddr = PPN(pte) * 4096 + OFFSET(vaddr);
-  assert(paddr == vaddr);
+  //assert(paddr == vaddr);
   return paddr;
 }
