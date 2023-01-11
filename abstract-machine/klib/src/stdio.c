@@ -60,6 +60,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   for(str = out; *fmt; fmt++){
     if(*fmt != '%'){ *str++ = *fmt; continue;}
     fmt++;
+    zeroflag = false, field_width = -1;
     if(*fmt == '0'){ fmt++; zeroflag = true;}
     if(*fmt >= '0' && *fmt <= '9'){
       field_width = atoi(fmt);
