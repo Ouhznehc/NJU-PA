@@ -21,11 +21,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);// magic number must be elf
 
   Elf_Phdr phdr[ehdr.e_phnum];
-  fs_read(fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
+  fs_lseek(fd, ehdr.e_phoff, SEEK_SET);
+  fs_read (fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
   for(size_t i = 0; i < ehdr.e_phnum; i++){
     if(phdr[i].p_type == PT_LOAD){
       fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-      fs_read(fd, (void *)phdr[i].p_vaddr, phdr[i].p_memsz);
+      fs_read (fd, (void *)phdr[i].p_vaddr, phdr[i].p_memsz);
       memset((void *)(phdr[i].p_vaddr + phdr[i].p_filesz), 0, phdr[i].p_memsz - phdr[i].p_filesz);
     }
   }
