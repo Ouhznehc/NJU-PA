@@ -47,20 +47,12 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg){
 
 }
 
-static size_t rounded4(size_t byte){
-  if(byte % 4) return (byte / 4 + 1) * 4;
-  return byte;
-}
-
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]){
-
+ 
   AddrSpace *as = &pcb->as;
   protect(as);
-
-  // void *page = new_page(nr_page) + nr_page * PGSIZE;
-  // for(int i = 8; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, 1);
-
-
+  void *page = new_page(nr_page) + nr_page * PGSIZE;
+  for(int i = nr_page; i >= 1; i--) map(as, as->area.end - i * PGSIZE, page - i * PGSIZE, MMAP_READ | MMAP_WRITE);
 /*
               |               |
               +---------------+ <---- ustack.end
@@ -103,17 +95,17 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   while(envp && envp[envc]) {printf("Argument envp[%d] is %s\n", envc, envp[envc]); envc++;}
 
   char *argv_area[argc], *envp_area[envc];
-  char *string_area = (char *)(new_page(nr_page) - PGSIZE * nr_page);
+  char *string_area = (char *)page;
   //char *string_area = (char *)heap.end;
 
   for (int i = 0; i < argc; i++){
-    string_area -= rounded4(strlen(argv[i]) + 1);
+    string_area -= strlen(argv[i]) + 1;
     argv_area[i] = string_area;
     strcpy(string_area, argv[i]);
   }
 
   for (int i = 0; i < envc; i++){
-    string_area -= rounded4(strlen(envp[i]) + 1);
+    string_area -= strlen(envp[i]) + 1;
     envp_area[i] = string_area;
     strcpy(string_area, envp[i]);
   }
