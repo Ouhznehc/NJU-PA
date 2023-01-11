@@ -8,7 +8,6 @@
 #define IN_RANGE(ptr, area) ((area).start <= (ptr) && (ptr) < (area).end)
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define CEIL(a, sz)         ((((uintptr_t)a) + (sz) - 1) / (sz))
 
 
 
