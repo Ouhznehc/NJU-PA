@@ -36,7 +36,7 @@ int mm_brk(uintptr_t brk) {
   // current->max_brk = brk;
 
 
-  if(brk < current->max_brk) return 0;
+  if(brk <= current->max_brk) return 0;
   printf("===============\n");
   uint32_t max_nr_page = current->max_brk / PGSIZE;
   uint32_t now_nr_page = brk / PGSIZE;
