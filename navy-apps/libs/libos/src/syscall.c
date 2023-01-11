@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <time.h>
+#include <stdio.h>
 #include "syscall.h"
 
 extern char end;
@@ -69,6 +70,7 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 void *_sbrk(intptr_t increment) {
+  printf("_sbrk: increment: %08x   brk: %08p\n", increment, program_break);
   void *former_program_break = program_break;
   intptr_t sys = _syscall_(SYS_brk, (intptr_t)program_break + increment, 0, 0);
   if(!sys) {program_break += increment; return (void*)former_program_break;}
