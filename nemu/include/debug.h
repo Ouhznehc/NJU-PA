@@ -40,26 +40,20 @@
 
 #define TODO() panic("please implement me")
 
-// ================= my printf =============================
-#define color_red(format, ...) \
-  do { \
-    printf("\33[1;31m" format "\33[0m", ## __VA_ARGS__); \
-  } while (0)
-
 #define color_yellow(format, ...) \
-  do { \
-    printf("\33[1;33m" format "\33[0m", ## __VA_ARGS__); \
-  } while (0)
+    _Log(ANSI_FMT(" " format, ANSI_FG_YELLOW), \
+        ## __VA_ARGS__)
 
-#define color_blue(format, ...) \
-  do { \
-    printf("\33[1;34m" format "\33[0m", ## __VA_ARGS__); \
-  } while (0)
+#define color_red(format, ...) \
+    _Log(ANSI_FMT(" " format, ANSI_FG_RED), \
+        ## __VA_ARGS__)
 
 #define color_green(format, ...) \
-  do { \
-    printf("\33[1;32m" format "\33[0m", ## __VA_ARGS__); \
-  } while (0)
-// ========================================================
+    _Log(ANSI_FMT(" " format, ANSI_FG_GREEN), \
+        ## __VA_ARGS__)
+
+#define color_blue(format, ...) \
+    _Log(ANSI_FMT(" " format, ANSI_FG_BLUE), \
+        ## __VA_ARGS__)
 
 #endif
