@@ -29,7 +29,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     int nr_page = ROUNDUP(phdr[i].p_memsz, PGSIZE) / PGSIZE;
     void *page = new_page(nr_page);
     memset(page, 0, nr_page * PGSIZE);
-    for(int j = 0; j < nr_page; j++) map(&pcb->as, (void *)phdr[i].p_vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
+    for(int j = 0; j < nr_page; j++) {
+      map(&pcb->as, (void *)phdr[i].p_vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
+      printf("loader map from va = %08p to pa = %08p\n", (void *)phdr[i].p_vaddr + j * PGSIZE ,page + j * PGSIZE);
+    }
     fs_read (fd, page, phdr[i].p_memsz);
     pcb->max_brk = MAX(phdr[i].p_vaddr + phdr[i].p_memsz, pcb->max_brk);
   }
