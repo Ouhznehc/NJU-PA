@@ -25,12 +25,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   fs_read (fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
   for(size_t i = 0; i < ehdr.e_phnum; i++){
     if(phdr[i].p_type != PT_LOAD) continue;
-      fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-      int nr_page = ROUNDUP(phdr[i].p_memsz, PGSIZE) / PGSIZE;
-      void *page = new_page(nr_page);
-      memset(page, 0, nr_page * PGSIZE);
-      for(int j = 0; j < nr_page; j++) map(&pcb->as, (void *)phdr[i].p_vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
-      fs_read (fd, page, phdr[i].p_memsz);
+    fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
+    int nr_page = ROUNDUP(phdr[i].p_memsz, PGSIZE) / PGSIZE;
+    void *page = new_page(nr_page);
+    memset(page, 0, nr_page * PGSIZE);
+    for(int j = 0; j < nr_page; j++) map(&pcb->as, (void *)phdr[i].p_vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
+    fs_read (fd, page, phdr[i].p_memsz);
     if(phdr[i].p_filesz < phdr[i].p_memsz)//data segment
         pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
   }
