@@ -31,7 +31,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       memset(page, 0, nr_page * PGSIZE);
       for(int i = 0; i < nr_page; i++) map(&pcb->as, (void *)phdr[i].p_vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
       fs_read (fd, page, phdr[i].p_memsz);
-      memset(page + phdr[i].p_filesz, 0, phdr[i].p_memsz - phdr[i].p_filesz);
     }
   }
   return ehdr.e_entry;
