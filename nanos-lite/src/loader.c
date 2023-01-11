@@ -26,7 +26,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   for(size_t i = 0; i < ehdr.e_phnum; i++){
     if(phdr[i].p_type != PT_LOAD) continue;
     fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-    int nr_page = ROUNDUP(phdr[i].p_memsz, PGSIZE) / PGSIZE;
+    int nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz) / PGSIZE - phdr[i].p_vaddr / PGSIZE + 1;
     void *page = new_page(nr_page);
     void *vaddr = (void *)ROUNDDOWN(phdr[i].p_vaddr, PGSIZE);
     memset(page, 0, nr_page * PGSIZE);
