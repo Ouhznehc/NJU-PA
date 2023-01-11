@@ -35,10 +35,10 @@
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   uint32_t pde = paddr_read(pde_addr, 4);
-  assert(pde & PTE_V);
+  if((pde & PTE_V) == 0) panic("page directory entry:%x is invalid", pde);
 
   uint32_t pte = paddr_read(pte_addr, 4);
-  assert(pte & PTE_V);
+  if((pte & PTE_V) == 0) panic("page table entry:%x is invalid", pte);
 
   uint32_t paddr = PPN(pte) * 4096 + OFFSET(vaddr);
   return paddr;
