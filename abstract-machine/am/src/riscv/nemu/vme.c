@@ -85,7 +85,7 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   //if(pa != va) printf("map from va = %08p to pa = %08p\n", va, pa);
   uint32_t *pde = as->ptr + VPN_1(va) * 4;
-  if ((*pde & PTE_V) == 0) {
+  if((*pde & PTE_V) == 0) {
     uint32_t *new_page = pgalloc_usr(PGSIZE);
     *pde = (uint32_t)new_page >> 2;
     *pde |= PTE_V;
@@ -94,6 +94,14 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
   *pte |= (uint32_t)pa >> 2;
   *pte |= PTE_V;
 }
+
+// bool check_map(AddrSpace *as, void *va){
+//   uint32_t *pde = as->ptr + VPN_1(va) * 4;
+//   if((*pde & PTE_V) == 0) return false;
+//   uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
+//   if((*pte & PTE_V) == 0) return false;
+//   return true;
+// }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
   Context *context = kstack.end - sizeof(Context);

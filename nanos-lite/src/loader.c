@@ -26,15 +26,19 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   for(size_t i = 0; i < ehdr.e_phnum; i++){
     if(phdr[i].p_type != PT_LOAD) continue;
     fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-    int nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz) / PGSIZE - phdr[i].p_vaddr / PGSIZE + 1;
+    //! we assume that vaddr is increasing by i
+    uint32_t memsz_nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz - 1) / PGSIZE;
+    uint32_t vaddr_nr_page = phdr[i].p_vaddr / PGSIZE;
+    int nr_page = memsz_nr_page - vaddr_nr_page + 1;
     void *page = new_page(nr_page);
     void *vaddr = (void *)ROUNDDOWN(phdr[i].p_vaddr, PGSIZE);
+    uint32_t page_offset = phdr[i].p_vaddr & (PGSIZE - 1);
     memset(page, 0, nr_page * PGSIZE);
     for(int j = 0; j < nr_page; j++) {
       map(&pcb->as, vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
       //printf("loader map from va = %08p to pa = %08p\n", (void *)phdr[i].p_vaddr + j * PGSIZE ,page + j * PGSIZE);
     }
-    fs_read (fd, page, phdr[i].p_filesz);
+    fs_read (fd, page + page_offset, phdr[i].p_filesz);
     pcb->max_brk = MAX(phdr[i].p_vaddr + phdr[i].p_memsz, pcb->max_brk);
   }
   //pcb->max_brk = 0xe0000000;
