@@ -1,4 +1,5 @@
 #include <memory.h>
+#include <proc.h>
 
 static void *pf = NULL;
 
@@ -23,9 +24,17 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
+  if(brk < current->max_brk) return 0;
+  uint32_t max_nr_page = ROUNDUP(current->max_brk, PGSIZE) / PGSIZE - 1;
+  uint32_t now_nr_page = ROUNDUP(brk,              PGSIZE) / PGSIZE - 1;
+  int nr_page = now_nr_page - max_nr_page;
+  void *page = new_page(nr_page);
+  void *vaddr = (void *)ROUNDUP(current->max_brk, PGSIZE);
+  for(int i = 0; i < nr_page; i++) map(&current->as, vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
   return 0;
 }
 
+extern PCB *current;
 void init_mm() {
   pf = (void *)ROUNDUP(heap.start, PGSIZE);
   Log("free physical pages starting from %p", pf);
