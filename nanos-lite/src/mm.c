@@ -24,7 +24,7 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-  printf("mm_brk is called!!!\n");
+  printf("mm_brk is called!\n");
   if(brk < current->max_brk) return 0;
   uint32_t max_nr_page = ROUNDUP(current->max_brk, PGSIZE) / PGSIZE - 1;
   uint32_t now_nr_page = ROUNDUP(brk,              PGSIZE) / PGSIZE - 1;
