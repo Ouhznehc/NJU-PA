@@ -22,7 +22,7 @@ void switch_mstatus(int mode){
     cpu.mstatus &= ~MIE;
   }
   if(mode == MSTATUS_RESTORE){
-    (cpu.mstatus & MPIE) ? (cpu.mstatus |= MIE) : (cpu.mstatus &= ~(MIE)); 
+    (cpu.mstatus & MPIE) ? (cpu.mstatus |= MIE) : (cpu.mstatus &= ~MIE); 
     cpu.mstatus |= MPIE;
   }
 }
