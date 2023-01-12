@@ -12,6 +12,10 @@
 #define MMAP_READ  0x00000001 // can read
 #define MMAP_WRITE 0x00000002 // can write
 
+//status
+#define KERNEL 3
+#define USER 0
+
 // Memory area for [@start, @end)
 typedef struct {
   void *start, *end;

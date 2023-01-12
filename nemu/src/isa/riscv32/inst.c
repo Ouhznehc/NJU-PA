@@ -35,7 +35,8 @@ enum {
     MTVEC   = 0x305,
     MEPC    = 0x341,
     MCAUSE  = 0x342,
-    SATP    = 0x180
+    SATP    = 0x180,
+    MSCRATCH = 0x340
   };
 //==============================================================
 
@@ -46,22 +47,24 @@ enum {
 static word_t csr_read(word_t csr){
   word_t value = 0;
   switch (csr) {
-      case MSTATUS: value = cpu.mstatus;  break;
-      case MTVEC:   value = cpu.mtvec;    break;
-      case MEPC:    value = cpu.mepc;     break;
-      case MCAUSE:  value = cpu.mcause;   break;
-      case SATP:    value = cpu.satp;     break;
+      case MSTATUS:  value = cpu.mstatus;  break;
+      case MTVEC:    value = cpu.mtvec;    break;
+      case MEPC:     value = cpu.mepc;     break;
+      case MCAUSE:   value = cpu.mcause;   break;
+      case SATP:     value = cpu.satp;     break;
+      case MSCRATCH: value = cpu.mscratch; break;
     } 
   return value;
 }
 
 static void csr_write(word_t csr, word_t value){
       switch (csr) {
-      case MSTATUS: cpu.mstatus = value;  break;
-      case MTVEC:   cpu.mtvec   = value;  break;
-      case MEPC:    cpu.mepc    = value;  break;
-      case MCAUSE:  cpu.mcause  = value;  break;
-      case SATP:    cpu.satp    = value;  break;
+      case MSTATUS:  cpu.mstatus  = value;  break;
+      case MTVEC:    cpu.mtvec    = value;  break;
+      case MEPC:     cpu.mepc     = value;  break;
+      case MCAUSE:   cpu.mcause   = value;  break;
+      case SATP:     cpu.satp     = value;  break;
+      case MSCRATCH: cpu.mscratch = value;  break;
     } 
 }
 
