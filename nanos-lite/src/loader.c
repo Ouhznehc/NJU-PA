@@ -4,6 +4,7 @@
 
 #define NR_PAGE 8
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
+
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
 # define Elf_Phdr Elf64_Phdr
