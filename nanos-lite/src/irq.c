@@ -14,7 +14,7 @@ static Context* do_event(Event e, Context* c) {
       do_syscall(c);
       break;
     case EVENT_IRQ_TIMER:
-      Log("=== event timer interupt triggered ===");
+      color_yellow("=== event timer interupt triggered ===");
       return schedule(c);
       break;
     default: panic("Unhandled event ID = %d", e.event);

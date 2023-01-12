@@ -93,6 +93,7 @@ static void execute(uint64_t n) {
         color_green("pc = 0x%08x   \n", cpu.pc);
       #endif
       cpu.pc = isa_raise_intr(intr, cpu.pc);
+      switch_mstatus(MSTATUS_SAVE);
     }
   }
 }
