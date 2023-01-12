@@ -26,64 +26,29 @@ f(30) f(31)
 #define OFFSET_CAUSE  (32 * XLEN)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
-#define OFFSET_NP     (35 * XLEN)
-
-#define KERNEL    0
-#define USER      3
+//中间有一个pdir没有地址
+#define OFFSET_NP     (36 * XLEN)
 
 .align 3
 .globl __am_asm_trap
 __am_asm_trap:
+//还在用户栈底
+  addi sp, sp, -XLEN
+  STORE t4, (sp)
+  mv t4, sp
 
-  // set sp from mscratch (kernel sp)
-  // store original sp in mscratch
-  csrrw sp, mscratch, sp
-  
-  // if sp is valid, do as user state
-  bnez sp, user_save_sp
-  // if it is kernel state
-  
-  // restore sp
-  csrr sp, mscratch
+  csrrw sp, mscratch, sp   // (1) atomically exchange sp and mscratch
+  bnez sp, save_context    // (2) take the branch if we trapped from user
+  csrrw sp, mscratch, sp   // (3) if we trapped from kernel, 恢复之前的状态
 
-  // push the context structure
+//进入内核栈
+  save_context:
   addi sp, sp, -CONTEXT_SIZE
 
-  // push gprs other than sp
+  STORE t4, OFFSET_SP(sp)
+
   MAP(REGS, PUSH)
 
-  // push sp (no need in kernel state)
-  // PUSH sp, OFFSET_SP(sp)
-
-  // tell the trap to restore in a 'kernel state' way
-  li t0, KERNEL
-  STORE t0, OFFSET_NP(sp)
-
-  j end_set_state
-
-  // if it is user state
-user_save_sp:
-
-  // push the context structure
-  addi sp, sp, -CONTEXT_SIZE
-
-  // push gprs other than sp
-  MAP(REGS, PUSH)
-
-  // read original sp from mscratch and store original sp
-  csrr t0, mscratch
-  STORE t0, OFFSET_SP(sp)
-
-  // tell the trap to restore in a 'user state' way
-  li t0, USER
-  STORE t0, OFFSET_NP(sp)
-
-end_set_state:
-
-  // set mscratch in kernel state
-  csrw mscratch, x0
-
-  // save more registers
   csrr t0, mcause
   csrr t1, mstatus
   csrr t2, mepc
@@ -92,46 +57,37 @@ end_set_state:
   STORE t1, OFFSET_STATUS(sp)
   STORE t2, OFFSET_EPC(sp)
 
-  // set mstatus.MPRV to pass difftest
+  # set mstatus.MPRV to pass difftest
   li a0, (1 << 17)
   or t1, t1, a0
   csrw mstatus, t1
 
-  // call the handler 
   mv a0, sp
   jal __am_irq_handle
-
-  // get next context address
   mv sp, a0
+//切换到新的内核栈空间
 
-  // load mstatus and epc
+//判断c->np == USER
+  LOAD t4, OFFSET_NP(sp)
+  bnez t4, restore_contexts
+//c->np == USER
+  addi t4, sp, CONTEXT_SIZE
+  csrw mscratch, t4
+
+restore_contexts:
+
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
   csrw mstatus, t1
   csrw mepc, t2
 
-  // read the way to restore ksp and sp
-  LOAD t0, OFFSET_NP(sp)
-
-  // select by t0 to restore by a 'user state' or 'kernel state' way
-  bnez t0, user_restore_sp
-  
-  // restore gprs
   MAP(REGS, POP)
 
-  // no need to restore kernel sp and sp
-  mret
-
-user_restore_sp:
-
-  // calculate and restore kernel sp
-  addi t0, sp, CONTEXT_SIZE
-  csrw mscratch, t0
-
-  // restore gprs
-  MAP(REGS, POP)
-  
-  // restore original sp
-  LOAD sp, OFFSET_SP(sp)
+  LOAD t4, OFFSET_SP(sp)
+  addi sp, sp, CONTEXT_SIZE
+//回到了用户栈
+  mv sp, t4
+  LOAD t4, (sp)
+  addi sp, sp, XLEN
   
   mret

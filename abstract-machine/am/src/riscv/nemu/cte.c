@@ -8,11 +8,11 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 #define timer_interupt 0x80000007
 
 Context* __am_irq_handle(Context *c) {
-  // uintptr_t ksp;
-  // uintptr_t kas = 0;
-  // asm volatile("csrr %0, mscratch" : "=r"(ksp));
-  // c->np = (ksp == 0 ? KERNEL : USER);
-  // asm volatile("csrw mscratch, %0" : : "r"(kas));
+  uintptr_t ksp;
+  uintptr_t kas = 0;
+  asm volatile("csrr %0, mscratch" : "=r"(ksp));
+  c->np = (ksp == 0 ? KERNEL : USER);
+  asm volatile("csrw mscratch, %0" : : "r"(kas));
    __am_get_cur_as(c);
   if (user_handler) {
     Event ev = {0};
