@@ -4,22 +4,25 @@
 void __am_get_cur_as(Context *c);
 void __am_switch(Context *c);
 static Context* (*user_handler)(Event, Context*) = NULL;
-#define EVENT 0
+#define user_interupt 0
+#define timer_interupt 0x80000007
 Context* __am_irq_handle(Context *c) {
    __am_get_cur_as(c);
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
-      case EVENT:
+      case user_interupt:
         if(!~c->GPR1) ev.event = EVENT_YIELD;
         else ev.event = EVENT_SYSCALL;
+        c->mepc += 4;
+        break;
+      case timer_interupt:
+        ev.event = EVENT_IRQ_TIMER;
         break;
       default: ev.event = EVENT_ERROR; break;
     }
-
     c = user_handler(ev, c);
     assert(c != NULL);
-    c->mepc += 4;
   }
   __am_switch(c);
   return c;
@@ -39,7 +42,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   Context *context = kstack.end - sizeof(Context);
-  context->mstatus = 0x1800;
+  context->mstatus = 0x1800 | 0x0080 ;
   context->mepc    = (uintptr_t)entry;
   context->GPR2    = (uintptr_t)arg;
   context->pdir    = NULL;

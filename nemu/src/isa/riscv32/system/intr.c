@@ -15,7 +15,17 @@
 
 #include <isa.h>
 
-#define IRQ_TIMER 0x80000007
+
+void switch_mstatus(int mode){
+  if(mode == MSTATUS_SAVE){
+    (cpu.mstatus & MIE) ? (cpu.mstatus |= MPIE) : (cpu.mstatus &= ~MPIE);
+    cpu.mstatus &= ~MIE;
+  }
+  if(mode == MSTATUS_RESTORE){
+    (cpu.mstatus & MPIE) ? (cpu.mstatus |= MIE) : (cpu.mstatus &= ~(MIE)); 
+    cpu.mstatus |= MPIE;
+  }
+}
 
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
@@ -26,6 +36,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
     color_green(" EXCEPTION TRACE : normal");
     color_green("pc = 0x%08x   \n", epc);
   #endif
+  switch_mstatus(MSTATUS_SAVE);
   cpu.mepc = epc;
   cpu.mcause = NO;
 
@@ -34,7 +45,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 }
 
 word_t isa_query_intr() {
-  if (cpu.intr) {
+  if (cpu.intr && (cpu.mstatus & MIE)) {
     cpu.intr = false;
     return IRQ_TIMER;
   }
