@@ -19,7 +19,7 @@ void switch_boot_pcb() {
 void hello_fun(void *arg) {
   int j = 1;
   while (1) {
-    printf("Hello World from Nanos-lite with arg '%s' for the %dth time!\n", (uintptr_t)arg, j);
+    //printf("Hello World from Nanos-lite with arg '%s' for the %dth time!\n", (uintptr_t)arg, j);
     j ++;
     //yield();
   }
@@ -33,7 +33,7 @@ void init_proc() {
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/bin/echo", "aaa", NULL};
-  context_uload(&pcb[1], "/bin/hello", NULL, NULL);
+  context_uload(&pcb[1], "/bin/pal", NULL, NULL);
   switch_boot_pcb();
 }
 
