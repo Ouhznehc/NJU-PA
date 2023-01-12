@@ -24,7 +24,7 @@ size_t ramdisk_write(const void *buf, size_t offset, size_t len) {
 }
 
 void init_ramdisk() {
-  Log("ramdisk info: start = %p, end = %p, size = %p bytes",
+  Log("ramdisk info: start = %08p, end = %08p, size = %08p bytes",
       &ramdisk_start, &ramdisk_end, RAMDISK_SIZE);
 }
 
