@@ -11,7 +11,7 @@ int mm_brk(uintptr_t brk);
 
 size_t fs_write(int fd, const void *buf, size_t len);
 
-void sys_yield (Context *c) {yield();}
+void sys_yield (Context *c) {yield(); c->GPRx = 0;}
 
 void sys_exit (Context *c) { 
   //naive_uload(NULL, "/bin/nterm");
@@ -42,7 +42,8 @@ void sys_execve (Context *c) {
   char *filename = (char *) c->GPR2;
   char **argv    = (char **)c->GPR3;
   char **envp    = (char **)c->GPR4;
-  execve(filename, argv, envp); 
+  int ret = execve(filename, argv, envp); 
+  if(ret == -2) c->GPRx = -2;
 }
 
 void do_syscall(Context *c) {
