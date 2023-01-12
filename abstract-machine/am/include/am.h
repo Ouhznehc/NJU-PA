@@ -13,8 +13,8 @@
 #define MMAP_WRITE 0x00000002 // can write
 
 //status
-#define KERNEL 0
-#define USER 3
+#define KERNEL 3
+#define USER 0
 
 // Memory area for [@start, @end)
 typedef struct {
