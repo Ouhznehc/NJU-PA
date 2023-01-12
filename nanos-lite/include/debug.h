@@ -21,8 +21,10 @@
 // #define ANSI_NONE       "\33[0m"
 
 #define Log(format, ...) \
+  do{ \
   printf("\33[1;35m[%s,%d,%s] " format "\33[0m\n", \
-      __FILE__, __LINE__, __func__, ## __VA_ARGS__)
+      __FILE__, __LINE__, __func__, ## __VA_ARGS__); \
+  } while(0)
 
 #undef panic
 #define panic(format, ...) \
