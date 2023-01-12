@@ -107,7 +107,7 @@ static void statistic() {
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
 
-static void iringbuf_display(){
+void iringbuf_display(){
   #ifdef CONFIG_IRINGBUF
   printf("\n");
   color_green("IRINGBUF DISPLAY\n");
