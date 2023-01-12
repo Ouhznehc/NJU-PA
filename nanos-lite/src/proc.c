@@ -41,7 +41,7 @@ Context* schedule(Context *prev) {
   // save the context pointer
   current->cp = prev;
 
-  current = pcb_select;
+  //current = pcb_select;
 
   // then return the new context
   return current->cp;
