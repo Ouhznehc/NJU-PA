@@ -36,7 +36,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
     color_green(" EXCEPTION TRACE : normal");
     color_green("pc = 0x%08x   \n", epc);
   #endif
-  //switch_mstatus(MSTATUS_SAVE);
+  switch_mstatus(MSTATUS_SAVE);
   cpu.mepc = epc;
   cpu.mcause = NO;
 
