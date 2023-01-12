@@ -11,7 +11,7 @@ int mm_brk(uintptr_t brk);
 
 size_t fs_write(int fd, const void *buf, size_t len);
 
-void sys_yield (Context *c) {yield(); c->GPRx = 0;}
+void sys_yield (Context *c) {yield();}
 
 void sys_exit (Context *c) { 
   //naive_uload(NULL, "/bin/nterm");
