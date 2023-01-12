@@ -29,11 +29,11 @@ void init_proc() {
   Log("Initializing processes...");
 
 
-   context_kload(&pcb[1], hello_fun, "zero");
+   context_kload(&pcb[0], hello_fun, "zero");
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/bin/echo", "aaa", NULL};
-  context_uload(&pcb[0], "/bin/dummy", NULL, NULL);
+  context_uload(&pcb[1], "/bin/dummy", NULL, NULL);
   switch_boot_pcb();
 }
 
@@ -41,7 +41,7 @@ Context* schedule(Context *prev) {
   // save the context pointer
   current->cp = prev;
 
-  current = pcb_select;
+  //current = pcb_select;
 
   // then return the new context
   return current->cp;
