@@ -29,11 +29,11 @@ void init_proc() {
   Log("Initializing processes...");
 
 
-   context_kload(&pcb[0], hello_fun, "zero");
+   context_kload(&pcb[1], hello_fun, "zero");
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/bin/echo", "aaa", NULL};
-  context_uload(&pcb[1], "/bin/hello", NULL, NULL);
+  context_uload(&pcb[0], "/bin/hello", NULL, NULL);
   switch_boot_pcb();
 }
 
