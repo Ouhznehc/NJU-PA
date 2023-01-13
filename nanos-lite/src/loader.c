@@ -41,7 +41,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     }
     fs_read(fd, page + page_offset, phdr[i].p_filesz);
     //! we assume that segment vaddr is increasing
-    printf("max_brk value is %08p\n", pcb->max_brk);
+    printf("max_brk value is %08p, fuck is %08p\n", pcb->max_brk, ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE));
     pcb->max_brk = MAX(ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE), pcb->max_brk);
   }
   //pcb->max_brk = 0xe0000000;
