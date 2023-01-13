@@ -40,42 +40,14 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       //printf("loader map from va = %08p to pa = %08p\n", (void *)phdr[i].p_vaddr + j * PGSIZE ,page + j * PGSIZE);
     }
     fs_read(fd, page + page_offset, phdr[i].p_filesz);
-    pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
+    //! we assume that segment vaddr is increasing
+    printf("max_brk value is %08p\n", pcb->max_brk);
+    pcb->max_brk = MAX(ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE), pcb->max_brk);
   }
   //pcb->max_brk = 0xe0000000;
   //printf("max_brk initial value is %08p\n", pcb->max_brk);
   return ehdr.e_entry;
 }
-
-// static uintptr_t loader(PCB *pcb, const char *filename) {
-//   Elf_Ehdr ehdr;
-//   int fd = fs_open(filename, 0, 0);
-//   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
-//   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
-//   Elf_Phdr phdr[ehdr.e_phnum];
-//   fs_read(fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
-//   for(size_t i = 0; i < ehdr.e_phnum; i++){
-//     if(phdr[i].p_type == PT_LOAD){
-//       fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-//       int num_page = ((phdr[i].p_vaddr + phdr[i].p_memsz - 1) >> 12) - (phdr[i].p_vaddr >> 12) + 1; 
-//       int num = phdr[i].p_memsz / PGSIZE;
-//       if(phdr[i].p_memsz % PGSIZE) num++;
-//       //Log("num_page %p    wrong_page %p", num_page, num);
-//       void *paddr = new_page(num_page);
-//       memset(paddr, 0, PGSIZE * num_page);
-//       fs_read(fd, paddr + (phdr[i].p_paddr & 0xfff), phdr[i].p_filesz);
-//       void *vaddr = (void *)((phdr[i].p_vaddr >> 12) << 12);
-//       for(int j = 0; j < num_page; j++){
-//         //Log("va   %p    pa   %p", vaddr, paddr);
-//         map(&pcb->as, vaddr, paddr, 0x3);
-//         vaddr += PGSIZE; paddr += PGSIZE;
-//       }
-//       pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
-//       //Log("max_brk  %p", pcb->max_brk);
-//     }
-//   }
-//   return ehdr.e_entry;
-// }
 
 void naive_uload(PCB *pcb, const char *filename) {
   uintptr_t entry = loader(pcb, filename);
