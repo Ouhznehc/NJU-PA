@@ -1,7 +1,7 @@
 #include <proc.h>
 #include <fs.h>
 
-#define MAX_NR_PROC 5
+#define MAX_NR_PROC 4
 #define pcb_select (current == &pcb[0] ? &pcb[program_index] : &pcb[0]);
 int program_index = 1;
 void switch_program_index(int index){
@@ -33,12 +33,10 @@ void init_proc() {
   char *argv1[] = {"/bin/nterm", NULL};
   char *argv2[] = {"/bin/pal", "--skip", "--splash", NULL};
   char *argv3[] = {"/bin/nslider", NULL};
-  char *argv4[] = {"/bin/menu", NULL};
   context_uload(&pcb[0], "/bin/hello",   NULL,  NULL);
   context_uload(&pcb[1], "/bin/nterm",   argv1, NULL);
   context_uload(&pcb[2], "/bin/pal",     argv2, NULL);
   context_uload(&pcb[3], "/bin/nslider", argv3, NULL);
-  context_uload(&pcb[4], "/bin/menu",    argv4, NULL);
   switch_boot_pcb();
 }
 
