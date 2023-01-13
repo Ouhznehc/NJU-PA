@@ -33,7 +33,8 @@ void init_proc() {
   char *argv1[] = {"/bin/nterm", NULL};
   char *argv2[] = {"/bin/pal", "--skip", "--splash", NULL};
   char *argv3[] = {"/bin/nslider", NULL};
-  context_uload(&pcb[0], "/bin/hello",   NULL,  NULL);
+  context_kload(&pcb[0], hello_fun, "fuck");
+  //context_uload(&pcb[0], "/bin/hello",   NULL,  NULL);
   context_uload(&pcb[1], "/bin/nterm",   argv1, NULL);
   context_uload(&pcb[2], "/bin/pal",     argv2, NULL);
   context_uload(&pcb[3], "/bin/nslider", argv3, NULL);
