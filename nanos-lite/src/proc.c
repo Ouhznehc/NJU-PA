@@ -28,7 +28,7 @@ void hello_fun(void *arg) {
 void init_proc() {
   Log("Initializing processes...");
 
-  //switch_boot_pcb();
+  switch_boot_pcb();
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/usr/bin/yes", "aaa", NULL};
