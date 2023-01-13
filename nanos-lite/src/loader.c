@@ -40,7 +40,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     }
     fs_read(fd, page + page_offset, phdr[i].p_filesz);
     //! we assume that segment vaddr is increasing
-    pcb->max_brk = MAX(ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE), pcb->max_brk);
+    pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
   }
   //pcb->max_brk = 0xe0000000;
   //printf("max_brk initial value is %08p\n", pcb->max_brk);
@@ -144,7 +144,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
   }
   *ptr = argc;
 
-  pcb->max_brk = 0;
   void *entry = (void *)loader(pcb, filename);
   Area kstack;
   kstack.start = &pcb->cp;
