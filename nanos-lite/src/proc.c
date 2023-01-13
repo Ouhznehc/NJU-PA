@@ -29,7 +29,7 @@ void init_proc() {
   Log("Initializing processes...");
 
 
-  context_uload(&pcb[1], "/bin/hello", NULL, NULL);
+  context_uload(&pcb[1], "usr/bin/yes", NULL, NULL);
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/bin/echo", "aaa", NULL};
