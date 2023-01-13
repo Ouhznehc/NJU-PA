@@ -31,9 +31,9 @@ int mm_brk(uintptr_t brk) {
   int nr_page = now_nr_page - max_nr_page;
   void *page = new_page(nr_page);
   printf("begin malloc: max_brk = %08p, brk = %08p, pages = %d\n", current->max_brk, brk, nr_page);
-  void *vaddr = (void *)ROUNDUP(current->max_brk, PGSIZE);
+  void *vaddr = (void *)current->max_brk;
   for(int i = 0; i < nr_page; i++) map(&current->as, vaddr + i * PGSIZE, page + i * PGSIZE, MMAP_READ | MMAP_WRITE);
-  current->max_brk = brk;
+  current->max_brk = ROUNDUP(brk, PGSIZE);
   printf("end   malloc: max_brk = %08p\n", current->max_brk);
   printf("===============\n");
   return 0;
