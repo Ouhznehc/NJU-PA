@@ -52,8 +52,6 @@ __am_asm_trap:
   // push gprs other than sp
   MAP(REGS, PUSH)
 
-  // push sp (no need in kernel state)
-  // PUSH sp, OFFSET_SP(sp)
 
   // tell the trap to restore in a 'kernel state' way
   li t0, KERNEL
@@ -119,6 +117,7 @@ end_set_state:
   // restore gprs
   MAP(REGS, POP)
 
+  addi sp, sp, CONTEXT_SIZE
   // no need to restore kernel sp and sp
   mret
 
