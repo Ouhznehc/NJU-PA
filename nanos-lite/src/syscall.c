@@ -42,8 +42,7 @@ void sys_execve (Context *c) {
   char *filename = (char *) c->GPR2;
   char **argv    = (char **)c->GPR3;
   char **envp    = (char **)c->GPR4;
-  int ret = execve(filename, argv, envp); 
-  if(ret == -2) c->GPRx = -2;
+  c->GPRx = execve(filename, argv, envp); 
 }
 
 void do_syscall(Context *c) {
