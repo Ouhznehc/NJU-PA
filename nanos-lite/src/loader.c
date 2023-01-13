@@ -16,7 +16,6 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Ehdr ehdr;
   int fd = fs_open(filename, 0, 0);
-  if(fd == -1) panic("Invalid filename!");
   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
 
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);// magic number must be elf
