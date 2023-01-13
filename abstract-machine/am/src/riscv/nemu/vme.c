@@ -95,13 +95,13 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
   *pte |= PTE_V;
 }
 
-// bool check_map(AddrSpace *as, void *va){
-//   uint32_t *pde = as->ptr + VPN_1(va) * 4;
-//   if((*pde & PTE_V) == 0) return false;
-//   uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
-//   if((*pte & PTE_V) == 0) return false;
-//   return true;
-// }
+bool check_map(AddrSpace *as, void *va){
+  uint32_t *pde = as->ptr + VPN_1(va) * 4;
+  if((*pde & PTE_V) == 0) return false;
+  uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
+  if((*pte & PTE_V) == 0) return false;
+  return true;
+}
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
   Context *context = kstack.end - sizeof(Context);
