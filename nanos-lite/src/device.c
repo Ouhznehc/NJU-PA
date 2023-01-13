@@ -13,6 +13,7 @@ static const char *keyname[256] __attribute__((used)) = {
   [AM_KEY_NONE] = "NONE",
   AM_KEYS(NAME)
 };
+void switch_program_index(int index);
 
 size_t serial_write(const void *buf, size_t offset, size_t len){
   char *now = (char *)buf;
@@ -25,7 +26,21 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   AM_INPUT_KEYBRD_T kbd = io_read(AM_INPUT_KEYBRD);
   size_t res = 0;
   if(kbd.keycode == AM_KEY_NONE) return 0;
-  if(kbd.keydown) res = sprintf(buf, "key down %s\n", keyname[kbd.keycode]);
+  if(kbd.keydown){
+    res = sprintf(buf, "key down %s\n", keyname[kbd.keycode]);
+    switch (kbd.keycode){
+      case AM_KEY_F1:
+        switch_program_index(1);
+        break;
+      case AM_KEY_F2:
+        switch_program_index(2);
+        break;
+      case AM_KEY_F3:
+        switch_program_index(3);
+        break;
+      default:break;
+    }
+  }
   else res = sprintf(buf, "key up   %s\n", keyname[kbd.keycode]);
   return res;
 }
