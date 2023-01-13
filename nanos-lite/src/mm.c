@@ -26,7 +26,7 @@ void free_page(void *p) {
 int mm_brk(uintptr_t brk) {
   if(brk <= current->max_brk) return 0;
   //printf("===============\n");
-  uint32_t max_nr_page = current->max_brk / PGSIZE - 1;
+  uint32_t max_nr_page = (current->max_brk - 1) / PGSIZE;
   uint32_t now_nr_page = brk / PGSIZE;
   int nr_page = now_nr_page - max_nr_page;
   void *page = new_page(nr_page);
