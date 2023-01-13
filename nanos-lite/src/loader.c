@@ -27,7 +27,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     if(phdr[i].p_type != PT_LOAD) continue;
     fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
     //! we assume that different segment would not in the same page
-    uint32_t memsz_nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz) / PGSIZE;
+    uint32_t memsz_nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz - 1) / PGSIZE;
     uint32_t vaddr_nr_page = phdr[i].p_vaddr / PGSIZE;
     if(check_map(&pcb->as, (void *)phdr[i].p_vaddr)) panic("different segment is in the same page!");
     int nr_page = memsz_nr_page - vaddr_nr_page + 1;
@@ -37,7 +37,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     memset(page, 0, nr_page * PGSIZE);
     for(int j = 0; j < nr_page; j++) {
       map(&pcb->as, vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
-      printf("loader map from va = %08p to pa = %08p\n", (void *)phdr[i].p_vaddr + j * PGSIZE ,page + j * PGSIZE);
+      //printf("loader map from va = %08p to pa = %08p\n", (void *)phdr[i].p_vaddr + j * PGSIZE ,page + j * PGSIZE);
     }
     fs_read(fd, page + page_offset, phdr[i].p_filesz);
     pcb->max_brk = MAX(ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE), pcb->max_brk);
