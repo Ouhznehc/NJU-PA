@@ -28,11 +28,11 @@ void hello_fun(void *arg) {
 void init_proc() {
   Log("Initializing processes...");
 
-
+  switch_boot_pcb();
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/usr/bin/yes", "aaa", NULL};
-  context_uload(&pcb[1], "/bin/hello", NULL, NULL);
+  //context_uload(&pcb[1], "/bin/hello", NULL, NULL);
   context_uload(&pcb[0], "/bin/nterm", NULL, NULL);
   switch_boot_pcb();
 }
@@ -41,7 +41,7 @@ Context* schedule(Context *prev) {
   // save the context pointer
   current->cp = prev;
 
-  current = pcb_select;
+  //current = pcb_select;
 
   // then return the new context
   return current->cp;
