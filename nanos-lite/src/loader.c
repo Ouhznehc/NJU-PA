@@ -19,7 +19,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
 
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);// magic number must be elf
-
   Elf_Phdr phdr[ehdr.e_phnum];
   fs_lseek(fd, ehdr.e_phoff, SEEK_SET);
   fs_read (fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
@@ -41,7 +40,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     }
     fs_read(fd, page + page_offset, phdr[i].p_filesz);
     //! we assume that segment vaddr is increasing
-    printf("max_brk value is %08p, fuck is %08p\n", pcb->max_brk, ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE));
     pcb->max_brk = MAX(ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE), pcb->max_brk);
   }
   //pcb->max_brk = 0xe0000000;
@@ -145,6 +143,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
     ptr--;
   }
   *ptr = argc;
+
+  pcb->max_brk = 0;
   void *entry = (void *)loader(pcb, filename);
   Area kstack;
   kstack.start = &pcb->cp;
