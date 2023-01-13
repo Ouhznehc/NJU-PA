@@ -7,7 +7,7 @@ static Context* do_event(Event e, Context* c) {
   switch (e.event) {
     case EVENT_YIELD:
       //color_yellow("=== event  yield  triggered ===\n"); 
-      //return schedule(c);
+      return schedule(c);
       break;
     case EVENT_SYSCALL:
       //color_yellow("=== event syscall triggered ===\n");
@@ -15,7 +15,7 @@ static Context* do_event(Event e, Context* c) {
       break;
     case EVENT_IRQ_TIMER:
       //color_yellow("=== event timer interupt triggered ===\n");
-      //return schedule(c);
+      return schedule(c);
       break;
     default: panic("Unhandled event ID = %d", e.event);
   }

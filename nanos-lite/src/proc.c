@@ -27,14 +27,11 @@ void hello_fun(void *arg) {
 
 void init_proc() {
   Log("Initializing processes...");
-
-  switch_boot_pcb();
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
   //char *argv[] = {"/usr/bin/yes", "aaa", NULL};
-  //context_uload(&pcb[1], "/bin/hello", NULL, NULL);
-  //context_uload(&pcb[0], "/bin/nterm", NULL, NULL);
-  naive_uload(NULL, "/bin/nterm");
+  context_uload(&pcb[1], "/bin/hello", NULL, NULL);
+  context_uload(&pcb[0], "/bin/nterm", NULL, NULL);
   switch_boot_pcb();
 }
 
