@@ -27,7 +27,7 @@ int mm_brk(uintptr_t brk) {
   if(brk <= current->max_brk) return 0;
   //printf("===============\n");
   uint32_t max_nr_page = (current->max_brk - 1) / PGSIZE;
-  uint32_t now_nr_page = brk / PGSIZE;
+  uint32_t now_nr_page = (brk - 1) / PGSIZE;
   int nr_page = now_nr_page - max_nr_page;
   void *page = new_page(nr_page);
   //printf("begin malloc: max_brk = %08p, brk = %08p, pages = %d\n", current->max_brk, brk, nr_page);
