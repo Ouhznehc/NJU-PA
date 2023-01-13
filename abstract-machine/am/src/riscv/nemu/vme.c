@@ -77,7 +77,7 @@ void __am_switch(Context *c) {
 
 */
 #define BITMASK(bits) ((1u << (bits)) - 1)
-#define BITS(x, hi, lo) (((PTE)(x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
+#define BITS(x, hi, lo) (((uint32_t)(x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 #define VPN_0(x)  BITS(x, 21, 12)
 #define VPN_1(x)  BITS(x, 31, 22)
 #define PPN(x)    BITS(x, 31, 10)
