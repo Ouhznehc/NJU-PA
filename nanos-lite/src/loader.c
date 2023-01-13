@@ -13,69 +13,69 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 # define Elf_Phdr Elf32_Phdr
 #endif
 
-// static uintptr_t loader(PCB *pcb, const char *filename) {
-//   Elf_Ehdr ehdr;
-//   int fd = fs_open(filename, 0, 0);
-//   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
-
-//   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);// magic number must be elf
-
-//   Elf_Phdr phdr[ehdr.e_phnum];
-//   fs_lseek(fd, ehdr.e_phoff, SEEK_SET);
-//   fs_read (fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
-//   for(size_t i = 0; i < ehdr.e_phnum; i++){
-//     if(phdr[i].p_type != PT_LOAD) continue;
-//     fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-//     //! we assume that different segment would not in the same page
-//     uint32_t memsz_nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz - 1) / PGSIZE;
-//     uint32_t vaddr_nr_page = phdr[i].p_vaddr / PGSIZE;
-//     if(check_map(&pcb->as, (void *)phdr[i].p_vaddr)) panic("different segment is in the same page!");
-//     int nr_page = memsz_nr_page - vaddr_nr_page + 1;
-//     void *page = new_page(nr_page);
-//     void *vaddr = (void *)ROUNDDOWN(phdr[i].p_vaddr, PGSIZE);
-//     uint32_t page_offset = phdr[i].p_vaddr & (PGSIZE - 1);
-//     memset(page, 0, nr_page * PGSIZE);
-//     for(int j = 0; j < nr_page; j++) {
-//       map(&pcb->as, vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
-//       //printf("loader map from va = %08p to pa = %08p\n", (void *)phdr[i].p_vaddr + j * PGSIZE ,page + j * PGSIZE);
-//     }
-//     fs_read(fd, page + page_offset, phdr[i].p_filesz);
-//     pcb->max_brk = MAX(ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE), pcb->max_brk);
-//   }
-//   //pcb->max_brk = 0xe0000000;
-//   //printf("max_brk initial value is %08p\n", pcb->max_brk);
-//   return ehdr.e_entry;
-// }
-
 static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Ehdr ehdr;
   int fd = fs_open(filename, 0, 0);
   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
-  assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
+
+  assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);// magic number must be elf
+
   Elf_Phdr phdr[ehdr.e_phnum];
-  fs_read(fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
+  fs_lseek(fd, ehdr.e_phoff, SEEK_SET);
+  fs_read (fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
   for(size_t i = 0; i < ehdr.e_phnum; i++){
-    if(phdr[i].p_type == PT_LOAD){
-      fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
-      int num_page = ((phdr[i].p_vaddr + phdr[i].p_memsz - 1) >> 12) - (phdr[i].p_vaddr >> 12) + 1; 
-      int num = phdr[i].p_memsz / PGSIZE;
-      if(phdr[i].p_memsz % PGSIZE) num++;
-      //Log("num_page %p    wrong_page %p", num_page, num);
-      void *paddr = new_page(num_page);
-      memset(paddr, 0, PGSIZE * num_page);
-      fs_read(fd, paddr + (phdr[i].p_paddr & 0xfff), phdr[i].p_filesz);
-      void *vaddr = (void *)((phdr[i].p_vaddr >> 12) << 12);
-      for(int j = 0; j < num_page; j++){
-        //Log("va   %p    pa   %p", vaddr, paddr);
-        map(&pcb->as, vaddr, paddr, 0x3);
-        vaddr += PGSIZE; paddr += PGSIZE;
-      }
-      pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
-      //Log("max_brk  %p", pcb->max_brk);
+    if(phdr[i].p_type != PT_LOAD) continue;
+    fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
+    //! we assume that different segment would not in the same page
+    uint32_t memsz_nr_page = (phdr[i].p_vaddr + phdr[i].p_memsz - 1) / PGSIZE;
+    uint32_t vaddr_nr_page = phdr[i].p_vaddr / PGSIZE;
+    if(check_map(&pcb->as, (void *)phdr[i].p_vaddr)) panic("different segment is in the same page!");
+    int nr_page = memsz_nr_page - vaddr_nr_page + 1;
+    void *page = new_page(nr_page);
+    void *vaddr = (void *)ROUNDDOWN(phdr[i].p_vaddr, PGSIZE);
+    uint32_t page_offset = phdr[i].p_vaddr & (PGSIZE - 1);
+    memset(page, 0, nr_page * PGSIZE);
+    for(int j = 0; j < nr_page; j++) {
+      map(&pcb->as, vaddr + j * PGSIZE, page + j * PGSIZE, MMAP_READ | MMAP_WRITE);
+      //printf("loader map from va = %08p to pa = %08p\n", (void *)phdr[i].p_vaddr + j * PGSIZE ,page + j * PGSIZE);
     }
+    fs_read(fd, page + page_offset, phdr[i].p_filesz);
+    pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
   }
+  //pcb->max_brk = 0xe0000000;
+  //printf("max_brk initial value is %08p\n", pcb->max_brk);
   return ehdr.e_entry;
 }
+
+// static uintptr_t loader(PCB *pcb, const char *filename) {
+//   Elf_Ehdr ehdr;
+//   int fd = fs_open(filename, 0, 0);
+//   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
+//   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
+//   Elf_Phdr phdr[ehdr.e_phnum];
+//   fs_read(fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
+//   for(size_t i = 0; i < ehdr.e_phnum; i++){
+//     if(phdr[i].p_type == PT_LOAD){
+//       fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
+//       int num_page = ((phdr[i].p_vaddr + phdr[i].p_memsz - 1) >> 12) - (phdr[i].p_vaddr >> 12) + 1; 
+//       int num = phdr[i].p_memsz / PGSIZE;
+//       if(phdr[i].p_memsz % PGSIZE) num++;
+//       //Log("num_page %p    wrong_page %p", num_page, num);
+//       void *paddr = new_page(num_page);
+//       memset(paddr, 0, PGSIZE * num_page);
+//       fs_read(fd, paddr + (phdr[i].p_paddr & 0xfff), phdr[i].p_filesz);
+//       void *vaddr = (void *)((phdr[i].p_vaddr >> 12) << 12);
+//       for(int j = 0; j < num_page; j++){
+//         //Log("va   %p    pa   %p", vaddr, paddr);
+//         map(&pcb->as, vaddr, paddr, 0x3);
+//         vaddr += PGSIZE; paddr += PGSIZE;
+//       }
+//       pcb->max_brk = ROUNDUP(phdr[i].p_vaddr + phdr[i].p_memsz, PGSIZE);
+//       //Log("max_brk  %p", pcb->max_brk);
+//     }
+//   }
+//   return ehdr.e_entry;
+// }
 
 void naive_uload(PCB *pcb, const char *filename) {
   uintptr_t entry = loader(pcb, filename);
