@@ -31,8 +31,8 @@ void init_proc() {
 
   //char *argv[] = {"--skip", "--splash", NULL};
   //context_uload(&pcb[1], "/bin/pal", argv, NULL);
-  char *argv[] = {"usr/bin/yes", "aaa", NULL};
-  context_uload(&pcb[1], "usr/bin/yes", argv, NULL);
+  char *argv[] = {"/usr/bin/yes", "aaa", NULL};
+  context_uload(&pcb[1], "/usr/bin/yes", argv, NULL);
   context_uload(&pcb[0], "/bin/nterm", NULL, NULL);
   switch_boot_pcb();
 }
