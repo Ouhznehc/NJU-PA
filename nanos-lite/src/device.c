@@ -38,9 +38,6 @@ size_t events_read(void *buf, size_t offset, size_t len) {
       case AM_KEY_F3:
         switch_program_index(3);
         break;
-      case AM_KEY_F4:
-        switch_program_index(4);
-        break;
       default:break;
     }
   }
