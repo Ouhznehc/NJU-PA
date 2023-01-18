@@ -4,7 +4,7 @@ This project is the programming assignment of the class ICS(Introduction to Comp
 in Department of Computer Science and Technology, Nanjing University.
 
 For the guide of this programming assignment,
-refer to http://nju-ics.gitbooks.io/ics2022-programming-assignment/content/
+refer to https://nju-projectn.github.io/ics-pa-gitbook/ics2022/0.1.html
 
 To initialize, run
 ```bash
