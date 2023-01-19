@@ -1,11 +1,16 @@
 #ifndef KLIB_MACROS_H__
 #define KLIB_MACROS_H__
 
+#define CEIL(a, sz)         ((((uintptr_t)a) + (sz) - 1) / (sz))
 #define ROUNDUP(a, sz)      ((((uintptr_t)a) + (sz) - 1) & ~((sz) - 1))
 #define ROUNDDOWN(a, sz)    ((((uintptr_t)a)) & ~((sz) - 1))
 #define LENGTH(arr)         (sizeof(arr) / sizeof((arr)[0]))
 #define RANGE(st, ed)       (Area) { .start = (void *)(st), .end = (void *)(ed) }
 #define IN_RANGE(ptr, area) ((area).start <= (ptr) && (ptr) < (area).end)
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+
+
 
 #define STRINGIFY(s)        #s
 #define TOSTRING(s)         STRINGIFY(s)

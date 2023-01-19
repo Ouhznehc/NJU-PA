@@ -66,9 +66,47 @@ void __am_switch(Context *c) {
   }
 }
 
+/*
+-------------------------------------------------------------------
+|31        20|19        10|9     8| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+|   PPN[1]   |   PPN[0]   |  RSW  | D | A | G | U | X | W | R | V |
+|    12      |    10      |   2   | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+-------------------------------------------------------------------
+
+              Riscv32 Sv32 PTE(page-table entry)
+
+*/
+#define BITMASK(bits) ((1u << (bits)) - 1)
+#define BITS(x, hi, lo) (((uint32_t)(x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
+#define VPN_0(x)  BITS(x, 21, 12)
+#define VPN_1(x)  BITS(x, 31, 22)
+#define PPN(x)    BITS(x, 31, 10)
+
 void map(AddrSpace *as, void *va, void *pa, int prot) {
+  uint32_t *pde = as->ptr + VPN_1(va) * 4;
+  if((*pde & PTE_V) == 0) {
+    uint32_t *new_page = pgalloc_usr(PGSIZE);
+    *pde = (uint32_t)new_page >> 2;
+    *pde |= PTE_V;
+  }
+  uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
+  *pte |= (uint32_t)pa >> 2;
+  *pte |= PTE_V;
+}
+
+bool check_map(AddrSpace *as, void *va){
+  uint32_t *pde = as->ptr + VPN_1(va) * 4;
+  if((*pde & PTE_V) == 0) return false;
+  uint32_t *pte = (uint32_t *)(PPN(*pde) * 4096 + VPN_0(va) * 4);
+  if((*pte & PTE_V) == 0) return false;
+  return true;
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
-  return NULL;
+  Context *context = kstack.end - sizeof(Context);
+  context->mstatus = 0x1800 | 0x0080 ;
+  context->mepc    = (uintptr_t)entry;
+  context->pdir    = as->ptr;
+  context->np      = USER;
+  return context;
 }

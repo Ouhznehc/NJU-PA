@@ -19,8 +19,10 @@
 #include <common.h>
 
 typedef struct {
-  word_t gpr[32];
+  word_t  gpr[32];
   vaddr_t pc;
+  word_t  mepc, mcause, mtvec, mstatus, satp, mscratch;
+  bool intr;
 } riscv32_CPU_state;
 
 // decode
@@ -30,6 +32,10 @@ typedef struct {
   } inst;
 } riscv32_ISADecodeInfo;
 
-#define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
+#define MPIE      (0x080)
+#define MIE       (0x008)
+
+#define isa_mmu_check(vaddr, len, type) (cpu.satp & (1ul << 31) ? MMU_TRANSLATE : MMU_DIRECT)
+//#define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
 
 #endif
