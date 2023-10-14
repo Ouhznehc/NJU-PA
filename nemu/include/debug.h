@@ -41,19 +41,19 @@
 #define TODO() panic("please implement me")
 
 #define color_yellow(format, ...) \
-    _Log(ANSI_FMT(" " format, ANSI_FG_YELLOW) "\n", \
+    _Log(ANSI_FMT(" " format, ANSI_FG_YELLOW), \
         ## __VA_ARGS__)
 
 #define color_red(format, ...) \
-    _Log(ANSI_FMT(" " format, ANSI_FG_RED) "\n", \
+    _Log(ANSI_FMT(" " format, ANSI_FG_RED), \
         ## __VA_ARGS__)
 
 #define color_green(format, ...) \
-    _Log(ANSI_FMT(" " format, ANSI_FG_GREEN) "\n", \
+    _Log(ANSI_FMT(" " format, ANSI_FG_GREEN), \
         ## __VA_ARGS__)
 
 #define color_blue(format, ...) \
-    _Log(ANSI_FMT(" " format, ANSI_FG_BLUE) "\n", \
+    _Log(ANSI_FMT(" " format, ANSI_FG_BLUE), \
         ## __VA_ARGS__)
 
 #endif
